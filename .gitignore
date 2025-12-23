@@ -72,3 +72,8 @@ Thumbs.db
 # StreamingAssets (opcional, si se generan dinámicamente)
 # =========================
 [Aa]ssets/[Ss]treamingAssets/**/*.tmp
+
+# =========================
+# Exclude Exports folder
+# =========================
+/Exports/

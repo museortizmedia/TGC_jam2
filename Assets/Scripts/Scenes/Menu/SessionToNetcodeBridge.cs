@@ -1,22 +1,24 @@
 using UnityEngine;
 using Unity.Netcode;
 using Unity.Services.Multiplayer;
+using System.Threading.Tasks;
 
 public class SessionToNetcodeBridge : MonoBehaviour
 {
-    [SerializeField] string sessionType = "default";
+    [SerializeField] private MenuController menuController;
+    [SerializeField] private string sessionType = "default";
 
-    SessionObserver sessionObserver;
-    bool netcodeStarted;
+    private SessionObserver sessionObserver;
+    private bool netcodeStarted;
 
-    void Awake()
+    private void Awake()
     {
         Debug.Log("SessionToNetcodeBridge Awake");
         sessionObserver = new SessionObserver(sessionType);
         sessionObserver.SessionAdded += OnSessionAdded;
     }
 
-    void OnDestroy()
+    private void OnDestroy()
     {
         if (sessionObserver != null)
         {
@@ -25,11 +27,12 @@ public class SessionToNetcodeBridge : MonoBehaviour
         }
     }
 
-    void OnSessionAdded(ISession session)
+    private async void OnSessionAdded(ISession session)
     {
         if (netcodeStarted) return;
         netcodeStarted = true;
 
+        // Inicia Netcode
         if (session.IsHost)
         {
             Debug.Log("Starting Netcode as HOST");
@@ -40,5 +43,21 @@ public class SessionToNetcodeBridge : MonoBehaviour
             Debug.Log("Starting Netcode as CLIENT");
             NetworkManager.Singleton.StartClient();
         }
+
+        string sessionId = session.Id;
+
+        // VivoxManager se encarga de unir al canal de sesión
+        if (VivoxManager.Instance != null)
+        {
+            await VivoxManager.Instance.JoinChannel(sessionId);
+        }
+
+        // Configurar los taps para el canal de sesión
+        if (menuController != null)
+        {
+            menuController.SetupTapsForChannel(sessionId);
+        }
+
+        Debug.Log($"Sesión iniciada y taps configurados para canal: {sessionId}");
     }
 }
