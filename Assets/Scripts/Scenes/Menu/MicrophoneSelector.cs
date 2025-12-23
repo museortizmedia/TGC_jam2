@@ -10,6 +10,7 @@ public class MicrophoneSelector : MonoBehaviour
     [SerializeField] private TMP_Dropdown dropdown;
 
     private List<VivoxInputDevice> inputDevices = new List<VivoxInputDevice>();
+    private const string PlayerPrefKey = "SelectedMicrophoneIndex";
 
     private async void Start()
     {
@@ -25,6 +26,15 @@ public class MicrophoneSelector : MonoBehaviour
 
         // Suscribirse a cambios de selección en el dropdown
         dropdown.onValueChanged.AddListener(OnMicSelected);
+
+        // Cargar última selección guardada
+        int savedIndex = PlayerPrefs.GetInt(PlayerPrefKey, 0);
+        if (savedIndex >= 0 && savedIndex < inputDevices.Count)
+        {
+            dropdown.value = savedIndex;
+            await inputDevices[savedIndex].SetActiveDeviceAsync();
+            Debug.Log($"Micrófono restaurado: {inputDevices[savedIndex].DeviceName}");
+        }
     }
 
     private void RefreshDevices()
@@ -46,8 +56,8 @@ public class MicrophoneSelector : MonoBehaviour
         dropdown.ClearOptions();
         dropdown.AddOptions(labels);
 
-        // Seleccionar primer dispositivo por defecto
-        if (inputDevices.Count > 0)
+        // Seleccionar primer dispositivo por defecto si no hay guardado
+        if (inputDevices.Count > 0 && !PlayerPrefs.HasKey(PlayerPrefKey))
         {
             _ = inputDevices[0].SetActiveDeviceAsync();
             dropdown.value = 0;
@@ -63,6 +73,10 @@ public class MicrophoneSelector : MonoBehaviour
         Debug.Log($"Seleccionando micrófono: {device.DeviceName}");
 
         await device.SetActiveDeviceAsync();
+
+        // Guardar la selección en PlayerPrefs
+        PlayerPrefs.SetInt(PlayerPrefKey, index);
+        PlayerPrefs.Save();
 
         Debug.Log("Micrófono activo cambiado a: " + device.DeviceName);
     }

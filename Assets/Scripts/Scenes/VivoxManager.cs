@@ -77,4 +77,5 @@ public class VivoxManager : MonoBehaviour
         joinedChannels.Remove(channelName);
         Debug.Log($"Salido del canal: {channelName}");
     }
+    
 }
