@@ -747,7 +747,6 @@ GameObject:
   m_Component:
   - component: {fileID: 398642172}
   - component: {fileID: 398642171}
-  - component: {fileID: 398642174}
   - component: {fileID: 398642173}
   m_Layer: 0
   m_Name: VivoxMicrophone
@@ -880,20 +879,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4e239a6f9250a94f8074232314da7a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Services.Vivox::Unity.Services.Vivox.AudioTaps.VivoxChannelAudioTap
-  m_ChannelUri: 
-  m_ChannelName: 
---- !u!114 &398642174
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 398642169}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 695b8e8525611cf4bb0685077d525c82, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Services.Vivox::Unity.Services.Vivox.AudioTaps.VivoxCaptureSourceTap
   m_ChannelUri: 
   m_ChannelName: 
 --- !u!1 &410790536
@@ -1988,7 +1973,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efc0288a769f862429784861b27ac354, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MenuController
-  vivoxCaptureSourceTap: {fileID: 398642174}
   vivoxChannelAudioTap: {fileID: 398642173}
 --- !u!4 &1700216153
 Transform:
