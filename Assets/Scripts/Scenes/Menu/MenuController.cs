@@ -1,5 +1,6 @@
 using UnityEngine;
 using Unity.Services.Vivox.AudioTaps;
+using System;
 
 public class MenuController : MonoBehaviour
 {
@@ -16,5 +17,10 @@ public class MenuController : MonoBehaviour
         vivoxChannelAudioTap.ChannelName = channelName;
 
         Debug.Log($"Taps configurados para canal: {channelName}");
+    }
+
+    internal void ResetMenuState()
+    {
+        throw new NotImplementedException();
     }
 }

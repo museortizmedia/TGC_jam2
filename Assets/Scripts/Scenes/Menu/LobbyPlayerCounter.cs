@@ -47,10 +47,7 @@ public class LobbyPlayerCounter : NetworkBehaviour
         {
             gameStarted = true;
 
-            NetworkManager.Singleton.SceneManager.LoadScene(
-                "GameScene",
-                LoadSceneMode.Single
-            );
+            SessionManager.Instance.ChangeState(SessionManager.SessionState.Game);
         }
     }
 }
