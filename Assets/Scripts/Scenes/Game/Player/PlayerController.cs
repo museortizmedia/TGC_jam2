@@ -1,6 +1,7 @@
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Windows;
 
 public class PlayerMovementServerAuth : NetworkBehaviour
 {
@@ -64,7 +65,7 @@ public class PlayerMovementServerAuth : NetworkBehaviour
         isSprinting = sprint;
         if (jump) jumpRequested = true;
 
-        // El servidor aplica la rotación directamente
+        // El servidor aplica la rotaciï¿½n directamente
         transform.Rotate(Vector3.up * rotX * 0.1f);
     }
 
