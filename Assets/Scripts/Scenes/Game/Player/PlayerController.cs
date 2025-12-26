@@ -9,6 +9,9 @@ public class PlayerMovementServerAuth : NetworkBehaviour
     [SerializeField] float sprintMultiplier = 1.5f;
     [SerializeField] float jumpForce = 5f;
 
+    [SerializeField] Transform cameraTransform;
+
+
     Rigidbody rb;
     Vector2 moveInput;
     float verticalInput;
@@ -23,6 +26,21 @@ public class PlayerMovementServerAuth : NetworkBehaviour
     {
         if (!IsOwner) return;
         moveInput = context.ReadValue<Vector2>();
+
+
+        Vector3 camForward = cameraTransform.forward;
+        Vector3 camRight = cameraTransform.right;
+
+        camForward.y = 0;
+        camRight.y = 0;
+
+        camForward.Normalize();
+        camRight.Normalize();
+
+        Vector3 moveDir = camForward * moveInput.y + camRight * moveInput.x;
+
+
+
         // Enviamos todo, incluyendo el mouseX actual
         SubmitMovementServerRpc(moveInput, verticalInput, isSprinting, jumpRequested, mouseX);
     }
