@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovementServerAuth : NetworkBehaviour
 {
-    [SerializeField] float moveSpeed = 5f;
+    [SerializeField] public float moveSpeed = 5f;
     [SerializeField] float sprintMultiplier = 1.5f;
     [SerializeField] float jumpForce = 5f;
 
@@ -93,6 +93,12 @@ public class PlayerMovementServerAuth : NetworkBehaviour
             {
                 rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
                 jumpRequested = false;
+
+                if (TryGetComponent<PlayerAnimations>(out PlayerAnimations anims))
+                {
+                    anims.TriggerJump();
+                }
+                
             }
         }
     }
