@@ -251,6 +251,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   ShowTopMostFoldoutHeaderGroup: 1
   moveSpeed: 5
+  cameraTransform: {fileID: 5733269954909974583}
 --- !u!114 &8984886632031532847
 MonoBehaviour:
   m_ObjectHideFlags: 0
