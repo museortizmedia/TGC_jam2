@@ -21,6 +21,6 @@ public class MenuController : MonoBehaviour
 
     internal void ResetMenuState()
     {
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
     }
 }

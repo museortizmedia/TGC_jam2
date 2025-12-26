@@ -1131,11 +1131,11 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
-  far clip plane: 1000
+  near clip plane: 0.1
+  far clip plane: 5000
   field of view: 60.000004
   orthographic: 0
-  orthographic size: 5
+  orthographic size: 10
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1159,8 +1159,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 646153758}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.20345671, y: 6.781076e-16, z: -1.4091286e-16, w: 0.97908396}
-  m_LocalPosition: {x: 0.5, y: 2.31221, z: -5.15478}
+  m_LocalRotation: {x: 0.000653401, y: 0.98798525, z: 0.0041385293, w: -0.15449172}
+  m_LocalPosition: {x: 3.2648945, y: -0.42631444, z: 13.244202}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1236,14 +1236,12 @@ MonoBehaviour:
     Style: 1
     Time: 2
     CustomCurve:
+      serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
   CustomBlends: {fileID: 0}
-  m_OutputCamera: {fileID: 646153760}
-  m_TargetOverride: {fileID: 0}
-  m_LastFrameUpdated: 2768
 --- !u!1 &893407389
 GameObject:
   m_ObjectHideFlags: 0
@@ -1276,7 +1274,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LobbyPlayerCounter
   ShowTopMostFoldoutHeaderGroup: 1
-  maxPlayers: 4
+  maxPlayers: 2
 --- !u!114 &893407391
 MonoBehaviour:
   m_ObjectHideFlags: 0

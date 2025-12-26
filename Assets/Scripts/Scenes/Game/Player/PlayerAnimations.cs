@@ -25,10 +25,10 @@ public class PlayerAnimations : NetworkBehaviour
         bool grounded = CheckIfGrounded();
         animator.SetBool("isGrounded", grounded);
 
-        Debug.Log($"¿Tocando suelo?: {grounded}");
+        Debug.Log($"ï¿½Tocando suelo?: {grounded}");
 
-        // 2. Locomoción (Blend Tree)
-        float currentBaseSpeed = movementScript.moveSpeed;
+        // 2. Locomociï¿½n (Blend Tree)
+        float currentBaseSpeed = movementScript.MoveSpeed;
         Vector3 localVelocity = transform.InverseTransformDirection(rb.linearVelocity);
 
         float targetX = localVelocity.x / currentBaseSpeed;
@@ -55,7 +55,7 @@ public class PlayerAnimations : NetworkBehaviour
         if (animator != null)
         {
             animator.SetTrigger("Jump");
-            Debug.Log("¡Animación de Salto activada!");
+            Debug.Log("ï¿½Animaciï¿½n de Salto activada!");
         }
     }
 
