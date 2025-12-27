@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovementServerAuth : NetworkBehaviour
 {
-    [SerializeField] public float moveSpeed = 5f;
+    [SerializeField] public float moveSpeed = 20f;
     [SerializeField] float sprintMultiplier = 1.5f;
     [SerializeField] float jumpForce = 5f;
 
@@ -35,6 +35,7 @@ public class PlayerMovementServerAuth : NetworkBehaviour
 
     public void OnSprint(InputAction.CallbackContext context)
     {
+
         if (!IsOwner) return;
         isSprinting = context.performed;
         SubmitMovementServerRpc(moveInput, verticalInput, isSprinting, jumpRequested, mouseX);
@@ -49,10 +50,9 @@ public class PlayerMovementServerAuth : NetworkBehaviour
 
     public void OnLook(InputAction.CallbackContext context)
     {
-        if (!IsOwner) return;
-        // Leemos el movimiento horizontal del mouse
-        mouseX = context.ReadValue<Vector2>().x;
-        SubmitMovementServerRpc(moveInput, verticalInput, isSprinting, jumpRequested, mouseX);
+        //if (!IsOwner) return;
+        //mouseX = context.ReadValue<Vector2>().x;
+        //SubmitMovementServerRpc(moveInput, verticalInput, isSprinting, jumpRequested, mouseX);
     }
 
     // ---------- RPC ----------

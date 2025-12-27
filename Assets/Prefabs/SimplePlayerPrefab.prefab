@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 4621875121548438981}
   - component: {fileID: 4545678878262133887}
   - component: {fileID: 4942732193969505918}
+  - component: {fileID: 5164078982041766225}
   m_Layer: 0
   m_Name: SimplePlayerPrefab
   m_TagString: Untagged
@@ -338,6 +339,23 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   groundCheckDistance: 0.1
+  fallThreshold: 0.15
+  turnSpeed: 15
+--- !u!114 &5164078982041766225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 378827129244887094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.Components.NetworkAnimator
+  ShowTopMostFoldoutHeaderGroup: 1
+  TransitionStateInfoList: []
+  m_Animator: {fileID: 3687331756959807393}
 --- !u!1 &1786092694608488543
 GameObject:
   m_ObjectHideFlags: 0
@@ -551,6 +569,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4dc0ef3af5d1d03499200c74a434e9e7, type: 3}
+--- !u!95 &3687331756959807393 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 4dc0ef3af5d1d03499200c74a434e9e7, type: 3}
+  m_PrefabInstance: {fileID: 7081520206284818992}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7335277917140086235 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 4dc0ef3af5d1d03499200c74a434e9e7, type: 3}
