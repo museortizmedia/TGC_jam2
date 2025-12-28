@@ -80,10 +80,9 @@ public class PlayerMovementServerAuth : NetworkBehaviour
 
     public void OnLook(InputAction.CallbackContext context)
     {
-        if (!IsOwner || !canMove) return;
-
-        mouseX = context.ReadValue<Vector2>().x;
-        SubmitMovementServerRpc(moveInput, verticalInput, isSprinting, jumpRequested, mouseX);
+        //if (!IsOwner) return;
+        //mouseX = context.ReadValue<Vector2>().x;
+        //SubmitMovementServerRpc(moveInput, verticalInput, isSprinting, jumpRequested, mouseX);
     }
 
     // ---------- SERVER RPC ----------
