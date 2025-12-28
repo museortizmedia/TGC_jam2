@@ -50,6 +50,7 @@ public class PlayerMovementServerAuth : NetworkBehaviour
         if (!IsOwner || !canMove) return;
 
         moveInput = context.ReadValue<Vector2>();
+
         SubmitMovementServerRpc(moveInput, verticalInput, isSprinting, jumpRequested, mouseX);
     }
 

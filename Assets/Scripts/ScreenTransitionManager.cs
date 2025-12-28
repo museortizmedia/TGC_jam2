@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Unity.Netcode;
 
 public class ScreenTransitionManager : MonoBehaviour
 {
@@ -27,6 +28,7 @@ public class ScreenTransitionManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         EnsureCanvasExists();
     }
+
 
     private void EnsureCanvasExists()
     {
