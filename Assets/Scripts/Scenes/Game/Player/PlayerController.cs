@@ -8,149 +8,161 @@ public class PlayerMovementServerAuth : NetworkBehaviour
 {
     [Header("Movement Settings")]
     [SerializeField] float moveSpeed = 5f;
-    public float MoveSpeed { get => moveSpeed; set => moveSpeed = value; }
+    public float MoveSpeed => moveSpeed;
+
     [SerializeField] float sprintMultiplier = 1.5f;
-    [SerializeField] float jumpForce = 5f;
+    [SerializeField] float jumpForce = 6f;
 
-    [Header("References")]
-    [SerializeField] Transform cameraTransform;
+    [Header("Ground Check")]
+    [SerializeField] LayerMask groundLayer;
+    [SerializeField] float groundCheckDistance = 0.35f;
+    [SerializeField] float groundCheckOffset = 0.2f;
+    [SerializeField] float coyoteTime = 0.15f;
 
-    [Header("Debug / State (Inspector)")]
-    [SerializeField] bool canMove;
+    [Header("Camera")]
+    public Transform cameraTransform;
 
     Rigidbody rb;
+    PlayerInput playerInput;
 
     Vector2 moveInput;
-    float verticalInput;
     bool isSprinting;
-    bool jumpRequested;
-    float mouseX;
 
-    void Awake()
-    {
-        rb = GetComponent<Rigidbody>();
-    }
+    bool jumpBuffered;   // input recibido
+    bool jumpConsumed;   // salto ejecutado
 
-    // ---------- NETWORK SPAWN ----------
+    float lastGroundedTime;
+
+    public bool IsGrounded { get; private set; }
+    public float VerticalVelocity => rb.linearVelocity.y;
+
+    bool canSendInput;
+    bool canMoveServer;
+
     public override void OnNetworkSpawn()
     {
-        // Solo el propietario local puede moverse
-        canMove = IsOwner;
+        rb = GetComponent<Rigidbody>();
+        playerInput = GetComponent<PlayerInput>();
 
-        // Desactivamos PlayerInput en no propietarios
-        if (!IsOwner)
+        if (IsOwner)
+            canSendInput = true;
+        else
         {
-            GetComponent<PlayerInput>().enabled = false;
+            canSendInput = false;
+            playerInput.enabled = false;
         }
+
+        if (IsServer)
+            canMoveServer = true;
     }
 
-    // ---------- INPUT (CLIENTE PROPIETARIO) ----------
+    // ---------- INPUT ----------
     public void OnMove(InputAction.CallbackContext context)
     {
-        if (!IsOwner || !canMove) return;
-
+        if (!IsOwner || !canSendInput) return;
         moveInput = context.ReadValue<Vector2>();
-
-        SubmitMovementServerRpc(moveInput, verticalInput, isSprinting, jumpRequested, mouseX);
-    }
-
-    public void OnVertical(InputAction.CallbackContext context)
-    {
-        if (!IsOwner || !canMove) return;
-
-        verticalInput = context.ReadValue<float>();
-        SubmitMovementServerRpc(moveInput, verticalInput, isSprinting, jumpRequested, mouseX);
     }
 
     public void OnSprint(InputAction.CallbackContext context)
     {
-        if (!IsOwner || !canMove) return;
-
+        if (!IsOwner || !canSendInput) return;
         isSprinting = context.performed;
-        SubmitMovementServerRpc(moveInput, verticalInput, isSprinting, jumpRequested, mouseX);
     }
 
     public void OnJump(InputAction.CallbackContext context)
     {
-        if (!IsOwner || !canMove || !context.performed) return;
-
-        jumpRequested = true;
-        SubmitMovementServerRpc(moveInput, verticalInput, isSprinting, true, mouseX);
+        if (!IsOwner || !canSendInput) return;
+        if (context.performed) {
+            jumpBuffered = true;
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        }
     }
 
-    public void OnLook(InputAction.CallbackContext context)
+    void Update()
     {
-        //if (!IsOwner) return;
-        //mouseX = context.ReadValue<Vector2>().x;
-        //SubmitMovementServerRpc(moveInput, verticalInput, isSprinting, jumpRequested, mouseX);
+        if (!IsOwner || !canSendInput) return;
+        SubmitMovementServerRpc(moveInput, isSprinting, jumpBuffered);
+        jumpBuffered = false;
     }
 
-    // ---------- SERVER RPC ----------
     [ServerRpc]
-    void SubmitMovementServerRpc(
-        Vector2 move,
-        float vertical,
-        bool sprint,
-        bool jump,
-        float rotX)
+    void SubmitMovementServerRpc(Vector2 move, bool sprint, bool jump)
     {
-        // Seguridad adicional
-        if (!canMove) return;
+        if (!canMoveServer) return;
 
         moveInput = move;
-        verticalInput = vertical;
         isSprinting = sprint;
 
         if (jump)
-            jumpRequested = true;
-
-        // Rotación server-authoritative
-        transform.Rotate(Vector3.up * rotX * 0.1f);
+            jumpBuffered = true;
     }
 
-    // ---------- MOVIMIENTO REAL (SOLO SERVER) ----------
+    // ---------- SERVER PHYSICS ----------
     void FixedUpdate()
     {
-        if (!IsServer || !canMove) return;
+        if (!IsServer || !canMoveServer) return;
 
-        bool isSpectator = CheckIfSpectator();
-        rb.useGravity = !isSpectator;
+        UpdateGroundedState();
 
-        float currentSpeed = moveSpeed * (isSprinting ? sprintMultiplier : 1f);
-        Vector3 relativeDir = transform.forward * moveInput.y + transform.right * moveInput.x;
+        float speed = moveSpeed * (isSprinting ? sprintMultiplier : 1f);
 
-        if (isSpectator)
+        Vector3 forward = transform.forward;
+        Vector3 right = transform.right;
+
+        if (cameraTransform != null)
         {
-            rb.linearVelocity = new Vector3(
-                relativeDir.x * currentSpeed,
-                verticalInput * currentSpeed,
-                relativeDir.z * currentSpeed
-            );
+            forward = Vector3.ProjectOnPlane(cameraTransform.forward, Vector3.up).normalized;
+            right = Vector3.ProjectOnPlane(cameraTransform.right, Vector3.up).normalized;
         }
-        else
+
+        Vector3 direction = forward * moveInput.y + right * moveInput.x;
+
+        rb.linearVelocity = new Vector3(
+            direction.x * speed,
+            rb.linearVelocity.y,
+            direction.z * speed
+        );
+
+        bool canJump =
+            jumpBuffered &&
+            (IsGrounded || Time.time - lastGroundedTime <= coyoteTime) &&
+            !jumpConsumed;
+
+        if (canJump)
         {
-            rb.linearVelocity = new Vector3(
-                relativeDir.x * currentSpeed,
-                rb.linearVelocity.y,
-                relativeDir.z * currentSpeed
-            );
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
 
-            if (jumpRequested)
-            {
-                rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-                jumpRequested = false;
-
-                if (TryGetComponent<PlayerAnimations>(out PlayerAnimations anims))
-                {
-                    anims.TriggerJump();
-                }
-            }
+            jumpConsumed = true;
+            jumpBuffered = false;
         }
+
+        if (IsGrounded)
+            jumpConsumed = false;
     }
 
-    // ---------- UTIL ----------
-    bool CheckIfSpectator()
+    void UpdateGroundedState()
     {
-        return false;
+        Vector3 origin = transform.position + Vector3.up * groundCheckOffset;
+
+        IsGrounded = Physics.Raycast(
+            origin,
+            Vector3.down,
+            groundCheckDistance,
+            groundLayer
+        );
+
+        if (IsGrounded)
+            lastGroundedTime = Time.time;
     }
+
+#if UNITY_EDITOR
+    void OnDrawGizmosSelected()
+    {
+        Vector3 origin = transform.position + Vector3.up * groundCheckOffset;
+        Gizmos.color = IsGrounded ? Color.green : Color.red;
+        Gizmos.DrawSphere(origin + Vector3.down * groundCheckDistance, 0.08f);
+        Gizmos.DrawLine(origin, origin + Vector3.down * groundCheckDistance);
+    }
+#endif
 }

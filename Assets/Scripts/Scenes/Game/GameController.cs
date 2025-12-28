@@ -1,15 +1,23 @@
 using UnityEngine;
 using Unity.Netcode;
-using UnityEngine.SceneManagement;
 using System.Collections.Generic;
+using Unity.Cinemachine;
 
 public class GameController : NetworkBehaviour
 {
     [SerializeField] GameObject playerPrefab;
     [SerializeField] Vector3 spawnCenter;
     [SerializeField] float spawnRadius = 5f;
-
+    [SerializeField] List<GameObject> playerInstanced;
+    [SerializeField] CinemachineVirtualCameraBase freelookCamera;
+    public CinemachineVirtualCameraBase Camera => freelookCamera;
     Dictionary<ulong, NetworkObject> spawnedPlayers = new();
+    [SerializeField] int localPlayerIndex = -1;
+
+    void Awake()
+    {
+        playerInstanced = new List<GameObject>();
+    }
 
     public override void OnNetworkSpawn()
     {
@@ -43,9 +51,12 @@ public class GameController : NetworkBehaviour
 
     void SpawnAllPlayers()
     {
+        int i = 0;
         foreach (var client in NetworkManager.ConnectedClientsList)
         {
+            //Debug.Log(i);
             SpawnPlayerForClient(client.ClientId);
+            i++;
         }
     }
 
@@ -61,6 +72,7 @@ public class GameController : NetworkBehaviour
 
         netObj.SpawnAsPlayerObject(clientId, true);
         spawnedPlayers.Add(clientId, netObj);
+        playerInstanced.Add(player);
     }
 
     Vector3 GetRandomSpawnPosition()

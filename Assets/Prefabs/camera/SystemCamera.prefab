@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3955789034792619242}
   - component: {fileID: 8255018578707323636}
   m_Layer: 0
-  m_Name: Camera (1)
+  m_Name: Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -170,7 +170,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5704314870013170480}
-  - component: {fileID: 3220154164289277171}
   m_Layer: 0
   m_Name: SystemCamera
   m_TagString: Untagged
@@ -191,24 +190,10 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 6660681923813794501}
   - {fileID: 8670176802822552095}
+  - {fileID: 6660681923813794501}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3220154164289277171
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5429654361592292462}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dee2907ba01b0984cad1703d71cfe90d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CameraManager
-  freeLookCamera: {fileID: 4243950260636147430}
-  cameraTransform: {fileID: 6660681923813794501}
 --- !u!1 &5895958847258280341
 GameObject:
   m_ObjectHideFlags: 0
@@ -224,7 +209,7 @@ GameObject:
   - component: {fileID: 1121975409528081784}
   - component: {fileID: 1261447361304865193}
   m_Layer: 0
-  m_Name: FreeLook Camera (1)
+  m_Name: FreeLook Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -238,8 +223,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5895958847258280341}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.05073851, y: 0.1878908, z: 0.009719619, w: 0.98083043}
-  m_LocalPosition: {x: -3.3042288, y: -0.39193994, z: -0.77220213}
+  m_LocalRotation: {x: -0.050738506, y: 0.1878908, z: 0.009719618, w: 0.9808304}
+  m_LocalPosition: {x: -3.3042288, y: -0.39193988, z: -0.77220225}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

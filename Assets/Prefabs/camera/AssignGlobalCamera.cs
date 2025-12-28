@@ -1,23 +1,29 @@
+using Unity.Cinemachine;
 using Unity.Netcode;
 using UnityEngine;
 
 public class AssignGlobalCamera : NetworkBehaviour
 {
     [SerializeField] private Transform cameraTarget;
+    [SerializeField] PlayerMovementServerAuth playerMovementServerAuth;
 
     public override void OnNetworkSpawn()
     {
-        if (!IsOwner) return;
+        if (!IsOwner)
+            return;
 
-        var camManager = CameraManager.Instance;
+        GameController controller = FindAnyObjectByType<GameController>();
 
-        if (camManager == null)
+
+        if (controller == null)
         {
-            Debug.LogError("CameraManager no encontrado");
+            Debug.LogError("No se encontró el GameControler en la escena");
             return;
         }
 
-        camManager.FreeLookCamera.Follow = cameraTarget;
-        camManager.FreeLookCamera.LookAt = cameraTarget;
+        controller.Camera.Follow = cameraTarget;
+        controller.Camera.LookAt = cameraTarget;
+
+        playerMovementServerAuth.cameraTransform = controller.Camera.transform;
     }
 }
