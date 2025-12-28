@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using System.Linq;
 
 public class ColorIdentity : MonoBehaviour {
     [SerializeField] private ColorData currentColor;
@@ -12,5 +13,12 @@ public class ColorIdentity : MonoBehaviour {
     public void SetColor(ColorData newData) {
         currentColor = newData;
         OnColorChanged?.Invoke(currentColor);
+
+        // Notificar a todos los componentes que reaccionan al color
+        var affectedComponents = GetComponentsInChildren<IColorAffected>();
+        foreach (var comp in affectedComponents)
+        {
+            comp.EvaluateColor(currentColor);
+        }
     }
 }

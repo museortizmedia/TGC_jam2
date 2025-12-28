@@ -11,7 +11,7 @@ public class PlayerAnimations : NetworkBehaviour
     [SerializeField] float smoothTime = 10f;
     [SerializeField] LayerMask groundLayer;
     [SerializeField] float groundCheckDistance = 0.1f;
-    [SerializeField] float fallThreshold = 0.15f; // Ajustado para evitar parpadeos en saltos pequeños
+    [SerializeField] float fallThreshold = 0.15f; // Ajustado para evitar parpadeos en saltos pequeï¿½os
     [SerializeField] float turnSpeed = 15f;
 
     private Transform visualsChild;
@@ -32,37 +32,37 @@ public class PlayerAnimations : NetworkBehaviour
     {
         if (rb == null || animator == null || movementScript == null || visualsChild == null) return;
 
-        // 1. ESTADO DE SUELO Y FÍSICA VERTICAL
+        // 1. ESTADO DE SUELO Y Fï¿½SICA VERTICAL
         bool grounded = CheckIfGrounded();
         animator.SetBool("isGrounded", grounded);
         float verticalVel = rb.linearVelocity.y;
 
         if (!grounded)
         {
-            // Gestión de tiempo de caída
+            // Gestiï¿½n de tiempo de caï¿½da
             airTime += Time.deltaTime;
             if (airTime >= fallThreshold)
             {
                 animator.SetBool("isFalling", true);
             }
 
-            // Sincronización de animación de aire por velocidad real del Rigidbody
+            // Sincronizaciï¿½n de animaciï¿½n de aire por velocidad real del Rigidbody
             animator.SetFloat("VerticalVelocity", verticalVel);
         }
         else
         {
             airTime = 0f;
             animator.SetBool("isFalling", false);
-            // Al tocar suelo, forzamos el parámetro a 0 para estabilidad
+            // Al tocar suelo, forzamos el parï¿½metro a 0 para estabilidad
             animator.SetFloat("VerticalVelocity", 0f);
         }
 
-        // 2. CÁLCULO DE VELOCIDADES HORIZONTALES
+        // 2. Cï¿½LCULO DE VELOCIDADES HORIZONTALES
         float currentBaseSpeed = movementScript.moveSpeed;
         Vector3 localVelocity = transform.InverseTransformDirection(rb.linearVelocity);
         float horizontalSpeed = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z).magnitude;
 
-        // 3. LÓGICA DE ROTACIÓN Y LOCOMOCIÓN (Blend Tree 1D)
+        // 3. Lï¿½GICA DE ROTACIï¿½N Y LOCOMOCIï¿½N (Blend Tree 1D)
         if (horizontalSpeed > 0.5f)
         {
             float angle = Mathf.Atan2(localVelocity.x, localVelocity.z) * Mathf.Rad2Deg;
@@ -80,7 +80,7 @@ public class PlayerAnimations : NetworkBehaviour
             animator.SetFloat("AnimSpeed", 1f);
         }
 
-        // 4. APLICAR ROTACIÓN AL MODELO
+        // 4. APLICAR ROTACIï¿½N AL MODELO
         if (horizontalSpeed > 0.1f)
         {
             visualsChild.localRotation = Quaternion.Slerp(
