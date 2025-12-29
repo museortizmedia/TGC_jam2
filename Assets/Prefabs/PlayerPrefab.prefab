@@ -434,7 +434,7 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   moveSpeed: 5
   sprintMultiplier: 1.5
-  jumpForce: 5
+  jumpForce: 8
   groundLayer:
     serializedVersion: 2
     m_Bits: 64

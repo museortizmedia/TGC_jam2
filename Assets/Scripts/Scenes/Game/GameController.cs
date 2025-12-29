@@ -3,6 +3,8 @@ using Unity.Netcode;
 using System.Collections.Generic;
 using Unity.Cinemachine;
 using Mono.Cecil.Cil;
+using System.Collections;
+using Unity.VisualScripting;
 
 public class GameController : NetworkBehaviour
 {
@@ -20,6 +22,10 @@ public class GameController : NetworkBehaviour
 
     [SerializeField] WorldBuilder worldBuilder;
 
+    private HashSet<ulong> playersThatEnteredCenter = new();
+    private bool partidaFinalizada = false;
+
+
     void Awake()
     {
         playerInstanced = new List<GameObject>();
@@ -32,6 +38,11 @@ public class GameController : NetworkBehaviour
         if (!IsServer) return;
 
         NetworkManager.SceneManager.OnSceneEvent += OnSceneEvent;
+
+        if (worldBuilder != null)
+        {
+            worldBuilder.OnPlayerEnterInCenter += PlayerInCenterCounter;
+        }
     }
 
     public override void OnNetworkDespawn()
@@ -39,6 +50,11 @@ public class GameController : NetworkBehaviour
         if (!NetworkManager) return;
 
         NetworkManager.SceneManager.OnSceneEvent -= OnSceneEvent;
+
+        if (worldBuilder != null)
+        {
+            worldBuilder.OnPlayerEnterInCenter -= PlayerInCenterCounter;
+        }
     }
 
     void OnSceneEvent(SceneEvent sceneEvent)
@@ -81,7 +97,7 @@ public class GameController : NetworkBehaviour
         netObj.SpawnAsPlayerObject(clientId, true);
         spawnedPlayers.Add(clientId, netObj);
         OnSpawnPlayer(player);
-        
+
     }
 
     Vector3 GetSpawnPosition()
@@ -105,11 +121,62 @@ public class GameController : NetworkBehaviour
         player.TryGetComponent<PlayerColor>(out var playerColor);
         if (playerColor != null)
         {
-            ColorData colorData = currentColors[ Random.Range(0, currentColors.Count - 1) ];
+            ColorData colorData = currentColors[Random.Range(0, currentColors.Count - 1)];
             Debug.Log("Asignando color: " + colorData.name + " al jugador " + player.name);
             playerColor._color.Value = ColorDataMapper.ToNet(colorData);
             currentColors.Remove(colorData);
         }
 
+    }
+
+    int playerInCenter = 0;
+    void PlayerInCenterCounter(GameObject player)
+    {
+        if (!IsServer || partidaFinalizada)
+            return;
+
+        var netObj = player.GetComponent<NetworkObject>();
+        if (netObj == null)
+            return;
+
+        ulong clientId = netObj.OwnerClientId;
+
+        // Si ya entró antes, ignoramos
+        if (!playersThatEnteredCenter.Add(clientId))
+            return;
+
+        Debug.Log(
+            $"Jugador {clientId} entró al centro " +
+            $"({playersThatEnteredCenter.Count}/{NetworkManager.ConnectedClientsList.Count})"
+        );
+
+        // ¿Todos han entrado?
+        if (playersThatEnteredCenter.Count == NetworkManager.ConnectedClientsList.Count)
+        {
+            FinalizarPartida();
+        }
+    }
+
+    void FinalizarPartida()
+    {
+        if (partidaFinalizada)
+            return;
+
+        partidaFinalizada = true;
+
+        Debug.Log("Todos los jugadores han entrado al centro. Finalizando partida.");
+        // Reportar al SessionManager
+        SessionManager.Instance.ChangeState(SessionManager.SessionState.End);
+        // - cada instancia de player debe quita el input
+        // Activar cámara de finalización y lógica de definición de ganador
+        StartCoroutine(FinalizarPartidaCoroutine());
+    }
+
+    IEnumerator FinalizarPartidaCoroutine()
+    {
+        // Esperar un momento para que todos vean que han entrado
+        Debug.Log("5 segundos para reiniciar...");
+        yield return new WaitForSeconds(5f);
+        SessionManager.Instance.ChangeState(SessionManager.SessionState.Lobby);
     }
 }

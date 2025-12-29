@@ -35,6 +35,7 @@ public class LobbyPlayerCounter : NetworkBehaviour
         CheckPlayerCount();
     }
 
+    [ContextMenu("Check Player Count")]
     void CheckPlayerCount()
     {
         if (gameStarted) return;

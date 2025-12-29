@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class WorldBuilder : MonoBehaviour
@@ -5,6 +6,8 @@ public class WorldBuilder : MonoBehaviour
     public GameObject PiecePrefab;
     public Transform[] SpawnPoints;
     private int currentSpawnIndex = 0;
+
+    public event Action<GameObject> OnPlayerEnterInCenter;
 
     public Vector3 GetCurrentSpawnPointPosition()
     {
@@ -17,6 +20,12 @@ public class WorldBuilder : MonoBehaviour
         Vector3 spawnPoint = SpawnPoints[currentSpawnIndex].position;
         currentSpawnIndex = (currentSpawnIndex + 1) % SpawnPoints.Length;
         return spawnPoint;
+    }
+
+    public void ReportPlayerInCenter(GameObject player)
+    {
+        OnPlayerEnterInCenter?.Invoke(player);
+        Debug.Log("Player " + player.name + " is in the center area.");
     }
     
 }

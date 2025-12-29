@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7726900961954633752}
   - component: {fileID: 1220329878063955406}
   - component: {fileID: 5367223666122283763}
+  - component: {fileID: 5869821803738053800}
   m_Layer: 0
   m_Name: Molde (3)
   m_TagString: Untagged
@@ -422,6 +423,28 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &5869821803738053800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1707304435343238176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a7a0fad1fa8df1489b58e5e089ea1d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EditorPolygonArea
+  fillColor: {r: 1, g: 0, b: 0, a: 0.25}
+  outlineColor: {r: 1, g: 0, b: 0, a: 1}
+  initialPoints: 4
+  points:
+  - {x: -143.99956, y: 20, z: 226.03238}
+  - {x: -282.47455, y: 20, z: 106.52287}
+  - {x: -79.861595, y: 20, z: -13.262756}
+  - {x: 123.0582, y: 20, z: -3.3847656}
+  - {x: 64.07816, y: 20, z: 171.81921}
+  - {x: -40.412445, y: 20, z: 166.51167}
 --- !u!1 &2649615177346798488
 GameObject:
   m_ObjectHideFlags: 0
@@ -436,6 +459,7 @@ GameObject:
   - component: {fileID: 2461401753632135071}
   - component: {fileID: 4133513185707914525}
   - component: {fileID: 8318718199566622590}
+  - component: {fileID: 6470469716056392506}
   m_Layer: 0
   m_Name: Molde (2)
   m_TagString: Untagged
@@ -844,6 +868,28 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &6470469716056392506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2649615177346798488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a7a0fad1fa8df1489b58e5e089ea1d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EditorPolygonArea
+  fillColor: {r: 1, g: 0, b: 0, a: 0.25}
+  outlineColor: {r: 1, g: 0, b: 0, a: 1}
+  initialPoints: 4
+  points:
+  - {x: -280.37473, y: 35, z: 106.12778}
+  - {x: -427.0521, y: 35, z: -16.59674}
+  - {x: -116.92836, y: 35, z: -190.82385}
+  - {x: 181.74576, y: 35, z: -179.08313}
+  - {x: 119.04619, y: 35, z: 5.583557}
+  - {x: -79.92615, y: 35, z: -10.748413}
 --- !u!1 &3658000935108403247
 GameObject:
   m_ObjectHideFlags: 0
@@ -858,6 +904,7 @@ GameObject:
   - component: {fileID: 6336457884634088817}
   - component: {fileID: 4640524384765770307}
   - component: {fileID: 5670605095205138656}
+  - component: {fileID: 3902078570817948964}
   m_Layer: 0
   m_Name: Molde (4)
   m_TagString: Untagged
@@ -1266,6 +1313,26 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &3902078570817948964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3658000935108403247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a7a0fad1fa8df1489b58e5e089ea1d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EditorPolygonArea
+  fillColor: {r: 1, g: 0, b: 0, a: 0.25}
+  outlineColor: {r: 1, g: 0, b: 0, a: 1}
+  initialPoints: 4
+  points:
+  - {x: -144.19926, y: 8, z: 226.23428}
+  - {x: -40.285355, y: 8, z: 166.3142}
+  - {x: 63.50807, y: 8, z: 171.90791}
+  - {x: 2.0788097, y: 8, z: 342.86844}
 --- !u!1 &5045349007678660981
 GameObject:
   m_ObjectHideFlags: 0
@@ -2898,9 +2965,9 @@ MonoBehaviour:
   outlineColor: {r: 1, g: 0, b: 0, a: 1}
   initialPoints: 4
   points:
-  - {x: -418.96808, y: 50, z: -14.166718}
-  - {x: -593.328, y: 50, z: -164.81604}
-  - {x: -173.91068, y: 50, z: -422.81396}
-  - {x: 253.42317, y: 50, z: -420.93402}
-  - {x: 187.02284, y: 50, z: -220.64801}
-  - {x: -144.733, y: 50, z: -217.35919}
+  - {x: -420.39142, y: 50, z: -12.935394}
+  - {x: -560.3281, y: 50, z: -131.52698}
+  - {x: -159.97775, y: 50, z: -376.1114}
+  - {x: 238.11565, y: 50, z: -352.10968}
+  - {x: 178.38724, y: 50, z: -172.65002}
+  - {x: -120.971176, y: 50, z: -193.77234}
