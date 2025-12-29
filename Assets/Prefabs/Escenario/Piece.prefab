@@ -1330,7 +1330,7 @@ GameObject:
   - component: {fileID: 798734272493890084}
   - component: {fileID: 9206487041718834529}
   m_Layer: 0
-  m_Name: Molde
+  m_Name: MoldeOriginal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2473,6 +2473,7 @@ GameObject:
   - component: {fileID: 3904252514221343792}
   - component: {fileID: 488008551484488851}
   - component: {fileID: 7313610224695367195}
+  - component: {fileID: 7339859203194218123}
   m_Layer: 0
   m_Name: Molde (1)
   m_TagString: Untagged
@@ -2881,3 +2882,25 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &7339859203194218123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7955951071069413961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a7a0fad1fa8df1489b58e5e089ea1d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EditorPolygonArea
+  fillColor: {r: 1, g: 0, b: 0, a: 0.25}
+  outlineColor: {r: 1, g: 0, b: 0, a: 1}
+  initialPoints: 4
+  points:
+  - {x: -418.96808, y: 50, z: -14.166718}
+  - {x: -593.328, y: 50, z: -164.81604}
+  - {x: -173.91068, y: 50, z: -422.81396}
+  - {x: 253.42317, y: 50, z: -420.93402}
+  - {x: 187.02284, y: 50, z: -220.64801}
+  - {x: -144.733, y: 50, z: -217.35919}

@@ -16,7 +16,7 @@ public class GameController : NetworkBehaviour
     [SerializeField] int localPlayerIndex = -1;
 
     [SerializeField] ColorData[] playerColors;
-    List<ColorData> currentColors;
+    [SerializeField] List<ColorData> currentColors;
 
     [SerializeField] WorldBuilder worldBuilder;
 
@@ -105,7 +105,7 @@ public class GameController : NetworkBehaviour
         player.TryGetComponent<PlayerColor>(out var playerColor);
         if (playerColor != null)
         {
-            ColorData colorData = currentColors[ Random.Range(0, playerInstanced.Count - 1) ];
+            ColorData colorData = currentColors[ Random.Range(0, currentColors.Count - 1) ];
             Debug.Log("Asignando color: " + colorData.name + " al jugador " + player.name);
             playerColor._color.Value = ColorDataMapper.ToNet(colorData);
             currentColors.Remove(colorData);
