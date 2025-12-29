@@ -3,9 +3,9 @@ using Unity.Netcode;
 
 public class PlayerAnimations : NetworkBehaviour
 {
-    Animator animator;
-    Rigidbody rb;
-    PlayerMovementServerAuth movement;
+    [SerializeField] Animator animator;
+    [SerializeField] Rigidbody rb;
+    [SerializeField] PlayerMovementServerAuth movement;
 
     [Header("Settings")]
     [SerializeField] float smoothTime = 10f;

@@ -14,7 +14,7 @@ public class CharacterColorRenderer : MonoBehaviour, IColorAffected
     public void EvaluateColor(ColorData colorData)
     {
         rend.GetPropertyBlock(block);
-        block.SetColor("_Color", colorData.value);
+        //block.SetColor("_Color", colorData.dataColor.value);
         rend.SetPropertyBlock(block);
     }
 }

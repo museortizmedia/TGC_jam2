@@ -588,71 +588,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &186012143
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 378827129244887094, guid: 3b6f370707af6f240aa76973333b1025, type: 3}
-      propertyPath: m_Name
-      value: PlayerPrefab
-      objectReference: {fileID: 0}
-    - target: {fileID: 3113760690273241834, guid: 3b6f370707af6f240aa76973333b1025, type: 3}
-      propertyPath: GlobalObjectIdHash
-      value: 2877013950
-      objectReference: {fileID: 0}
-    - target: {fileID: 3113760690273241834, guid: 3b6f370707af6f240aa76973333b1025, type: 3}
-      propertyPath: InScenePlacedSourceGlobalObjectIdHash
-      value: 3918221075
-      objectReference: {fileID: 0}
-    - target: {fileID: 4640166229409602657, guid: 3b6f370707af6f240aa76973333b1025, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4640166229409602657, guid: 3b6f370707af6f240aa76973333b1025, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4640166229409602657, guid: 3b6f370707af6f240aa76973333b1025, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4640166229409602657, guid: 3b6f370707af6f240aa76973333b1025, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4640166229409602657, guid: 3b6f370707af6f240aa76973333b1025, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4640166229409602657, guid: 3b6f370707af6f240aa76973333b1025, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4640166229409602657, guid: 3b6f370707af6f240aa76973333b1025, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4640166229409602657, guid: 3b6f370707af6f240aa76973333b1025, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4640166229409602657, guid: 3b6f370707af6f240aa76973333b1025, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4640166229409602657, guid: 3b6f370707af6f240aa76973333b1025, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 3b6f370707af6f240aa76973333b1025, type: 3}
 --- !u!43 &228415577
 Mesh:
   m_ObjectHideFlags: 0
@@ -5088,6 +5023,12 @@ MonoBehaviour:
   playerInstanced: []
   freelookCamera: {fileID: 1590918759}
   localPlayerIndex: -1
+  playerColors:
+  - {fileID: 11400000, guid: 1703ceb6c4a7270499f35e42b0b4a6a0, type: 2}
+  - {fileID: 11400000, guid: 32c9bbca4a2f3ab45932136c2d668bc3, type: 2}
+  - {fileID: 11400000, guid: 227ccc20ac0ce214f869f4c4e92657bd, type: 2}
+  - {fileID: 11400000, guid: 9cb2c6964de5e7749bb0ef74498fe8dd, type: 2}
+  worldBuilder: {fileID: 1203637815122856592}
 --- !u!1001 &1203637815122856591
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5529,6 +5470,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
+--- !u!114 &1203637815122856592 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 478906825473487501, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
+  m_PrefabInstance: {fileID: 1203637815122856591}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 295491aa16ddda84b858ed670ffccad8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WorldBuilder
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -5538,5 +5490,4 @@ SceneRoots:
   - {fileID: 121175608}
   - {fileID: 924565897}
   - {fileID: 1590918758}
-  - {fileID: 186012143}
   - {fileID: 1203637815122856591}

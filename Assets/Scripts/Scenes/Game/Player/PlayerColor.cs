@@ -1,36 +1,71 @@
-using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
 using Unity.Netcode;
+using UnityEngine;
 
+[DisallowMultipleComponent]
 public class PlayerColor : NetworkBehaviour
 {
-    [SerializeField] Renderer rend;
+    [Header("Shader Property Names")]
+    [SerializeField] private string emitColorProperty = "_EmitColor";
+    [SerializeField] private string emitIntensityProperty = "_EmitIntensity";
 
-    private NetworkVariable<Color> playerColor =
-        new(writePerm: NetworkVariableWritePermission.Server);
+    [SerializeField] Renderer[] renderers;
+    private MaterialPropertyBlock propertyBlock;
+
+    public NetworkVariable<ColorDataNet> _color =
+        new NetworkVariable<ColorDataNet>(
+            new() { r = 1f, g = 1f, b = 1f, a = 1f, intensity = 1f },
+            NetworkVariableReadPermission.Everyone,
+            NetworkVariableWritePermission.Server
+        );
+    [SerializeField] string currenColorName;
+    [SerializeField] ColorData currentColor;
+    [SerializeField] ColorData[] allColors;
+
+    private void Awake()
+    {
+        renderers ??= GetComponentsInChildren<Renderer>();
+        propertyBlock = new MaterialPropertyBlock();
+    }
 
     public override void OnNetworkSpawn()
     {
-        if (IsServer)
-        {
-            playerColor.Value = Random.ColorHSV();
-        }
-
-        ApplyColor(playerColor.Value);
-        playerColor.OnValueChanged += OnColorChanged;
+        // Escuchar cambios sincronizados
+        _color.OnValueChanged += OnColorChanged;
     }
 
     public override void OnNetworkDespawn()
     {
-        playerColor.OnValueChanged -= OnColorChanged;
+        _color.OnValueChanged -= OnColorChanged;
     }
 
-    void OnColorChanged(Color oldColor, Color newColor)
+    private void OnColorChanged(ColorDataNet oldColor, ColorDataNet newColor)
     {
-        ApplyColor(newColor);
+        // Buscamos el color
+        ColorData resolved =
+        allColors.FirstOrDefault(c => c.colorId == newColor.colorId);
+
+        if (resolved == null) { Debug.LogError($"ColorData con id '{newColor.colorId}' no encontrado en catálogo.", transform); return; }
+
+        // Podemos hacer una espera o solo almacenar la info para lanzarla mas adelante
+        ApplyColor(ColorDataMapper.ToUnityColor(newColor), ColorDataMapper.ToUnityIntensity(newColor));
+        currenColorName = ColorDataMapper.ToUnityColorId(newColor);
     }
 
-    void ApplyColor(Color color)
+    /// <summary>
+    /// Aplica color e intensidad de emisión.
+    /// </summary>
+    public void ApplyColor(Color color, float intensity = 1f)
     {
-        rend.material.color = color;
+        for (int i = 0; i < renderers.Length; i++)
+        {
+            Renderer rend = renderers[i];
+
+            rend.GetPropertyBlock(propertyBlock);
+            propertyBlock.SetColor(emitColorProperty, color);
+            propertyBlock.SetFloat(emitIntensityProperty, intensity);
+            rend.SetPropertyBlock(propertyBlock);
+        }
     }
 }
