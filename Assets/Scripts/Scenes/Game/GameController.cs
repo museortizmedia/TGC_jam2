@@ -10,12 +10,10 @@ public class GameController : NetworkBehaviour
 {
     [SerializeField] GameObject playerPrefab;
     [SerializeField] Vector3 spawnCenter;
-    [SerializeField] float spawnRadius = 5f;
     [SerializeField] List<GameObject> playerInstanced;
     [SerializeField] CinemachineVirtualCameraBase freelookCamera;
     public CinemachineVirtualCameraBase Camera => freelookCamera;
     Dictionary<ulong, NetworkObject> spawnedPlayers = new();
-    [SerializeField] int localPlayerIndex = -1;
 
     [SerializeField] ColorData[] playerColors;
     [SerializeField] List<ColorData> currentColors;
@@ -103,8 +101,6 @@ public class GameController : NetworkBehaviour
     Vector3 GetSpawnPosition()
     {
         return worldBuilder.GetCurrentSpawnPointPosition();
-        //Vector2 circle = Random.insideUnitCircle * spawnRadius;
-        //return spawnCenter + new Vector3(circle.x, 0, circle.y);
     }
 
     void OnSpawnPlayer(GameObject player)
@@ -129,7 +125,6 @@ public class GameController : NetworkBehaviour
 
     }
 
-    int playerInCenter = 0;
     void PlayerInCenterCounter(GameObject player)
     {
         if (!IsServer || partidaFinalizada)
