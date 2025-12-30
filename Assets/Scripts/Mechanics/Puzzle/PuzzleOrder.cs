@@ -1,16 +1,18 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 public class PuzzleOrder : Puzzle
 {
     [SerializeField] private InteractionLever[] levers;
 
-    private int currentIndex = 0;
+    private List<InteractionLever> activatedOrder = new();
+    private int activatedCount = 0;
 
     private void OnEnable()
     {
         foreach (var lever in levers)
         {
-            lever.onActivated.AddListener(OnLeverActivated);
+            lever.onInteracted.AddListener(OnLeverActivated);
         }
     }
 
@@ -18,27 +20,40 @@ public class PuzzleOrder : Puzzle
     {
         foreach (var lever in levers)
         {
-            lever.onActivated.RemoveListener(OnLeverActivated);
+            lever.onInteracted.RemoveListener(OnLeverActivated);
         }
     }
 
-    public void OnLeverActivated(InteractionLever lever)
+    private void OnLeverActivated(InteractionLever lever)
     {
         if (isSolved) return;
 
-        if (levers[currentIndex] == lever)
-        {
-            currentIndex++;
+        // Evitar dobles activaciones
+        if (activatedOrder.Contains(lever))
+            return;
 
-            if (currentIndex >= levers.Length)
+        activatedOrder.Add(lever);
+        activatedCount++;
+
+        //  SOLO validar cuando todas estén activadas
+        if (activatedCount == levers.Length)
+        {
+            ValidateOrder();
+        }
+    }
+
+    private void ValidateOrder()
+    {
+        for (int i = 0; i < levers.Length; i++)
+        {
+            if (activatedOrder[i] != levers[i])
             {
-                Solved();
+                Incorrect();
+                return;
             }
         }
-        else
-        {
-            Incorrect();
-        }
+
+        Solved();
     }
 
     protected override void OnSolved()
@@ -50,11 +65,12 @@ public class PuzzleOrder : Puzzle
     {
         Debug.Log("PuzzleOrder INCORRECT → Reset");
 
-        currentIndex = 0;
+        activatedOrder.Clear();
+        activatedCount = 0;
 
         foreach (var lever in levers)
         {
-            lever.SetActive(false);
+            lever.Deactivate();
         }
     }
 }

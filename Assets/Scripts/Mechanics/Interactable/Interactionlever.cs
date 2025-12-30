@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
 
 public class InteractionLever : InteractiveObject
@@ -7,8 +7,7 @@ public class InteractionLever : InteractiveObject
     [SerializeField] private Animator animator;
 
     [Header("Events")]
-    public UnityEvent<InteractionLever> onActivated;
-    public UnityEvent<InteractionLever> onDeactivated;
+    public UnityEvent<InteractionLever> onInteracted;
 
     private bool isActive;
 
@@ -19,24 +18,41 @@ public class InteractionLever : InteractiveObject
     {
         if (isActive) return;
 
-        SetActive(true);
-        onActivated?.Invoke(this);
+        isActive = true;
+        animator.SetBool("IsActive", true);
+
+        Debug.Log($"[InteractionLever] Interacted: {gameObject.name}", this);
+        onInteracted?.Invoke(this);
     }
 
-    protected override void OnInteract() { }
-    protected override void OnInteractEnd() { }
 
-    // =========================
-    // CONTROL
-    // =========================
 
-    public void SetActive(bool value)
+    // Implementación requerida por la clase base
+    protected override void OnInteract()
     {
-        isActive = value;
-        animator.SetBool("IsActive", isActive);
+        // Lógica de interacción (puede dejarse vacío si no se necesita)
+    }
 
-        if (!value)
-            onDeactivated?.Invoke(this);
+    protected override void OnInteractEnd()
+    {
+        // Lógica al finalizar la interacción (puede dejarse vacío si no se necesita)
+    }
+
+    // =========================
+    // STATE (control externo)
+    // =========================
+
+    public void Activate()
+    {
+        Debug.Log($"[InteractionLever] Activated: {gameObject.name}", this);
+        animator.SetBool("IsActive", true);
+    }
+
+    public void Deactivate()
+    {
+        isActive = false;
+        animator.SetBool("IsActive", false);
+
     }
 
     public bool IsActive => isActive;
