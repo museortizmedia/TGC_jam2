@@ -285,7 +285,7 @@ MonoBehaviour:
   cameraReference: {fileID: 0}
   groundLayers:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 4294967295
   groundCheckRadius: 0.25
   groundCheckOffset: {x: 0, y: -0.02, z: 0}
   crouchHeightOffset: 0.5
@@ -311,12 +311,13 @@ MonoBehaviour:
   animators:
   - {fileID: 7481933711644676859}
   - {fileID: 7361430719581269433}
-  rb: {fileID: 0}
-  movement: {fileID: 0}
+  movement: {fileID: 4984804232306192955}
+  visualsChild: {fileID: 4079310922658465208}
   smoothTime: 10
   fallThreshold: 0.15
   turnSpeed: 15
-  visualsChild: {fileID: 4079310922658465208}
+  targetYRotationNet:
+    m_InternalValue: 0
 --- !u!1 &3376476663957511764
 GameObject:
   m_ObjectHideFlags: 0
