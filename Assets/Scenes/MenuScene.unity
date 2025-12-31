@@ -623,8 +623,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LobbyPlayerCounter
   ShowTopMostFoldoutHeaderGroup: 1
-  maxPlayers: 1
-  countdownSeconds: 5
+  maxPlayers: 2
+  countdownSeconds: 1
 --- !u!114 &893407391
 MonoBehaviour:
   m_ObjectHideFlags: 0
