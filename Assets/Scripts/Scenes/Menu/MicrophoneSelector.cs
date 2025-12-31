@@ -1,10 +1,10 @@
 using UnityEngine;
-using UnityEngine.UI;
 using System.Collections.Generic;
 using Unity.Services.Vivox;
-using System.Threading.Tasks;
 using TMPro;
+using System;
 
+[Obsolete("Usar MicrophoneSelectorUIToolkit en su lugar")]
 public class MicrophoneSelector : MonoBehaviour
 {
     [SerializeField] private TMP_Dropdown dropdown;
