@@ -14,6 +14,7 @@ public struct ColorDataNet :
     public float b;
     public float a;
     public float intensity;
+    public int meshIndex;
 
     public ColorDataNet(ColorData so)
     {
@@ -23,6 +24,7 @@ public struct ColorDataNet :
         b = so.color.b;
         a = so.color.a;
         intensity = so.intensity;
+        meshIndex = so.meshIndex;
     }
 
     public bool Equals(ColorDataNet other)
@@ -32,7 +34,8 @@ public struct ColorDataNet :
             && g == other.g
             && b == other.b
             && a == other.a
-            && intensity == other.intensity;
+            && intensity == other.intensity
+            && meshIndex == other.meshIndex;
     }
 
     public void NetworkSerialize<T>(BufferSerializer<T> serializer)
@@ -44,6 +47,7 @@ public struct ColorDataNet :
         serializer.SerializeValue(ref b);
         serializer.SerializeValue(ref a);
         serializer.SerializeValue(ref intensity);
+        serializer.SerializeValue(ref meshIndex);
     }
 }
 
@@ -58,7 +62,8 @@ public static class ColorDataMapper
             g = so.color.g,
             b = so.color.b,
             a = so.color.a,
-            intensity = so.intensity
+            intensity = so.intensity,
+            meshIndex = so.meshIndex
         };
     }
 
@@ -71,8 +76,14 @@ public static class ColorDataMapper
     {
         return net.intensity;
     }
+
     public static string ToUnityColorId(ColorDataNet net)
     {
         return net.colorId.ToString();
+    }
+
+    public static float ToUnityMeshIndex(ColorDataNet net)
+    {
+        return net.meshIndex;
     }
 }

@@ -7,8 +7,12 @@ using System.Collections.Generic;
 public class LobbyReadyController : NetworkBehaviour
 {
     [Header("Lobby Settings")]
-    [SerializeField] private int maxPlayers = 4;
-    [SerializeField] private int countdownSeconds = 5;
+    [SerializeField] private int maxPlayersProd = 4;
+    [SerializeField] private int maxPlayersEditor = 1;
+    private int maxPlayers;
+    [SerializeField] private int countdownSecondsProd  = 5;
+    [SerializeField] private int countdownSecondsEditor = 1;
+    private int countdownSeconds;
 
     // =========================
     // EVENTS (UI)
@@ -38,11 +42,21 @@ public class LobbyReadyController : NetworkBehaviour
     private bool gameStarted;
     private Coroutine countdownRoutine;
 
+
+    void Awake()
+    {
+        maxPlayers = Application.isEditor ? maxPlayersEditor : maxPlayersProd;
+        countdownSeconds = Application.isEditor ? countdownSecondsEditor : countdownSecondsProd;
+    }
+
     // =========================
     // NETWORK LIFECYCLE
     // =========================
     public override void OnNetworkSpawn()
     {
+        maxPlayers = Application.isEditor ? maxPlayersEditor : maxPlayersProd;
+        countdownSeconds = Application.isEditor ? countdownSecondsEditor : countdownSecondsProd;
+
         connectedPlayers.OnValueChanged += (_, __) => EmitAllState();
         readyCount.OnValueChanged += (_, __) => EmitAllState();
         countdownNet.OnValueChanged += (_, __) => EmitStatus();

@@ -66,6 +66,15 @@ public class LobbyReadyButtonBinder : MonoBehaviour
         uiInitialized = false;
     }
 
+    [ContextMenu("Initialize UI")]
+    void ContextMenuInitializeUI()
+    {
+        if (uiDocument != null && uiDocument.rootVisualElement != null)
+        {
+            InitializeUI(uiDocument.rootVisualElement);
+        }
+    }
+
     // =========================
     // UI INITIALIZATION
     // =========================

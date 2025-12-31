@@ -43,7 +43,7 @@ public class PlayerMovementServerAuth : NetworkBehaviour
     private Rigidbody rb;
     private CapsuleCollider playerCollider;
 
-    private bool isGrounded;
+    [HideInInspector] public bool isGrounded;
     private bool isCrouched;
     private float originalColliderCenterY;
 

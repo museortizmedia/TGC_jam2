@@ -10,6 +10,8 @@ public class PlayerColor : NetworkBehaviour
     [SerializeField] private string emitColorProperty = "_EmitColor";
     [SerializeField] private string emitIntensityProperty = "_EmitIntensity";
 
+    [SerializeField] private GameObject maleMesh, femaleMesh;
+
     [SerializeField] Renderer[] renderers;
     private MaterialPropertyBlock propertyBlock;
 
@@ -43,10 +45,11 @@ public class PlayerColor : NetworkBehaviour
     private void OnColorChanged(ColorDataNet oldColor, ColorDataNet newColor)
     {
         // Buscamos el color
-        ColorData resolved =
+        currentColor =
         allColors.FirstOrDefault(c => c.colorId == newColor.colorId);
+        Debug.Log(currentColor == null ? $"ColorData con id '{currentColor.colorId}' no encontrado en catálogo." : $"ColorData con id '{currentColor.colorId}' resuelto correctamente.", transform);
 
-        if (resolved == null) { Debug.LogError($"ColorData con id '{newColor.colorId}' no encontrado en catálogo.", transform); return; }
+        if (currentColor == null) { Debug.LogError($"ColorData con id '{newColor.colorId}' no encontrado en catálogo.", transform); return; }
 
         // Podemos hacer una espera o solo almacenar la info para lanzarla mas adelante
         ApplyColor(ColorDataMapper.ToUnityColor(newColor), ColorDataMapper.ToUnityIntensity(newColor));
@@ -66,6 +69,17 @@ public class PlayerColor : NetworkBehaviour
             propertyBlock.SetColor(emitColorProperty, color);
             propertyBlock.SetFloat(emitIntensityProperty, intensity);
             rend.SetPropertyBlock(propertyBlock);
+
+            if (currentColor.meshIndex == 0)
+            {
+                maleMesh.SetActive(true);
+                femaleMesh.SetActive(false);
+            }
+            else
+            {
+                maleMesh.SetActive(false);
+                femaleMesh.SetActive(true);
+            }
         }
     }
 }

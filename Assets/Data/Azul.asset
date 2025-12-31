@@ -15,4 +15,5 @@ MonoBehaviour:
   colorId: azul
   color: {r: 0.15107687, g: 0.55392313, b: 0.9150943, a: 1}
   intensity: 1
+  meshIndex: 1
   ghostMaterial: {fileID: 0}

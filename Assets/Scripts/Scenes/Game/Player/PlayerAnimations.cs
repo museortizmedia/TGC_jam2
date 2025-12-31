@@ -3,7 +3,7 @@ using Unity.Netcode;
 
 public class PlayerAnimations : NetworkBehaviour
 {
-    /*[SerializeField] Animator animator;
+    [SerializeField] Animator[] animators;
     [SerializeField] Rigidbody rb;
     [SerializeField] PlayerMovementServerAuth movement;
 
@@ -12,51 +12,45 @@ public class PlayerAnimations : NetworkBehaviour
     [SerializeField] float fallThreshold = 0.15f;
     [SerializeField] float turnSpeed = 15f;
 
-    Transform visualsChild;
+    public Transform visualsChild;
 
     float airTime;
     float targetYRotation;
 
     void Awake()
     {
-        animator = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody>();
         movement = GetComponent<PlayerMovementServerAuth>();
-
-        if (animator != null)
-            visualsChild = animator.transform;
-        else
-            Debug.LogError("Animator not found");
     }
 
     void Update()
     {
-        if (!IsServer || animator == null || movement == null || visualsChild == null)
+        if (!IsServer || movement == null || visualsChild == null)
             return;
 
         // ---------- GROUND STATE ----------
-        bool grounded = movement.IsGrounded;
-        animator.SetBool("isGrounded", grounded);
+        bool grounded = movement.isGrounded;
+        SetAnimatorsBool("isGrounded", grounded);
 
-        float verticalVel = movement.VerticalVelocity;
+        float verticalVel = movement.verticalFreeMoveSpeed;
 
         if (!grounded)
         {
             airTime += Time.deltaTime;
             if (airTime >= fallThreshold)
-                animator.SetBool("isFalling", true);
+                SetAnimatorsBool("isFalling", true);
 
-            animator.SetFloat("VerticalVelocity", verticalVel);
+            SetAnimatorsFloat("VerticalVelocity", verticalVel);
         }
         else
         {
             airTime = 0f;
-            animator.SetBool("isFalling", false);
-            animator.SetFloat("VerticalVelocity", 0f);
+            SetAnimatorsBool("isFalling", false);
+            SetAnimatorsFloat("VerticalVelocity", 0f);
         }
 
         // ---------- LOCOMOTION ----------
-        float baseSpeed = movement.MoveSpeed;
+        float baseSpeed = movement.moveSpeed;
         Vector3 localVelocity = transform.InverseTransformDirection(rb.linearVelocity);
         float horizontalSpeed = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z).magnitude;
 
@@ -66,20 +60,24 @@ public class PlayerAnimations : NetworkBehaviour
             targetYRotation = angle;
 
             float blend = horizontalSpeed / baseSpeed;
-            animator.SetFloat(
-                "VelocityZ",
-                Mathf.Lerp(animator.GetFloat("VelocityZ"), blend, Time.deltaTime * smoothTime)
-            );
+            foreach (Animator anim in animators)
+            {
+                float current = anim.GetFloat("VelocityZ");
+                float target = Mathf.Lerp(current, blend, Time.deltaTime * smoothTime);
+                anim.SetFloat("VelocityZ", target);
+            }
 
-            animator.SetFloat("AnimSpeed", Mathf.Max(0.5f, blend));
+            SetAnimatorsFloat("AnimSpeed", Mathf.Max(0.5f, blend));
         }
         else
         {
-            animator.SetFloat(
-                "VelocityZ",
-                Mathf.Lerp(animator.GetFloat("VelocityZ"), 0f, Time.deltaTime * smoothTime)
-            );
-            animator.SetFloat("AnimSpeed", 1f);
+            foreach (Animator anim in animators)
+            {
+                float current = anim.GetFloat("VelocityZ");
+                float target = Mathf.Lerp(current, 0f, Time.deltaTime * smoothTime);
+                anim.SetFloat("VelocityZ", target);
+            }
+            SetAnimatorsFloat("AnimSpeed", 1f);
         }
 
         // ---------- VISUAL ROTATION ----------
@@ -96,6 +94,28 @@ public class PlayerAnimations : NetworkBehaviour
     // ---------- EVENTOS ----------
     public void TriggerJump()
     {
-        animator.SetTrigger("Jump");
-    }*/
+        SetAnimatorsTrigger("Jump");
+    }
+
+    public void SetAnimatorsTrigger(string ParamName)
+    {
+        foreach(Animator anim in animators)
+        {
+            anim.SetTrigger(ParamName);
+        }
+    }
+    public void SetAnimatorsBool(string ParamName, bool value)
+    {
+        foreach(Animator anim in animators)
+        {
+            anim.SetBool(ParamName, value);
+        }
+    }
+    public void SetAnimatorsFloat(string ParamName, float value)
+    {
+        foreach(Animator anim in animators)
+        {
+            anim.SetFloat(ParamName, value);
+        }
+    }
 }

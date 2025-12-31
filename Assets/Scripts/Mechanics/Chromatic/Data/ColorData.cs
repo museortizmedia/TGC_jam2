@@ -9,6 +9,7 @@ public class ColorData : ScriptableObject
     public string colorId;
     public Color color;
     public float intensity;
+    public int meshIndex;
 
     // No enviados por red
     public Material ghostMaterial;
