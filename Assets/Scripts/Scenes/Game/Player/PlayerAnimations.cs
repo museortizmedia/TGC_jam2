@@ -16,90 +16,130 @@ public class PlayerAnimations : NetworkBehaviour
     float airTime;
     float targetYRotation;
 
-    // NetworkVariable para replicar la rotación
+    // ---------------- NETWORK VARIABLES ----------------
+
     public NetworkVariable<float> targetYRotationNet = new NetworkVariable<float>(
         0f,
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Server
     );
 
+    public NetworkVariable<float> velocityZNet = new NetworkVariable<float>(
+        0f,
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Server
+    );
+
+    public NetworkVariable<float> animSpeedNet = new NetworkVariable<float>(
+        1f,
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Server
+    );
+
+    // ---------------- UPDATE ----------------
+
     void Update()
     {
         if (movement == null || visualsChild == null)
             return;
 
-        // ---------- ANIMACIONES DE ESTADO (solo servidor) ----------
-        if (IsServer)
+        // ---------- OWNER: calcula dirección y estado ----------
+        if (IsOwner)
         {
-            bool grounded = movement.isGrounded;
-            SetAnimatorsBool("isGrounded", grounded);
+            Vector3 camForward = Vector3.ProjectOnPlane(
+                movement.cameraReference.forward,
+                Vector3.up
+            ).normalized;
 
-            if (!grounded)
+            Vector3 camRight = movement.cameraReference.right;
+            Vector3 desiredDirection =
+                camForward * movement.moveInput.y +
+                camRight * movement.moveInput.x;
+
+            if (desiredDirection.sqrMagnitude > 0.01f)
             {
-                airTime += Time.deltaTime;
-                if (airTime >= fallThreshold)
-                    SetAnimatorsBool("isFalling", true);
+                targetYRotation =
+                    Mathf.Atan2(desiredDirection.x, desiredDirection.z) *
+                    Mathf.Rad2Deg;
+
+                if (IsServer)
+                    targetYRotationNet.Value = targetYRotation;
+                else
+                    SubmitRotationServerRpc(targetYRotation);
+            }
+
+            float blend = Mathf.Clamp01(movement.moveInput.magnitude);
+            float animSpeed = Mathf.Max(0.5f, blend);
+
+            if (IsServer)
+            {
+                velocityZNet.Value = blend;
+                animSpeedNet.Value = animSpeed;
             }
             else
             {
-                airTime = 0f;
-                SetAnimatorsBool("isFalling", false);
+                SubmitAnimationServerRpc(blend, animSpeed);
             }
         }
 
-        // ---------- CALCULO DE DIRECCION Y ROTACION ----------
-        Vector3 desiredDirection;
-
-        if (IsOwner)
-        {
-            Vector3 camForward = Vector3.ProjectOnPlane(movement.cameraReference.forward, Vector3.up).normalized;
-            Vector3 camRight = movement.cameraReference.right;
-            desiredDirection = camForward * movement.moveInput.y + camRight * movement.moveInput.x;
-        }
-        else
-        {
-            // Otros clientes pueden usar la última dirección replicada
-            desiredDirection = Vector3.forward;
-        }
-
-        if (desiredDirection.sqrMagnitude > 0.01f)
-        {
-            targetYRotation = Mathf.Atan2(desiredDirection.x, desiredDirection.z) * Mathf.Rad2Deg;
-
-            if (IsServer)
-                targetYRotationNet.Value = targetYRotation;
-        }
-
-        float rotationToUse = IsOwner ? targetYRotation : targetYRotationNet.Value;
-        visualsChild.localRotation = Quaternion.Slerp(
-            visualsChild.localRotation,
-            Quaternion.Euler(0, rotationToUse, 0),
-            Time.deltaTime * turnSpeed
-        );
-
-        // ---------- CALCULO DE VELOCIDAD PARA ANIMACIONES (desde input) ----------
-        float inputMagnitude = movement.moveInput.magnitude;
-        float blend = Mathf.Clamp01(inputMagnitude);
-
+        // ---------- TODOS LOS CLIENTES: aplicar animaciones ----------
         foreach (Animator anim in animators)
         {
             if (anim == null || !anim.gameObject.activeSelf || !anim.enabled || anim.runtimeAnimatorController == null)
                 continue;
 
-            float current = anim.GetFloat("VelocityZ");
-            float target = Mathf.Lerp(current, blend, Time.deltaTime * smoothTime);
-            anim.SetFloat("VelocityZ", target);
-            anim.SetFloat("AnimSpeed", Mathf.Max(0.5f, blend));
+            anim.SetFloat("VelocityZ", velocityZNet.Value);
+            anim.SetFloat("AnimSpeed", animSpeedNet.Value);
         }
+
+        // ---------- TODOS LOS CLIENTES: aplicar rotación visual ----------
+        float rotationToUse = IsOwner ? targetYRotation : targetYRotationNet.Value;
+
+        visualsChild.localRotation = Quaternion.Slerp(
+            visualsChild.localRotation,
+            Quaternion.Euler(0f, rotationToUse, 0f),
+            Time.deltaTime * turnSpeed
+        );
     }
 
-    // ---------- EVENTOS ----------
+    // ---------------- RPCs ----------------
+
+    [ServerRpc]
+    void SubmitAnimationServerRpc(float velocityZ, float animSpeed)
+    {
+        velocityZNet.Value = velocityZ;
+        animSpeedNet.Value = animSpeed;
+    }
+
+    [ServerRpc]
+    void SubmitRotationServerRpc(float yRotation)
+    {
+        targetYRotationNet.Value = yRotation;
+    }
+
+    // ---------------- EVENTS ----------------
+
     public void TriggerJump()
+    {
+        if (IsOwner)
+            TriggerJumpServerRpc();
+    }
+
+    [ServerRpc]
+    void TriggerJumpServerRpc()
+    {
+        TriggerJumpClientRpc();
+    }
+
+    [ClientRpc]
+    void TriggerJumpClientRpc()
     {
         SetAnimatorsTrigger("Jump");
     }
 
-    public void SetAnimatorsTrigger(string paramName)
+    // ---------------- ANIMATOR HELPERS ----------------
+
+    void SetAnimatorsTrigger(string paramName)
     {
         foreach (Animator anim in animators)
         {
