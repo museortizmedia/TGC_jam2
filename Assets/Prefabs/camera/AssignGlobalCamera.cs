@@ -24,6 +24,6 @@ public class AssignGlobalCamera : NetworkBehaviour
         controller.Camera.Follow = cameraTarget;
         controller.Camera.LookAt = cameraTarget;
 
-        playerMovementServerAuth.cameraTransform = controller.Camera.transform;
+        playerMovementServerAuth.cameraReference = controller.Camera.transform;
     }
 }

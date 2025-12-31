@@ -1,168 +1,227 @@
-using Unity.Netcode;
 using UnityEngine;
+using Unity.Netcode;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(CapsuleCollider))]
 [RequireComponent(typeof(Rigidbody))]
-[RequireComponent(typeof(PlayerInput))]
 public class PlayerMovementServerAuth : NetworkBehaviour
 {
+    public enum MovementMode
+    {
+        LocalPlayer,
+        ServerPlayer
+    }
+
+    [Header("Movement Mode")]
+    public MovementMode movementMode = MovementMode.ServerPlayer;
+
     [Header("Movement Settings")]
-    [SerializeField] float moveSpeed = 5f;
-    public float MoveSpeed => moveSpeed;
+    public float moveSpeed = 5f;
+    public float jumpForce = 7f;
+    public float verticalFreeMoveSpeed = 5f;
 
-    [SerializeField] float sprintMultiplier = 1.5f;
-    [SerializeField] float jumpForce = 6f;
+    [Header("Camera Reference")]
+    public Transform cameraReference;
 
-    [Header("Ground Check")]
-    [SerializeField] LayerMask groundLayer;
-    [SerializeField] float groundCheckDistance = 0.35f;
-    [SerializeField] float groundCheckOffset = 0.2f;
-    [SerializeField] float coyoteTime = 0.15f;
+    [Header("Ground Detection")]
+    public LayerMask groundLayers;
+    public float groundCheckRadius = 0.25f;
+    public Vector3 groundCheckOffset = new(0, -0.5f, 0);
 
-    [Header("Camera")]
-    public Transform cameraTransform;
+    [Header("Crouch Settings")]
+    public float crouchHeightOffset = 0.5f;
 
-    Rigidbody rb;
-    PlayerInput playerInput;
+    [Header("Free Navigation Mode")]
+    public bool disableJumpAndCrouch = false;
 
-    Vector2 moveInput;
-    bool isSprinting;
+    [Header("Input Debug (Inspector)")]
+    public Vector2 moveInput;
+    public bool jumpInput;
+    public bool crouchInput;
+    public float verticalInput;
 
-    bool jumpBuffered;   // input recibido
-    bool jumpConsumed;   // salto ejecutado
+    private Rigidbody rb;
+    private CapsuleCollider playerCollider;
 
-    float lastGroundedTime;
+    private bool isGrounded;
+    private bool isCrouched;
+    private float originalColliderCenterY;
 
-    public bool IsGrounded { get; private set; }
-    public float VerticalVelocity => rb.linearVelocity.y;
+    // INPUT SYSTEM (C#)
+    private PlayerInputAction input;
 
-    bool canSendInput;
-    bool canMoveServer;
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+        playerCollider = GetComponent<CapsuleCollider>();
+
+        rb.freezeRotation = true;
+        rb.useGravity = true;
+
+        originalColliderCenterY = playerCollider.center.y;
+    }
 
     public override void OnNetworkSpawn()
     {
-        rb = GetComponent<Rigidbody>();
-        playerInput = GetComponent<PlayerInput>();
+        if (movementMode == MovementMode.ServerPlayer && !IsOwner)
+            return;
 
-        if (IsOwner)
-            canSendInput = true;
+        if (cameraReference == null)
+            cameraReference = transform;
+
+        EnableInput();
+    }
+
+    public override void OnNetworkDespawn()
+    {
+        DisableInput();
+    }
+
+    #region INPUT SYSTEM (C# ONLY)
+
+    private void EnableInput()
+    {
+        input = new PlayerInputAction();
+
+        input.Player.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
+        input.Player.Move.canceled += _ => moveInput = Vector2.zero;
+
+        input.Player.Jump.performed += _ => jumpInput = true;
+        input.Player.Jump.canceled += _ => jumpInput = false;
+
+        input.Player.Crouch.performed += _ => crouchInput = true;
+        input.Player.Crouch.canceled += _ => crouchInput = false;
+
+        input.Player.Vertical.performed += ctx => verticalInput = ctx.ReadValue<float>();
+        input.Player.Vertical.canceled += _ => verticalInput = 0f;
+
+        input.Enable();
+    }
+
+    private void DisableInput()
+    {
+        if (input == null) return;
+
+        input.Disable();
+        input.Dispose();
+        input = null;
+    }
+
+    #endregion
+
+    private void FixedUpdate()
+    {
+        if (movementMode == MovementMode.ServerPlayer)
+        {
+            if (!IsOwner) return;
+
+            Vector3 camForward = Vector3.ProjectOnPlane(cameraReference.forward, Vector3.up).normalized;
+            Vector3 camRight = cameraReference.right;
+
+            SendInputServerRpc(moveInput, jumpInput, crouchInput, verticalInput,
+                   camForward.x, camForward.y, camForward.z,
+                   camRight.x, camRight.y, camRight.z);
+        }
         else
         {
-            canSendInput = false;
-            playerInput.enabled = false;
-        }
-
-        if (IsServer)
-            canMoveServer = true;
-    }
-
-    // ---------- INPUT ----------
-    public void OnMove(InputAction.CallbackContext context)
-    {
-        if (!IsOwner || !canSendInput) return;
-        moveInput = context.ReadValue<Vector2>();
-    }
-
-    public void OnSprint(InputAction.CallbackContext context)
-    {
-        if (!IsOwner || !canSendInput) return;
-        isSprinting = context.performed;
-    }
-
-    public void OnJump(InputAction.CallbackContext context)
-    {
-        if (!IsOwner || !canSendInput) return;
-        if (context.performed) {
-            jumpBuffered = true;
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            ProcessMovement(moveInput, jumpInput, crouchInput, verticalInput,
+                            Vector3.ProjectOnPlane(cameraReference.forward, Vector3.up).normalized,
+                            cameraReference.right);
         }
     }
 
-    void Update()
-    {
-        if (!IsOwner || !canSendInput) return;
-        SubmitMovementServerRpc(moveInput, isSprinting, jumpBuffered);
-        jumpBuffered = false;
-    }
+
+    #region SERVER RPC
 
     [ServerRpc]
-    void SubmitMovementServerRpc(Vector2 move, bool sprint, bool jump)
+    private void SendInputServerRpc(
+    Vector2 move, bool jump, bool crouch, float vertical,
+    float camForwardX, float camForwardY, float camForwardZ,
+    float camRightX, float camRightY, float camRightZ)
     {
-        if (!canMoveServer) return;
+        Vector3 camForward = new(camForwardX, camForwardY, camForwardZ);
+        Vector3 camRight = new(camRightX, camRightY, camRightZ);
 
-        moveInput = move;
-        isSprinting = sprint;
-
-        if (jump)
-            jumpBuffered = true;
+        ProcessMovement(move, jump, crouch, vertical, camForward, camRight);
     }
 
-    // ---------- SERVER PHYSICS ----------
-    void FixedUpdate()
+
+    #endregion
+
+    #region MOVEMENT LOGIC
+    private void ProcessMovement(Vector2 move, bool jump, bool crouch, float vertical, Vector3 forward, Vector3 right)
     {
-        if (!IsServer || !canMoveServer) return;
+        CheckGround();
 
-        UpdateGroundedState();
+        // Calculamos velocidad horizontal
+        Vector3 horizontalVelocity = (forward * move.y + right * move.x) * moveSpeed;
 
-        float speed = moveSpeed * (isSprinting ? sprintMultiplier : 1f);
-
-        Vector3 forward = transform.forward;
-        Vector3 right = transform.right;
-
-        if (cameraTransform != null)
+        if (disableJumpAndCrouch)
         {
-            forward = Vector3.ProjectOnPlane(cameraTransform.forward, Vector3.up).normalized;
-            right = Vector3.ProjectOnPlane(cameraTransform.right, Vector3.up).normalized;
+            // Modo libre: movemos en eje Y con input vertical y desactivamos gravedad
+            rb.useGravity = false;
+            rb.linearVelocity = new Vector3(horizontalVelocity.x, vertical * verticalFreeMoveSpeed, horizontalVelocity.z);
         }
-
-        Vector3 direction = forward * moveInput.y + right * moveInput.x;
-
-        rb.linearVelocity = new Vector3(
-            direction.x * speed,
-            rb.linearVelocity.y,
-            direction.z * speed
-        );
-
-        bool canJump =
-            jumpBuffered &&
-            (IsGrounded || Time.time - lastGroundedTime <= coyoteTime) &&
-            !jumpConsumed;
-
-        if (canJump)
+        else
         {
-            rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            // Modo normal: activamos gravedad
+            rb.useGravity = true;
 
-            jumpConsumed = true;
-            jumpBuffered = false;
+            // Conservamos la velocidad vertical actual
+            float newY = rb.linearVelocity.y;
+
+            // Salto
+            if (jump && isGrounded)
+            {
+                newY = jumpForce;
+            }
+
+            // Aplicamos velocidad horizontal + vertical (incluye salto si corresponde)
+            rb.linearVelocity = new Vector3(horizontalVelocity.x, newY, horizontalVelocity.z);
+
+            // Crouch
+            HandleCrouch(crouch);
         }
-
-        if (IsGrounded)
-            jumpConsumed = false;
     }
 
-    void UpdateGroundedState()
+    private void HandleCrouch(bool crouch)
     {
-        Vector3 origin = transform.position + Vector3.up * groundCheckOffset;
+        if (crouch && !isCrouched)
+        {
+            playerCollider.center = new Vector3(
+                playerCollider.center.x,
+                originalColliderCenterY - crouchHeightOffset,
+                playerCollider.center.z
+            );
+            isCrouched = true;
+        }
+        else if (!crouch && isCrouched)
+        {
+            playerCollider.center = new Vector3(
+                playerCollider.center.x,
+                originalColliderCenterY,
+                playerCollider.center.z
+            );
+            isCrouched = false;
+        }
+    }
 
-        IsGrounded = Physics.Raycast(
-            origin,
-            Vector3.down,
-            groundCheckDistance,
-            groundLayer
+    private void CheckGround()
+    {
+        Vector3 checkPosition = transform.position + groundCheckOffset;
+        isGrounded = Physics.CheckSphere(
+            checkPosition,
+            groundCheckRadius,
+            groundLayers,
+            QueryTriggerInteraction.Ignore
         );
-
-        if (IsGrounded)
-            lastGroundedTime = Time.time;
     }
 
-#if UNITY_EDITOR
-    void OnDrawGizmosSelected()
+    #endregion
+
+    private void OnDrawGizmos()
     {
-        Vector3 origin = transform.position + Vector3.up * groundCheckOffset;
-        Gizmos.color = IsGrounded ? Color.green : Color.red;
-        Gizmos.DrawSphere(origin + Vector3.down * groundCheckDistance, 0.08f);
-        Gizmos.DrawLine(origin, origin + Vector3.down * groundCheckDistance);
+        Gizmos.color = isGrounded ? Color.green : Color.red;
+        Gizmos.DrawWireSphere(transform.position + groundCheckOffset, groundCheckRadius);
     }
-#endif
 }

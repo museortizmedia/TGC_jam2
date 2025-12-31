@@ -3,7 +3,7 @@ using Unity.Netcode;
 
 public class PlayerAnimations : NetworkBehaviour
 {
-    [SerializeField] Animator animator;
+    /*[SerializeField] Animator animator;
     [SerializeField] Rigidbody rb;
     [SerializeField] PlayerMovementServerAuth movement;
 
@@ -97,5 +97,5 @@ public class PlayerAnimations : NetworkBehaviour
     public void TriggerJump()
     {
         animator.SetTrigger("Jump");
-    }
+    }*/
 }
