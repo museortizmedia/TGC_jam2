@@ -1,14 +1,59 @@
 #define INTERACTION_DEBUG
 
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerInteractionController : MonoBehaviour
+public class PlayerInteractionController : NetworkBehaviour
 {
     [Header("References")]
     [SerializeField] private PlayerInteractionTrigger interactionTrigger;
 
     private IInteractable currentInteractable;
+    private PlayerInputAction input;
+
+    void Awake()
+    {
+        input = new PlayerInputAction();
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        if (!IsOwner)
+            return;
+
+        EnableInput();
+    }
+
+    public override void OnNetworkDespawn()
+    {
+        DisableInput();
+    }
+
+     // ---------------- INPUT ----------------
+
+    private void EnableInput()
+    {
+        input.Player.Interact.started += OnInteract;
+        input.Player.Interact.performed += OnInteract;
+        input.Player.Interact.canceled += OnInteract;
+
+        input.Enable();
+    }
+
+    private void DisableInput()
+    {
+        if (input == null)
+            return;
+
+        input.Player.Interact.started -= OnInteract;
+        input.Player.Interact.performed -= OnInteract;
+        input.Player.Interact.canceled -= OnInteract;
+
+        input.Disable();
+    }
+
+    // ---------------- INTERACTION ----------------
 
     public void OnInteract(InputAction.CallbackContext context)
     {
