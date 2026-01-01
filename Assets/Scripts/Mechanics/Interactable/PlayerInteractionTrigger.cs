@@ -1,4 +1,4 @@
-#define INTERACTION_DEBUG
+//#define INTERACTION_DEBUG
 
 using UnityEngine;
 

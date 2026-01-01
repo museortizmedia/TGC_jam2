@@ -2714,22 +2714,24 @@ MonoBehaviour:
     elementGroup: 0
     m_TextureGroup: 6
   m_SharedVertices:
-  - m_Vertices: 0a0000000d000000
-  - m_Vertices: 1200000015000000
-  - m_Vertices: 0e00000011000000
+  - m_Vertices: 00000000
+  - m_Vertices: 07000000
   - m_Vertices: 0100000006000000
-  - m_Vertices: 0500000016000000
-  - m_Vertices: 0900000018000000
-  - m_Vertices: 1b0000001c000000
   - m_Vertices: 020000001f000000
-  - m_Vertices: 0000000007000000
   - m_Vertices: 030000001e000000
   - m_Vertices: 0400000017000000
+  - m_Vertices: 0500000016000000
   - m_Vertices: 0800000019000000
-  - m_Vertices: 0b0000000c000000
+  - m_Vertices: 0900000018000000
+  - m_Vertices: 0a0000000d000000
+  - m_Vertices: 0b000000
+  - m_Vertices: 0c000000
+  - m_Vertices: 0e00000011000000
   - m_Vertices: 0f00000010000000
+  - m_Vertices: 1200000015000000
   - m_Vertices: 1300000014000000
   - m_Vertices: 1a0000001d000000
+  - m_Vertices: 1b0000001c000000
   m_SharedTextures: []
   m_Positions:
   - {x: -120.183716, y: 51.694214, z: -192.30273}
@@ -2841,7 +2843,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 5718
+  m_VersionIndex: 5785
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -2908,7 +2910,7 @@ MeshRenderer:
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
   m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
+  m_SelectedEditorRenderState: 2
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89

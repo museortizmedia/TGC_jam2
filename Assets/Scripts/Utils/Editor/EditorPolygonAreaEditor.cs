@@ -7,6 +7,9 @@ public static class EditorPolygonAreaGizmos
     [DrawGizmo(GizmoType.NonSelected | GizmoType.Selected)]
     static void DrawPolygonGizmo(EditorPolygonArea area, GizmoType gizmoType)
     {
+        if (!area.enabled)
+        return;
+        
         if (area.points == null || area.points.Count < 3)
             return;
 

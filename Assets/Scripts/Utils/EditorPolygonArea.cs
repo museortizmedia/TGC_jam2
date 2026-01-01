@@ -63,6 +63,9 @@ public class EditorPolygonAreaEditor : Editor
 
     private void OnSceneGUI()
     {
+        if (!area.enabled)
+        return;
+        
         if (area.points == null || area.points.Count < 3)
             return;
 
