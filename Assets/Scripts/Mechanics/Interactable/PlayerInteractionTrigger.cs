@@ -1,11 +1,13 @@
-//#define INTERACTION_DEBUG
-
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerInteractionTrigger : MonoBehaviour
 {
+    [Header("Settings")]
+    [SerializeField] bool INTERACTION_DEBUG;
+
     public IInteractable CurrentInteractable { get; private set; }
 
     private void OnTriggerEnter(Collider other)
@@ -15,9 +17,7 @@ public class PlayerInteractionTrigger : MonoBehaviour
             CurrentInteractable = interactable;
             interactable.Arrived(transform.root);
 
-#if INTERACTION_DEBUG
-            Debug.Log($"[InteractionTrigger] Arrived at interactable: {other.name}", other);
-#endif
+            if (INTERACTION_DEBUG) { Debug.Log($"[InteractionTrigger] Arrived at interactable: {other.name}", other); }
         }
     }
 
@@ -29,9 +29,7 @@ public class PlayerInteractionTrigger : MonoBehaviour
             {
                 interactable.Leave(transform.root);
 
-#if INTERACTION_DEBUG
-                Debug.Log($"[InteractionTrigger] Left interactable: {other.name}", other);
-#endif
+                if (INTERACTION_DEBUG) { Debug.Log($"[InteractionTrigger] Left interactable: {other.name}", other); }
 
                 CurrentInteractable = null;
             }

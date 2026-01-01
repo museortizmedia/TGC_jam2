@@ -1,11 +1,12 @@
-//#define INTERACTION_DEBUG
-
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerInteractionController : NetworkBehaviour
 {
+    [Header("Settings")]
+    [SerializeField] bool INTERACTION_DEBUG;
+
     [Header("References")]
     [SerializeField] private PlayerInteractionTrigger interactionTrigger;
 
@@ -30,7 +31,7 @@ public class PlayerInteractionController : NetworkBehaviour
         DisableInput();
     }
 
-     // ---------------- INPUT ----------------
+    // ---------------- INPUT ----------------
 
     private void EnableInput()
     {
@@ -61,31 +62,35 @@ public class PlayerInteractionController : NetworkBehaviour
 
         if (currentInteractable == null)
         {
-#if INTERACTION_DEBUG
-            Debug.Log("[InteractionController] Interact input received, but no interactable in range.");
-#endif
+            if (INTERACTION_DEBUG)
+            {
+                Debug.Log("[InteractionController] Interact input received, but no interactable in range.");
+            }
             return;
         }
 
         if (context.started)
         {
-#if INTERACTION_DEBUG
-            Debug.Log($"[InteractionController] Interact START with {currentInteractable}", this);
-#endif
+            if (INTERACTION_DEBUG)
+            {
+                Debug.Log($"[InteractionController] Interact START with {currentInteractable}", this);
+            }
             currentInteractable.InteractStart(transform);
         }
         else if (context.performed)
         {
-#if INTERACTION_DEBUG
-            Debug.Log($"[InteractionController] Interact PERFORMED with {currentInteractable}", this);
-#endif
+            if (INTERACTION_DEBUG)
+            {
+                Debug.Log($"[InteractionController] Interact PERFORMED with {currentInteractable}", this);
+            }
             currentInteractable.Interact(transform);
         }
         else if (context.canceled)
         {
-#if INTERACTION_DEBUG
-            Debug.Log($"[InteractionController] Interact END with {currentInteractable}", this);
-#endif
+            if (INTERACTION_DEBUG)
+            {
+                Debug.Log($"[InteractionController] Interact END with {currentInteractable}", this);
+            }
             currentInteractable.InteractEnd(transform);
         }
     }
