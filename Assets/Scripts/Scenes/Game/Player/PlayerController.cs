@@ -20,6 +20,8 @@ public class PlayerMovementServerAuth : NetworkBehaviour
     public float jumpForce = 7f;
     public float verticalFreeMoveSpeed = 5f;
 
+    public float sprintSpeed = 10f;
+
     [Header("Camera Reference")]
     public Transform cameraReference;
 
@@ -39,6 +41,8 @@ public class PlayerMovementServerAuth : NetworkBehaviour
     public bool jumpInput;
     public bool crouchInput;
     public float verticalInput;
+    // AGREGADO: Variable para rastrear el estado del sprint
+    public bool sprintInput;
 
     private Rigidbody rb;
     private CapsuleCollider playerCollider;
@@ -77,6 +81,12 @@ public class PlayerMovementServerAuth : NetworkBehaviour
         DisableInput();
     }
 
+    public NetworkVariable<bool> isGroundedNet = new NetworkVariable<bool>(
+        true,
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Server
+    );
+
     #region INPUT SYSTEM (C# ONLY)
 
     private void EnableInput()
@@ -94,6 +104,10 @@ public class PlayerMovementServerAuth : NetworkBehaviour
 
         input.Player.Vertical.performed += ctx => verticalInput = ctx.ReadValue<float>();
         input.Player.Vertical.canceled += _ => verticalInput = 0f;
+
+        // Registro de la acción de Sprint
+        input.Player.Sprint.performed += _ => sprintInput = true;
+        input.Player.Sprint.canceled += _ => sprintInput = false;
 
         input.Enable();
     }
@@ -118,13 +132,15 @@ public class PlayerMovementServerAuth : NetworkBehaviour
             Vector3 camForward = Vector3.ProjectOnPlane(cameraReference.forward, Vector3.up).normalized;
             Vector3 camRight = cameraReference.right;
 
-            SendInputServerRpc(moveInput, jumpInput, crouchInput, verticalInput,
+            // Enviamos el sprintInput al servidor
+            SendInputServerRpc(moveInput, jumpInput, crouchInput, verticalInput, sprintInput,
                    camForward.x, camForward.y, camForward.z,
                    camRight.x, camRight.y, camRight.z);
         }
         else
         {
-            ProcessMovement(moveInput, jumpInput, crouchInput, verticalInput,
+            // Procesamiento local incluyendo sprintInput
+            ProcessMovement(moveInput, jumpInput, crouchInput, verticalInput, sprintInput,
                             Vector3.ProjectOnPlane(cameraReference.forward, Vector3.up).normalized,
                             cameraReference.right);
         }
@@ -135,51 +151,48 @@ public class PlayerMovementServerAuth : NetworkBehaviour
 
     [ServerRpc]
     private void SendInputServerRpc(
-    Vector2 move, bool jump, bool crouch, float vertical,
+    Vector2 move, bool jump, bool crouch, float vertical, bool sprint,
     float camForwardX, float camForwardY, float camForwardZ,
     float camRightX, float camRightY, float camRightZ)
     {
         Vector3 camForward = new(camForwardX, camForwardY, camForwardZ);
         Vector3 camRight = new(camRightX, camRightY, camRightZ);
 
-        ProcessMovement(move, jump, crouch, vertical, camForward, camRight);
+        ProcessMovement(move, jump, crouch, vertical, sprint, camForward, camRight);
     }
 
 
     #endregion
 
     #region MOVEMENT LOGIC
-    private void ProcessMovement(Vector2 move, bool jump, bool crouch, float vertical, Vector3 forward, Vector3 right)
+    private void ProcessMovement(Vector2 move, bool jump, bool crouch, float vertical, bool sprint, Vector3 forward, Vector3 right)
     {
         CheckGround();
 
-        // Calculamos velocidad horizontal
-        Vector3 horizontalVelocity = (forward * move.y + right * move.x) * moveSpeed;
+        // Aplicación de velocidad: Sprint solo funciona si estamos en el suelo
+        float currentSpeed = (sprint && isGrounded) ? sprintSpeed : moveSpeed;
+
+        Vector3 horizontalVelocity = (forward * move.y + right * move.x) * currentSpeed;
+
 
         if (disableJumpAndCrouch)
         {
-            // Modo libre: movemos en eje Y con input vertical y desactivamos gravedad
             rb.useGravity = false;
             rb.linearVelocity = new Vector3(horizontalVelocity.x, vertical * verticalFreeMoveSpeed, horizontalVelocity.z);
         }
         else
         {
-            // Modo normal: activamos gravedad
             rb.useGravity = true;
 
-            // Conservamos la velocidad vertical actual
             float newY = rb.linearVelocity.y;
 
-            // Salto
             if (jump && isGrounded)
             {
                 newY = jumpForce;
             }
 
-            // Aplicamos velocidad horizontal + vertical (incluye salto si corresponde)
             rb.linearVelocity = new Vector3(horizontalVelocity.x, newY, horizontalVelocity.z);
 
-            // Crouch
             HandleCrouch(crouch);
         }
     }
@@ -209,12 +222,30 @@ public class PlayerMovementServerAuth : NetworkBehaviour
     private void CheckGround()
     {
         Vector3 checkPosition = transform.position + groundCheckOffset;
-        isGrounded = Physics.CheckSphere(
+
+        Collider[] hits = Physics.OverlapSphere(
             checkPosition,
             groundCheckRadius,
             groundLayers,
             QueryTriggerInteraction.Ignore
         );
+
+        bool groundedResult = false;
+        foreach (var hit in hits)
+        {
+            if (hit != playerCollider)
+            {
+                groundedResult = true;
+                break;
+            }
+        }
+
+        isGrounded = groundedResult;
+
+        if (IsServer)
+        {
+            isGroundedNet.Value = isGrounded;
+        }
     }
 
     #endregion

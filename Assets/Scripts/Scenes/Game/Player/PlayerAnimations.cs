@@ -36,6 +36,12 @@ public class PlayerAnimations : NetworkBehaviour
         NetworkVariableWritePermission.Server
     );
 
+    public NetworkVariable<float> verticalVelocityNet = new NetworkVariable<float>(
+        0f,
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Server
+    );
+
     // ---------------- UPDATE ----------------
 
     void Update()
@@ -43,7 +49,18 @@ public class PlayerAnimations : NetworkBehaviour
         if (movement == null || visualsChild == null)
             return;
 
-        // ---------- OWNER: calcula dirección y estado ----------
+        // ---------- SERVER: Leer velocidad física para el Blend Tree Airborne ----------
+        if (IsServer)
+        {
+            Rigidbody rb = movement.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                // Sincroniza la velocidad Y para jump_start y jump_Middle
+                verticalVelocityNet.Value = rb.linearVelocity.y;
+            }
+        }
+
+        // ---------- OWNER: calcula dirección y estado de movimiento ----------
         if (IsOwner)
         {
             Vector3 camForward = Vector3.ProjectOnPlane(
@@ -56,6 +73,7 @@ public class PlayerAnimations : NetworkBehaviour
                 camForward * movement.moveInput.y +
                 camRight * movement.moveInput.x;
 
+            // Rotación visual
             if (desiredDirection.sqrMagnitude > 0.01f)
             {
                 targetYRotation =
@@ -68,8 +86,18 @@ public class PlayerAnimations : NetworkBehaviour
                     SubmitRotationServerRpc(targetYRotation);
             }
 
-            float blend = Mathf.Clamp01(movement.moveInput.magnitude);
-            float animSpeed = Mathf.Max(0.5f, blend);
+            // Lógica de Sprint para VelocityZ
+            float inputMagnitude = movement.moveInput.magnitude;
+            float targetVelocityZ = inputMagnitude;
+
+            // Si sprintInput es true, subimos el valor a 1.5 para activar "running"
+            if (movement.sprintInput && movement.isGrounded && inputMagnitude > 0.1f)
+            {
+                targetVelocityZ = inputMagnitude * 1.5f;
+            }
+
+            float blend = targetVelocityZ;
+            float animSpeed = Mathf.Max(0.5f, inputMagnitude);
 
             if (IsServer)
             {
@@ -88,8 +116,15 @@ public class PlayerAnimations : NetworkBehaviour
             if (anim == null || !anim.gameObject.activeSelf || !anim.enabled || anim.runtimeAnimatorController == null)
                 continue;
 
+            // Controla Idle (0), Walking (1) y Running (1.5)
             anim.SetFloat("VelocityZ", velocityZNet.Value);
             anim.SetFloat("AnimSpeed", animSpeedNet.Value);
+
+            // Controla la pose de salto/caída dentro del Blend Tree Airborne
+            anim.SetFloat("VerticalVelocity", verticalVelocityNet.Value);
+
+            // Cambia entre Blend Tree Walk y Airborne
+            anim.SetBool("isGrounded", movement.isGroundedNet.Value);
         }
 
         // ---------- TODOS LOS CLIENTES: aplicar rotación visual ----------
@@ -141,12 +176,10 @@ public class PlayerAnimations : NetworkBehaviour
 
     void SetAnimatorsTrigger(string paramName)
     {
-        foreach (Animator anim in animators)
+        foreach (var anim in animators)
         {
-            if (anim == null || !anim.gameObject.activeSelf || !anim.enabled || anim.runtimeAnimatorController == null)
-                continue;
-
-            anim.SetTrigger(paramName);
+            if (anim && anim.isActiveAndEnabled)
+                anim.SetTrigger(paramName);
         }
     }
 
