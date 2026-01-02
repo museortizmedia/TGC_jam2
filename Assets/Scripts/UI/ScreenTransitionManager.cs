@@ -1,11 +1,11 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
-using Unity.Netcode;
 
 public class ScreenTransitionManager : MonoBehaviour
 {
+    private static readonly WaitForSeconds DefaultWait = new(1f);
+
     public static ScreenTransitionManager Instance { get; private set; }
 
     [Header("Fade Settings")]
@@ -14,7 +14,6 @@ public class ScreenTransitionManager : MonoBehaviour
 
     private Canvas transitionCanvas;
     private Image fadeImage;
-    private Coroutine fadeRoutine;
 
     private void Awake()
     {
@@ -28,7 +27,6 @@ public class ScreenTransitionManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         EnsureCanvasExists();
     }
-
 
     private void EnsureCanvasExists()
     {
@@ -65,25 +63,34 @@ public class ScreenTransitionManager : MonoBehaviour
         rect.offsetMax = Vector2.zero;
     }
 
-    public void Transition(System.Action loadSceneAction)
+    #region PUBLIC API
+    public void PlayTransition(System.Action middleAction, WaitForSeconds wait = null)
     {
-        if (fadeRoutine != null)
-            StopCoroutine(fadeRoutine);
+        StartCoroutine(TransitionRoutine(middleAction, wait ?? DefaultWait));
+    }
+    #endregion
 
-        fadeRoutine = StartCoroutine(TransitionRoutine(loadSceneAction));
+    #region TRANSITION LOGIC
+    private IEnumerator TransitionRoutine(System.Action middleAction, WaitForSeconds waitSeconds)
+    {
+        yield return FadeIn();
+
+        //yield return waitSeconds;
+
+        middleAction?.Invoke();
+
+        yield return waitSeconds;
+
+        yield return FadeOut();
     }
 
-    private IEnumerator TransitionRoutine(System.Action loadSceneAction)
+    public IEnumerator FadeIn()
     {
         yield return Fade(0f, 1f);
+    }
 
-        loadSceneAction?.Invoke();
-
-        // Esperar a que la escena termine de cargarse
-        yield return new WaitUntil(() =>
-            SceneManager.GetActiveScene().isLoaded
-        );
-
+    public IEnumerator FadeOut()
+    {
         yield return Fade(1f, 0f);
     }
 
@@ -103,4 +110,5 @@ public class ScreenTransitionManager : MonoBehaviour
         color.a = to;
         fadeImage.color = color;
     }
+    #endregion
 }

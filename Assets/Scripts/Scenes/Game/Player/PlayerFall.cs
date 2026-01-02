@@ -4,7 +4,10 @@ using Unity.Netcode;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerFall : NetworkBehaviour
 {
+    [Header("Fall Settings")]
     [SerializeField] private float minY = -50f;
+
+    [Header("Respawn")]
     public Transform spawnPoint;
 
     private Rigidbody rb;
@@ -17,10 +20,10 @@ public class PlayerFall : NetworkBehaviour
 
     private void FixedUpdate()
     {
-        if (!IsServer || respawning)
+        if (!IsServer || respawning || spawnPoint == null)
             return;
 
-        if (transform.position.y < minY)
+        if (rb.position.y < minY)
         {
             respawning = true;
             HandleRespawn();
@@ -29,18 +32,32 @@ public class PlayerFall : NetworkBehaviour
 
     private void HandleRespawn()
     {
-        // Pedir transición SOLO para este jugador
-        SessionManager.Instance.PlayLocalRespawnTransition(OwnerClientId);
+        // Transición SOLO para el cliente dueño
+        SessionManager.Instance.PlayLocalRespawnTransition(
+            OwnerClientId,
+            ServerRespawn
+        );
+    }
 
-        // Reset físico
+    /// <summary>
+    /// Lógica de respawn AUTORITATIVA (servidor)
+    /// </summary>
+    private void ServerRespawn()
+    {
+        rb.Sleep();
+
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
 
         rb.position = spawnPoint.position;
         rb.rotation = spawnPoint.rotation;
-        gameObject.transform.position = spawnPoint.position;
-        gameObject.transform.rotation = spawnPoint.rotation;
+
+        transform.SetPositionAndRotation(
+            spawnPoint.position,
+            spawnPoint.rotation
+        );
 
         respawning = false;
     }
+
 }

@@ -1,10 +1,27 @@
 using System;
+using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
 public class SessionManager : NetworkBehaviour
 {
+    private static WaitForSeconds _waitForSeconds1 = new WaitForSeconds(1f);
+
     public static SessionManager Instance { get; private set; }
+
+    [Header("References")]
+    public ScreenTransitionManager screenTransitionManager;
+
+    public Action<SessionState> OnSessionStateChanged;
+
+    public enum SessionState
+    {
+        Lobby,
+        Game,
+        End
+    }
+
+    public SessionState CurrentState = SessionState.Lobby;
 
     private void Awake()
     {
@@ -17,18 +34,6 @@ public class SessionManager : NetworkBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
-
-    public ScreenTransitionManager screenTransitionManager;
-    public Action<SessionState> OnSessionStateChanged;
-
-    public enum SessionState
-    {
-        Lobby,
-        Game,
-        End
-    }
-
-    public SessionState CurrentState = SessionState.Lobby;
 
     public override void OnNetworkSpawn()
     {
@@ -76,17 +81,14 @@ public class SessionManager : NetworkBehaviour
 
     private void LoadNetworkScene(string sceneName)
     {
-        // Transición PARA TODOS
+        // Transición GLOBAL para todos los clientes
         ScreenTransitionAllClientRpc(sceneName);
     }
 
     #endregion
 
-    #region SCREEN TRANSITIONS
+    #region SCREEN TRANSITIONS (GLOBAL)
 
-    /// <summary>
-    /// Transición visible para TODOS los jugadores (cambio de escena)
-    /// </summary>
     [ClientRpc]
     private void ScreenTransitionAllClientRpc(string sceneName)
     {
@@ -96,14 +98,19 @@ public class SessionManager : NetworkBehaviour
             return;
         }
 
-        screenTransitionManager.Transition(() =>
+        screenTransitionManager.PlayTransition(() =>
         {
-            LoadScene(sceneName);
+            if (IsServer)
+            {
+                LoadScene(sceneName);
+            }
         });
     }
 
+
     private void LoadScene(string sceneName)
     {
+        // SOLO el servidor carga la escena
         if (IsServer)
         {
             NetworkManager.Singleton.SceneManager.LoadScene(
@@ -113,28 +120,52 @@ public class SessionManager : NetworkBehaviour
         }
     }
 
-    /// <summary>
-    /// Transición SOLO para un jugador (respawn, muerte, etc.)
-    /// </summary>
-    public void PlayLocalRespawnTransition(ulong targetClientId)
+    #endregion
+
+    #region SCREEN TRANSITIONS (LOCAL / RESPAWN)
+
+    public void PlayLocalRespawnTransition(
+        ulong targetClientId,
+        Action serverRespawnAction
+    )
     {
         if (!IsServer)
             return;
 
-        ScreenTransitionLocalClientRpc(targetClientId);
+        // 1. Fade IN solo para el cliente
+        FadeInClientRpc(targetClientId);
+
+        // 2. Ejecutar lógica de servidor bajo negro
+        serverRespawnAction?.Invoke();
+
+        // 3. Fade OUT tras un pequeño delay
+        StartCoroutine(FadeOutDelayed(targetClientId));
+    }
+
+    private IEnumerator FadeOutDelayed(ulong clientId)
+    {
+        yield return _waitForSeconds1;
+        FadeOutClientRpc(clientId);
     }
 
     [ClientRpc]
-    private void ScreenTransitionLocalClientRpc(ulong targetClientId)
+    private void FadeInClientRpc(ulong targetClientId)
     {
         if (NetworkManager.Singleton.LocalClientId != targetClientId)
             return;
 
-        if (screenTransitionManager != null)
-        {
-            screenTransitionManager.Transition(null);
-        }
+        screenTransitionManager?.FadeIn();
+    }
+
+    [ClientRpc]
+    private void FadeOutClientRpc(ulong targetClientId)
+    {
+        if (NetworkManager.Singleton.LocalClientId != targetClientId)
+            return;
+
+        screenTransitionManager?.FadeOut();
     }
 
     #endregion
+
 }
