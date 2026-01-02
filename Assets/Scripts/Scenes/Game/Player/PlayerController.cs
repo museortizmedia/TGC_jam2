@@ -47,6 +47,12 @@ public class PlayerMovementServerAuth : NetworkBehaviour
     private Rigidbody rb;
     private CapsuleCollider playerCollider;
 
+    public NetworkVariable<bool> isGroundedNet = new NetworkVariable<bool>(
+    true,
+    NetworkVariableReadPermission.Everyone,
+    NetworkVariableWritePermission.Server
+    );
+
     [HideInInspector] public bool isGrounded;
     private bool isCrouched;
     private float originalColliderCenterY;
@@ -81,11 +87,7 @@ public class PlayerMovementServerAuth : NetworkBehaviour
         DisableInput();
     }
 
-    public NetworkVariable<bool> isGroundedNet = new NetworkVariable<bool>(
-        true,
-        NetworkVariableReadPermission.Everyone,
-        NetworkVariableWritePermission.Server
-    );
+
 
     #region INPUT SYSTEM (C# ONLY)
 
@@ -242,7 +244,8 @@ public class PlayerMovementServerAuth : NetworkBehaviour
 
         isGrounded = groundedResult;
 
-        if (IsServer)
+        // Solo actualizar si estamos en el servidor Y la NetworkVariable está lista
+        if (IsServer && isGroundedNet != null)
         {
             isGroundedNet.Value = isGrounded;
         }

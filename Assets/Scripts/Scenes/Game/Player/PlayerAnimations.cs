@@ -9,8 +9,8 @@ public class PlayerAnimations : NetworkBehaviour
     public Transform visualsChild;
 
     [Header("Settings")]
-    [SerializeField] float smoothTime = 10f;
-    [SerializeField] float fallThreshold = 0.15f;
+    //[SerializeField] float smoothTime = 10f;
+    //[SerializeField] float fallThreshold = 0.15f;
     [SerializeField] float turnSpeed = 15f;
 
     float airTime;
@@ -123,8 +123,16 @@ public class PlayerAnimations : NetworkBehaviour
             // Controla la pose de salto/caída dentro del Blend Tree Airborne
             anim.SetFloat("VerticalVelocity", verticalVelocityNet.Value);
 
-            // Cambia entre Blend Tree Walk y Airborne
-            anim.SetBool("isGrounded", movement.isGroundedNet.Value);
+            // CAMBIO: Verificar que movement.isGroundedNet existe antes de usarla
+            if (movement.isGroundedNet != null)
+            {
+                anim.SetBool("isGrounded", movement.isGroundedNet.Value);
+            }
+            else
+            {
+                // Fallback: usa el valor local
+                anim.SetBool("isGrounded", movement.isGrounded);
+            }
         }
 
         // ---------- TODOS LOS CLIENTES: aplicar rotación visual ----------
