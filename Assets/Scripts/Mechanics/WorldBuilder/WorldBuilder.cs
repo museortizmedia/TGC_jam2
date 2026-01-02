@@ -9,15 +9,15 @@ public class WorldBuilder : MonoBehaviour
 
     public event Action<GameObject> OnPlayerEnterInCenter;
 
-    public Vector3 GetCurrentSpawnPointPosition()
+    public Transform GetCurrentSpawnPointPosition()
     {
         if (SpawnPoints.Length == 0)
         {
             Debug.LogWarning("No spawn points defined in WorldBuilder.");
-            return Vector3.zero;
+            return null;
         }
 
-        Vector3 spawnPoint = SpawnPoints[currentSpawnIndex].position;
+        Transform spawnPoint = SpawnPoints[currentSpawnIndex];
         currentSpawnIndex = (currentSpawnIndex + 1) % SpawnPoints.Length;
         return spawnPoint;
     }

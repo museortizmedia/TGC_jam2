@@ -13,11 +13,12 @@ public class SessionManager : NetworkBehaviour
             Destroy(gameObject);
             return;
         }
+
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
 
-    [SerializeField] ScreenTransitionManager screenTransitionManager;
+    public ScreenTransitionManager screenTransitionManager;
     public Action<SessionState> OnSessionStateChanged;
 
     public enum SessionState
@@ -36,6 +37,8 @@ public class SessionManager : NetworkBehaviour
             ChangeState(SessionState.Lobby);
         }
     }
+
+    #region SESSION STATE
 
     public void ChangeState(SessionState newState)
     {
@@ -57,7 +60,6 @@ public class SessionManager : NetworkBehaviour
         switch (newState)
         {
             case SessionState.Lobby:
-
                 LoadNetworkScene("MenuScene");
                 break;
 
@@ -66,7 +68,6 @@ public class SessionManager : NetworkBehaviour
                 break;
 
             case SessionState.End:
-                //
                 break;
         }
 
@@ -75,17 +76,35 @@ public class SessionManager : NetworkBehaviour
 
     private void LoadNetworkScene(string sceneName)
     {
-        if (screenTransitionManager != null)
+        // Transición PARA TODOS
+        ScreenTransitionAllClientRpc(sceneName);
+    }
+
+    #endregion
+
+    #region SCREEN TRANSITIONS
+
+    /// <summary>
+    /// Transición visible para TODOS los jugadores (cambio de escena)
+    /// </summary>
+    [ClientRpc]
+    private void ScreenTransitionAllClientRpc(string sceneName)
+    {
+        if (screenTransitionManager == null)
         {
-            screenTransitionManager.Transition(() =>
-            {
-                NetworkManager.Singleton.SceneManager.LoadScene(
-                    sceneName,
-                    UnityEngine.SceneManagement.LoadSceneMode.Single
-                );
-            });
+            LoadScene(sceneName);
+            return;
         }
-        else
+
+        screenTransitionManager.Transition(() =>
+        {
+            LoadScene(sceneName);
+        });
+    }
+
+    private void LoadScene(string sceneName)
+    {
+        if (IsServer)
         {
             NetworkManager.Singleton.SceneManager.LoadScene(
                 sceneName,
@@ -94,4 +113,28 @@ public class SessionManager : NetworkBehaviour
         }
     }
 
+    /// <summary>
+    /// Transición SOLO para un jugador (respawn, muerte, etc.)
+    /// </summary>
+    public void PlayLocalRespawnTransition(ulong targetClientId)
+    {
+        if (!IsServer)
+            return;
+
+        ScreenTransitionLocalClientRpc(targetClientId);
+    }
+
+    [ClientRpc]
+    private void ScreenTransitionLocalClientRpc(ulong targetClientId)
+    {
+        if (NetworkManager.Singleton.LocalClientId != targetClientId)
+            return;
+
+        if (screenTransitionManager != null)
+        {
+            screenTransitionManager.Transition(null);
+        }
+    }
+
+    #endregion
 }

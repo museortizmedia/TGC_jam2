@@ -87,23 +87,23 @@ public class GameController : NetworkBehaviour
         if (spawnedPlayers.ContainsKey(clientId))
             return;
 
-        Vector3 pos = GetSpawnPosition();
+        Transform SP = GetSpawnPosition();
 
-        var player = Instantiate(playerPrefab, pos, Quaternion.identity);
+        var player = Instantiate(playerPrefab, SP.position, Quaternion.identity);
         var netObj = player.GetComponent<NetworkObject>();
 
         netObj.SpawnAsPlayerObject(clientId, true);
         spawnedPlayers.Add(clientId, netObj);
-        OnSpawnPlayer(player);
+        OnSpawnPlayer(player, SP);
 
     }
 
-    Vector3 GetSpawnPosition()
+    Transform GetSpawnPosition()
     {
         return worldBuilder.GetCurrentSpawnPointPosition();
     }
 
-    void OnSpawnPlayer(GameObject player)
+    void OnSpawnPlayer(GameObject player, Transform spawpoint)
     {
         // solo lectura de la lista
         playerInstanced.Add(player);
@@ -114,13 +114,17 @@ public class GameController : NetworkBehaviour
 
 
         // Asignar color
-        player.TryGetComponent<PlayerColor>(out var playerColor);
-        if (playerColor != null)
+        if (player.TryGetComponent(out PlayerColor playerColor))
         {
             ColorData colorData = currentColors[Random.Range(0, currentColors.Count - 1)];
             Debug.Log("Asignando color: " + colorData.name + " al jugador " + player.name);
             playerColor._color.Value = ColorDataMapper.ToNet(colorData);
             currentColors.Remove(colorData);
+        }
+        // Asignar spawnpoint
+        if(player.TryGetComponent(out PlayerFall playerFall))
+        {
+            playerFall.spawnPoint = spawpoint;
         }
 
     }
