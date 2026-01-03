@@ -2,15 +2,8 @@ using UnityEngine;
 
 public class PuzzleModule : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public string puzzleName;
+    [Tooltip("Exactamente 4 módulos hijos")]
+    public GameObject[] moduleSlots;
+    public string ColorIdRute;
 }

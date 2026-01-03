@@ -21829,12 +21829,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 295491aa16ddda84b858ed670ffccad8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WorldBuilder
+  ShowTopMostFoldoutHeaderGroup: 1
   PiecePrefab: {fileID: 5045349007678660981, guid: 9df6eff9f028ac64dbab019a173b5899, type: 3}
   SpawnPoints:
   - {fileID: 5696404000927557785}
   - {fileID: 6692403304157898813}
   - {fileID: 1636104890141947089}
   - {fileID: 5547174431643674291}
+  puzzlePrefabs:
+  - {fileID: 5045349007678660981, guid: 9c9c20a84e63a4c45863f058c32a0e95, type: 3}
+  - {fileID: 5045349007678660981, guid: 695df222fc0c6d84aa9f9c559682a2d4, type: 3}
+  - {fileID: 5045349007678660981, guid: ac8ffd13228c82a47a80c8ac5b631175, type: 3}
+  - {fileID: 5045349007678660981, guid: 3d1e7008304f7974ea7ada56cb61fd2a, type: 3}
+  routes: []
 --- !u!1001 &2898217756195346721
 PrefabInstance:
   m_ObjectHideFlags: 0

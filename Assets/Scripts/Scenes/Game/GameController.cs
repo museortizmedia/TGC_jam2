@@ -16,6 +16,8 @@ public class GameController : NetworkBehaviour
 
     [SerializeField] ColorData[] playerColors;
     [SerializeField] List<ColorData> currentColors;
+    [Tooltip("Norte, Sur, Este, Oeste")]
+    public List<string> RutesColor;
 
     [SerializeField] WorldBuilder worldBuilder;
 
@@ -68,16 +70,19 @@ public class GameController : NetworkBehaviour
             return;
 
         SpawnAllPlayers();
+
+        if (IsServer)
+        {
+            worldBuilder.BuildWorld();
+        }
+
     }
 
     void SpawnAllPlayers()
     {
-        int i = 0;
         foreach (var client in NetworkManager.ConnectedClientsList)
         {
-            //Debug.Log(i);
             SpawnPlayerForClient(client.ClientId);
-            i++;
         }
     }
 
@@ -118,6 +123,7 @@ public class GameController : NetworkBehaviour
             ColorData colorData = currentColors[Random.Range(0, currentColors.Count - 1)];
             Debug.Log("Asignando color: " + colorData.name + " al jugador " + player.name);
             playerColor._color.Value = ColorDataMapper.ToNet(colorData);
+            RutesColor.Add(colorData.name);
             currentColors.Remove(colorData);
         }
         // Asignar spawnpoint
