@@ -5,7 +5,7 @@ using UnityEngine;
 public class AssignGlobalCamera : NetworkBehaviour
 {
     [SerializeField] private Transform cameraTarget;
-    [SerializeField] PlayerMovementServerAuth playerMovementServerAuth;
+    [SerializeField] private PlayerMovementServerAuth playerMovementServerAuth;
 
     public override void OnNetworkSpawn()
     {
@@ -14,16 +14,26 @@ public class AssignGlobalCamera : NetworkBehaviour
 
         GameController controller = FindAnyObjectByType<GameController>();
 
-
         if (controller == null)
         {
-            Debug.LogError("No se encontró el GameControler en la escena");
+            Debug.LogError("No se encontró el GameController en la escena");
             return;
         }
 
-        controller.Camera.Follow = cameraTarget;
-        controller.Camera.LookAt = cameraTarget;
+        var gameplayCamera = controller.systemCameraController.GameplayCamera;
 
-        playerMovementServerAuth.cameraReference = controller.Camera.transform;
+        if (gameplayCamera == null)
+        {
+            Debug.LogError("GameController no tiene referencia a la cámara de gameplay");
+            return;
+        }
+
+        gameplayCamera.Follow = cameraTarget;
+        gameplayCamera.LookAt = cameraTarget;
+
+        if (playerMovementServerAuth != null)
+        {
+            playerMovementServerAuth.cameraReference = gameplayCamera.transform;
+        }
     }
 }

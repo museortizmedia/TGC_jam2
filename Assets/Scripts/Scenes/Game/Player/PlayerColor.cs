@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Events;
 
 [DisallowMultipleComponent]
 public class PlayerColor : NetworkBehaviour
@@ -24,6 +25,9 @@ public class PlayerColor : NetworkBehaviour
     [SerializeField] string currenColorName;
     [SerializeField] ColorData currentColor;
     [SerializeField] ColorData[] allColors;
+
+    public UnityEvent OnStarPlayerColor;
+
 
     private void Awake()
     {
@@ -52,8 +56,19 @@ public class PlayerColor : NetworkBehaviour
         if (currentColor == null) { Debug.LogError($"ColorData con id '{newColor.colorId}' no encontrado en catálogo.", transform); return; }
 
         // Podemos hacer una espera o solo almacenar la info para lanzarla mas adelante
-        ApplyColor(ColorDataMapper.ToUnityColor(newColor), ColorDataMapper.ToUnityIntensity(newColor));
         currenColorName = ColorDataMapper.ToUnityColorId(newColor);
+
+        Invoke(nameof(StartPlayerColor), 5f);
+    }
+
+    [ContextMenu("Start Player Color")]
+    public void StartPlayerColor()
+    {
+        if(currentColor==null) return;
+
+        ApplyColor(currentColor.color, currentColor.intensity);
+
+        OnStarPlayerColor?.Invoke();
     }
 
     /// <summary>

@@ -138,6 +138,21 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 32c9bbca4a2f3ab45932136c2d668bc3, type: 2}
   - {fileID: 11400000, guid: 227ccc20ac0ce214f869f4c4e92657bd, type: 2}
   - {fileID: 11400000, guid: 9cb2c6964de5e7749bb0ef74498fe8dd, type: 2}
+  OnStarPlayerColor:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4984804232306192955}
+        m_TargetAssemblyTypeName: PlayerMovementServerAuth, Assembly-CSharp
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!136 &7085790231254611100
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -273,7 +288,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 378827129244887094}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b13cd03805219cb4d9f057443d52fe1c, type: 3}
   m_Name: 
@@ -335,9 +350,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f06cf05b248b3b5499bdb340a3355788, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerFall
+  ShowTopMostFoldoutHeaderGroup: 1
   minY: -50
   spawnPoint: {fileID: 0}
-  rb: {fileID: 4621875121548438981}
 --- !u!1 &3376476663957511764
 GameObject:
   m_ObjectHideFlags: 0

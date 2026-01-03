@@ -11,8 +11,7 @@ public class GameController : NetworkBehaviour
     [SerializeField] GameObject playerPrefab;
     [SerializeField] Vector3 spawnCenter;
     [SerializeField] List<GameObject> playerInstanced;
-    [SerializeField] CinemachineVirtualCameraBase freelookCamera;
-    public CinemachineVirtualCameraBase Camera => freelookCamera;
+    public SystemCameraController systemCameraController;
     Dictionary<ulong, NetworkObject> spawnedPlayers = new();
 
     [SerializeField] ColorData[] playerColors;
@@ -122,11 +121,58 @@ public class GameController : NetworkBehaviour
             currentColors.Remove(colorData);
         }
         // Asignar spawnpoint
-        if(player.TryGetComponent(out PlayerFall playerFall))
+        if (player.TryGetComponent(out PlayerFall playerFall))
         {
             playerFall.spawnPoint = spawpoint;
         }
 
+        if (IsServer)
+        {
+            StartIntroCinematicClientRpc(spawnCenter);
+        }
+
+    }
+
+    [ClientRpc]
+    void StartIntroCinematicClientRpc(Vector3 center)
+    {
+        if (!IsClient)
+            return;
+
+        StartCoroutine(WaitForLocalPlayerAndPlay(center));
+    }
+
+    IEnumerator WaitForLocalPlayerAndPlay(Vector3 center)
+    {
+        NetworkObject localPlayer = null;
+
+        // Esperar a que el LocalPlayer exista
+        while (localPlayer == null)
+        {
+            localPlayer = NetworkManager.Singleton
+                .SpawnManager
+                .GetLocalPlayerObject();
+
+            yield return null;
+        }
+
+        // Esperar a que esté activo y habilitado
+        while (!localPlayer.isActiveAndEnabled)
+            yield return null;
+
+        // Frame extra de seguridad (muy recomendable)
+        yield return null;
+
+        if (systemCameraController == null)
+        {
+            Debug.LogError("SystemCameraController not found on client");
+            yield break;
+        }
+        
+        systemCameraController.PlayIntroCinematic(
+            center,
+            localPlayer.transform
+        );
     }
 
     void PlayerInCenterCounter(GameObject player)
@@ -164,18 +210,19 @@ public class GameController : NetworkBehaviour
         partidaFinalizada = true;
 
         Debug.Log("Todos los jugadores han entrado al centro. Finalizando partida.");
+
         // Reportar al SessionManager
         SessionManager.Instance.ChangeState(SessionManager.SessionState.End);
-        // - cada instancia de player debe quita el input
-        // Activar cámara de finalización y lógica de definición de ganador
-        StartCoroutine(FinalizarPartidaCoroutine());
+
+        if (IsServer)
+        {
+            EndCinematicClientRpc();
+        }
     }
 
-    IEnumerator FinalizarPartidaCoroutine()
+    [ClientRpc]
+    void EndCinematicClientRpc()
     {
-        // Esperar un momento para que todos vean que han entrado
-        Debug.Log("5 segundos para reiniciar...");
-        yield return new WaitForSeconds(5f);
-        SessionManager.Instance.ChangeState(SessionManager.SessionState.Lobby);
+        systemCameraController.PlayEndCinematic(spawnCenter);
     }
 }

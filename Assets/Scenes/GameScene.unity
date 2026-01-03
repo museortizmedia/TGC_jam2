@@ -1551,6 +1551,17 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
+--- !u!114 &520762573 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9095464310872192216, guid: afb95a4df169b08439e8065fb559fd73, type: 3}
+  m_PrefabInstance: {fileID: 1590918758}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0aa3944b2d1a1a041a65536910ad1850, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!1001 &561031983
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3908,21 +3919,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3408320642545726221, guid: afb95a4df169b08439e8065fb559fd73, type: 3}
+      propertyPath: m_SplineSettings.Position
+      value: 0.07
+      objectReference: {fileID: 0}
     - target: {fileID: 5429654361592292462, guid: afb95a4df169b08439e8065fb559fd73, type: 3}
       propertyPath: m_Name
       value: SystemCamera
       objectReference: {fileID: 0}
     - target: {fileID: 5704314870013170480, guid: afb95a4df169b08439e8065fb559fd73, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.9308
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5704314870013170480, guid: afb95a4df169b08439e8065fb559fd73, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.71
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5704314870013170480, guid: afb95a4df169b08439e8065fb559fd73, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -3.68515
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5704314870013170480, guid: afb95a4df169b08439e8065fb559fd73, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3952,6 +3967,34 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8074656950727042562, guid: afb95a4df169b08439e8065fb559fd73, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 5.3828716
+      objectReference: {fileID: 0}
+    - target: {fileID: 8074656950727042562, guid: afb95a4df169b08439e8065fb559fd73, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 14.802839
+      objectReference: {fileID: 0}
+    - target: {fileID: 8074656950727042562, guid: afb95a4df169b08439e8065fb559fd73, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 17.939697
+      objectReference: {fileID: 0}
+    - target: {fileID: 8670176802822552095, guid: afb95a4df169b08439e8065fb559fd73, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 5.3828716
+      objectReference: {fileID: 0}
+    - target: {fileID: 8670176802822552095, guid: afb95a4df169b08439e8065fb559fd73, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 14.802839
+      objectReference: {fileID: 0}
+    - target: {fileID: 8670176802822552095, guid: afb95a4df169b08439e8065fb559fd73, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 17.939697
+      objectReference: {fileID: 0}
+    - target: {fileID: 9095464310872192216, guid: afb95a4df169b08439e8065fb559fd73, type: 3}
+      propertyPath: gameplayCamera
+      value: 
+      objectReference: {fileID: 1590918759}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5464,9 +5507,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameController
   ShowTopMostFoldoutHeaderGroup: 1
   playerPrefab: {fileID: 378827129244887094, guid: 3b6f370707af6f240aa76973333b1025, type: 3}
-  spawnCenter: {x: 0, y: 0, z: 0}
+  spawnCenter: {x: 0, y: 20, z: 0}
   playerInstanced: []
-  freelookCamera: {fileID: 1590918759}
+  systemCameraController: {fileID: 520762573}
   playerColors:
   - {fileID: 11400000, guid: 1703ceb6c4a7270499f35e42b0b4a6a0, type: 2}
   - {fileID: 11400000, guid: 32c9bbca4a2f3ab45932136c2d668bc3, type: 2}
