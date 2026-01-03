@@ -1,3 +1,4 @@
+#define ISEDITOR
 using UnityEngine;
 using Unity.Netcode;
 using System;
@@ -114,8 +115,11 @@ public class LobbyReadyController : NetworkBehaviour
 
     private void TryStartGame()
     {
-        bool lobbyFull = connectedPlayers.Value == maxPlayers;
+        Debug.Log($"Players: {connectedPlayers.Value}, Max: {maxPlayers}, Ready: {readyCount.Value}");
+        
+        bool lobbyFull = connectedPlayers.Value >= maxPlayers;
         bool allReady = readyCount.Value == connectedPlayers.Value && lobbyFull;
+
 
         if (allReady && countdownRoutine == null)
         {
