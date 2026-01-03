@@ -11,6 +11,7 @@ public class PlayerAnimations : NetworkBehaviour
     [Header("Settings")]
     //[SerializeField] float smoothTime = 10f;
     //[SerializeField] float fallThreshold = 0.15f;
+
     [SerializeField] float turnSpeed = 15f;
 
     float airTime;

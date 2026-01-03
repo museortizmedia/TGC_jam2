@@ -258,4 +258,6 @@ public class PlayerMovementServerAuth : NetworkBehaviour
         Gizmos.color = isGrounded ? Color.green : Color.red;
         Gizmos.DrawWireSphere(transform.position + groundCheckOffset, groundCheckRadius);
     }
+
+
 }
