@@ -142,6 +142,10 @@ public class WorldBuilder : NetworkBehaviour
         RutasParent.GetChild(1).gameObject.SetActive(false);
         RutasParent.GetChild(2).gameObject.SetActive(false);
         RutasParent.GetChild(3).gameObject.SetActive(false);
+        RutasParent.GetChild(0).GetComponent<NetworkObject>().Despawn(true);
+        RutasParent.GetChild(1).GetComponent<NetworkObject>().Despawn(true);
+        RutasParent.GetChild(2).GetComponent<NetworkObject>().Despawn(true);
+        RutasParent.GetChild(3).GetComponent<NetworkObject>().Despawn(true);
 
         //Activar Puzzles
         PuzzleModule[] puzzles = RutasParent.GetComponentsInChildren<PuzzleModule>();

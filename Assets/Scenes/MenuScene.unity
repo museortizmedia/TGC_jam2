@@ -804,6 +804,18 @@ PrefabInstance:
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 3485019537
       objectReference: {fileID: 0}
+    - target: {fileID: 8083792749650098573, guid: 54cfa77af2d31e2439ed906d9ed67561, type: 3}
+      propertyPath: EndMusic
+      value: 
+      objectReference: {fileID: 11400000, guid: ae2bcd7beeb48464ca3a4b06705c9183, type: 2}
+    - target: {fileID: 8083792749650098573, guid: 54cfa77af2d31e2439ed906d9ed67561, type: 3}
+      propertyPath: GameMusic
+      value: 
+      objectReference: {fileID: 11400000, guid: ae2bcd7beeb48464ca3a4b06705c9183, type: 2}
+    - target: {fileID: 8083792749650098573, guid: 54cfa77af2d31e2439ed906d9ed67561, type: 3}
+      propertyPath: MenuMusic
+      value: 
+      objectReference: {fileID: 11400000, guid: d5716ed5ec6da3b489a5f10f8c69f9f9, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -964,6 +976,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MenuController
   vivoxChannelAudioTap: {fileID: 398642173}
+  MenuSound: {fileID: 11400000, guid: d5716ed5ec6da3b489a5f10f8c69f9f9, type: 2}
 --- !u!4 &1700216153
 Transform:
   m_ObjectHideFlags: 0

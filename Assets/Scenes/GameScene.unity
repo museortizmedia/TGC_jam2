@@ -4964,7 +4964,10 @@ PrefabInstance:
     - {fileID: 4249614388330204590, guid: afb95a4df169b08439e8065fb559fd73, type: 3}
     - {fileID: 131700185301529069, guid: afb95a4df169b08439e8065fb559fd73, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1051100933522669789, guid: afb95a4df169b08439e8065fb559fd73, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1590918761}
   m_SourcePrefab: {fileID: 100100000, guid: afb95a4df169b08439e8065fb559fd73, type: 3}
 --- !u!114 &1590918759 stripped
 MonoBehaviour:
@@ -4977,6 +4980,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineCamera
+--- !u!1 &1590918760 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1051100933522669789, guid: afb95a4df169b08439e8065fb559fd73, type: 3}
+  m_PrefabInstance: {fileID: 1590918758}
+  m_PrefabAsset: {fileID: 0}
+--- !u!81 &1590918761
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1590918760}
+  m_Enabled: 1
 --- !u!43 &1595482651
 Mesh:
   m_ObjectHideFlags: 0

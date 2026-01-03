@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using MuseOrtizLibrary;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -11,6 +12,11 @@ public class SessionManager : NetworkBehaviour
 
     [Header("References")]
     public ScreenTransitionManager screenTransitionManager;
+
+    [Header("Audios")]
+    public ScriptableAudioClip MenuMusic;
+    public ScriptableAudioClip GameMusic, EndMusic;
+    public ScriptableAudioClip[] SfxAudios;
 
     public Action<SessionState> OnSessionStateChanged;
 
@@ -70,9 +76,13 @@ public class SessionManager : NetworkBehaviour
 
             case SessionState.Game:
                 LoadNetworkScene("GameScene");
+                MenuMusic.StopAudio();
+                GameMusic.PlayAudio();
                 break;
 
             case SessionState.End:
+                GameMusic.StopAudio();
+                EndMusic.PlayAudio();
                 break;
         }
 

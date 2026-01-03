@@ -1,11 +1,24 @@
 using UnityEngine;
 using Unity.Services.Vivox.AudioTaps;
 using System;
+using MuseOrtizLibrary;
 
 public class MenuController : MonoBehaviour
 {
     [Header("Vivox Taps")]
     [SerializeField] private VivoxChannelAudioTap vivoxChannelAudioTap;
+
+    public ScriptableAudioClip MenuSound;
+
+    void Start()
+    {
+        MenuSound.PlayAudio();
+    }
+
+    void OnDisable()
+    {
+        MenuSound.StopAudio();
+    }
 
     /// <summary>
     /// Configura los taps para un canal ya conectado en VivoxManager.
