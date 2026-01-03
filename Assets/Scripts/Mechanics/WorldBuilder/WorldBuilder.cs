@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -25,10 +26,11 @@ public class WorldBuilder : NetworkBehaviour
 
     public event Action<GameObject> OnPlayerEnterInCenter;
 
-    void Start()
+    /*void Start()
     {
         StartCoroutine(BuildWorldRoutine());
-    }
+    }*/
+
     private void Reset()
     {
         routes = new RouteTemplate[4];
@@ -88,6 +90,10 @@ public class WorldBuilder : NetworkBehaviour
             ColorRoutes.Add("rojo");
             ColorRoutes.Add("verde");
         }
+        while (ColorRoutes.Count < 4)
+        {
+            ColorRoutes.Add("blanco");
+        }
 
         // sacar las posiciones y rotaciones de cada modulo de todas las rutas
         Transform[][] levels = new Transform[][]
@@ -108,6 +114,9 @@ public class WorldBuilder : NetworkBehaviour
         {
             GameObject instanciaPuzzle = Instantiate(puzzlePrefabs[i], RutasParent); // Se crea el puzzle con los 4 modulos           
             PuzzleModule puzzleModule = instanciaPuzzle.GetComponent<PuzzleModule>();
+
+            puzzleModule.ColorIdRute.Value = new FixedString32Bytes(ColorRoutes[i]);
+            
             GameObject[] modulosDelPuzle = puzzleModule.moduleSlots; // referencia a los 4 modulos del puzzle
 
             for (int j = 0; j < 4; j++) // niveles
@@ -119,11 +128,11 @@ public class WorldBuilder : NetworkBehaviour
                 nivelDelModulo.transform.rotation = referencia.rotation;
                 nivelDelModulo.transform.localScale = referencia.localScale;
 
-                puzzleModule.ColorIdRute = ColorRoutes[i];
 
                 referencia.gameObject.SetActive(false);
             }
 
+            instanciaPuzzle.GetComponent<NetworkObject>().Spawn(true);
         }
         yield return null;
 
