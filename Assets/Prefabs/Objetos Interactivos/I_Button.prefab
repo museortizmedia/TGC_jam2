@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8163832064442421578}
   - component: {fileID: 4542485668471387858}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -125,7 +125,7 @@ GameObject:
   - component: {fileID: 5305194599387661044}
   - component: {fileID: 3316982624169458403}
   m_Layer: 0
-  m_Name: Cylinder
+  m_Name: Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -213,6 +213,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8766150325352096842}
   - component: {fileID: 4965042582376210376}
+  - component: {fileID: 8333408451569380728}
   - component: {fileID: 4030921778921992287}
   m_Layer: 0
   m_Name: I_Button
@@ -271,6 +272,28 @@ MonoBehaviour:
   onDisHighlighted:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &8333408451569380728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8382822008105646738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94cd0d581bb520f42a64084a5f32acd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectColored
+  emitColorProperty: _EmitColor
+  emitIntensityProperty: _EmitIntensity
+  render: {fileID: 3316982624169458403}
+  IsColored: 0
+  currentColor: {fileID: 0}
+  allColors:
+  - {fileID: 11400000, guid: 1703ceb6c4a7270499f35e42b0b4a6a0, type: 2}
+  - {fileID: 11400000, guid: 32c9bbca4a2f3ab45932136c2d668bc3, type: 2}
+  - {fileID: 11400000, guid: 227ccc20ac0ce214f869f4c4e92657bd, type: 2}
+  - {fileID: 11400000, guid: 9cb2c6964de5e7749bb0ef74498fe8dd, type: 2}
 --- !u!65 &4030921778921992287
 BoxCollider:
   m_ObjectHideFlags: 0

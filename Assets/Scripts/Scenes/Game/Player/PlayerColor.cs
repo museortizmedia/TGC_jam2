@@ -22,8 +22,8 @@ public class PlayerColor : NetworkBehaviour
             NetworkVariableReadPermission.Everyone,
             NetworkVariableWritePermission.Server
         );
-    [SerializeField] string currenColorName;
-    [SerializeField] ColorData currentColor;
+    public string currenColorName;
+    public ColorData currentColor;
     [SerializeField] ColorData[] allColors;
 
     public UnityEvent OnStarPlayerColor;
@@ -49,8 +49,7 @@ public class PlayerColor : NetworkBehaviour
     private void OnColorChanged(ColorDataNet oldColor, ColorDataNet newColor)
     {
         // Buscamos el color
-        currentColor =
-        allColors.FirstOrDefault(c => c.colorId == newColor.colorId);
+        currentColor = allColors.FirstOrDefault(c => c.colorId == newColor.colorId);
         Debug.Log(currentColor == null ? $"ColorData con id '{currentColor.colorId}' no encontrado en catálogo." : $"ColorData con id '{currentColor.colorId}' resuelto correctamente.", transform);
 
         if (currentColor == null) { Debug.LogError($"ColorData con id '{newColor.colorId}' no encontrado en catálogo.", transform); return; }
@@ -94,6 +93,21 @@ public class PlayerColor : NetworkBehaviour
             {
                 maleMesh.SetActive(false);
                 femaleMesh.SetActive(true);
+            }
+        }
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.TryGetComponent<IColorAffected>(out var colorAfected))
+        {
+            if(!colorAfected.CanInteractive(currentColor))
+            {
+                // Dead
+                if(collision.gameObject.TryGetComponent<IDeadly>(out var deadly))
+                {
+                    deadly.Dead();
+                }
             }
         }
     }

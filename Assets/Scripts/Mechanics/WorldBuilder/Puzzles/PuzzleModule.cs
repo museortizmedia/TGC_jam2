@@ -14,6 +14,8 @@ public class PuzzleModule : NetworkBehaviour
             NetworkVariableReadPermission.Everyone,
             NetworkVariableWritePermission.Server
         );
+    public ObjectColored[] RouteColorObjets;
+    public ObjectColored[] NoRouteColorObjets;
     public UnityEvent<string> OnInitPuzzle;
 
     public void IniciarPuzzle()
@@ -30,5 +32,15 @@ public class PuzzleModule : NetworkBehaviour
     private void OnColorChanged(FixedString32Bytes oldValue, FixedString32Bytes newValue)
     {
         //ApplyColor(newValue.ToString());
+        foreach (var routecolor in RouteColorObjets)
+        {
+            routecolor.ApplyColorInObject(newValue);
+        }
+
+        string otherColor = NoRouteColorObjets[0].GetOtherColorThan(newValue.ToString());
+        foreach (var noroutecolor in NoRouteColorObjets)
+        {
+            noroutecolor.ApplyColorInObject(otherColor);
+        }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using System.Linq;
 
+[Obsolete]
 public class ColorIdentity : MonoBehaviour {
     [SerializeField] private ColorData currentColor;
     
@@ -18,7 +19,7 @@ public class ColorIdentity : MonoBehaviour {
         var affectedComponents = GetComponentsInChildren<IColorAffected>();
         foreach (var comp in affectedComponents)
         {
-            comp.EvaluateColor(currentColor);
+            comp.CanInteractive(currentColor);
         }
     }
 }

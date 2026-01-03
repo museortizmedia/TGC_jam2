@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 4984804232306192955}
   - component: {fileID: 4942732193969505918}
   - component: {fileID: 29188683119206676}
+  - component: {fileID: 7997366815114389948}
   m_Layer: 0
   m_Name: PlayerPrefab
   m_TagString: Untagged
@@ -353,6 +354,21 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   minY: -50
   spawnPoint: {fileID: 0}
+--- !u!114 &7997366815114389948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 378827129244887094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f7e8d683f2bb6b459b511055e69c699, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerDead
+  OnDead:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &3376476663957511764
 GameObject:
   m_ObjectHideFlags: 0

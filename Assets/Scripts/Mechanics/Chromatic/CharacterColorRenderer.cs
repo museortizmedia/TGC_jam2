@@ -1,5 +1,7 @@
+using System;
 using UnityEngine;
 
+[Obsolete]
 public class CharacterColorRenderer : MonoBehaviour, IColorAffected
 {
     private Renderer rend;
@@ -11,10 +13,11 @@ public class CharacterColorRenderer : MonoBehaviour, IColorAffected
         block = new MaterialPropertyBlock();
     }
 
-    public void EvaluateColor(ColorData colorData)
+    public bool CanInteractive(ColorData colorData)
     {
         rend.GetPropertyBlock(block);
         //block.SetColor("_Color", colorData.dataColor.value);
         rend.SetPropertyBlock(block);
+        return true;
     }
 }

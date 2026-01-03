@@ -1,9 +1,17 @@
 using UnityEngine;
 
+[RequireComponent(typeof(ObjectColored))]
 public abstract class InteractiveObject : MonoBehaviour, IInteractable
 {
+    public ObjectColored objectColored;
     protected Transform currentInteractor;
     protected bool isInteracting;
+
+
+    void Awake()
+    {
+        objectColored = GetComponent<ObjectColored>();
+    }
 
     public virtual void Arrived(Transform objectArriving)
     {
@@ -22,6 +30,18 @@ public abstract class InteractiveObject : MonoBehaviour, IInteractable
 
     public virtual void InteractStart(Transform objectInteracting)
     {
+        // Matar al tratar de interactuar con un objeto de otro color
+        if(objectInteracting.gameObject.TryGetComponent(out PlayerColor playerColor))
+        {
+            if(!objectColored.CanInteractive(playerColor.currentColor))
+            {
+                if(objectInteracting.gameObject.TryGetComponent(out IDeadly deadly))
+                {
+                    deadly.Dead();
+                }
+            }
+        }
+
         if (!CanInteract()) return;
 
         isInteracting = true;
