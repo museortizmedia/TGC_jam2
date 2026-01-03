@@ -133,6 +133,13 @@ public class WorldBuilder : NetworkBehaviour
         RutasParent.GetChild(1).gameObject.SetActive(false);
         RutasParent.GetChild(2).gameObject.SetActive(false);
         RutasParent.GetChild(3).gameObject.SetActive(false);
+
+        //Activar Puzzles
+        PuzzleModule[] puzzles = RutasParent.GetComponentsInChildren<PuzzleModule>();
+        foreach (var puzz in puzzles)
+        {
+            puzz.IniciarPuzzle();
+        }
     }
 
     private Transform[] Shuffle(Transform[] array)
