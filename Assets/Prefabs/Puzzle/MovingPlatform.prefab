@@ -78,9 +78,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::OrbitRingSpawner
   platformPrefab: {fileID: 7127459114436157229, guid: 31c989c2d7bc00e4296c90e216181fbe, type: 3}
   platformCount: 5
-  radius: 120
-  orbitSpeed: 0.5
-  clockwise: 1
-  heightAmplitude: 3
-  heightSpeed: 1
-  center: {fileID: 6537869763477090971}
+  xRange: {x: -10, y: 10}
+  zRange: {x: -50, y: 50}
+  yHeight: 5

@@ -4952,6 +4952,10 @@ PrefabInstance:
       propertyPath: m_SplineSettings.Position
       value: 0.07
       objectReference: {fileID: 0}
+    - target: {fileID: 3955789034792619242, guid: afb95a4df169b08439e8065fb559fd73, type: 3}
+      propertyPath: m_RenderPostProcessing
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5429654361592292462, guid: afb95a4df169b08439e8065fb559fd73, type: 3}
       propertyPath: m_Name
       value: SystemCamera
@@ -6582,19 +6586,23 @@ PrefabInstance:
     - target: {fileID: 478906825473487501, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: 'puzzlePrefabs.Array.data[0]'
       value: 
-      objectReference: {fileID: 5045349007678660981, guid: 9c9c20a84e63a4c45863f058c32a0e95, type: 3}
+      objectReference: {fileID: 5045349007678660981, guid: 4908469c46d1944419e93ae7853ecb1f, type: 3}
     - target: {fileID: 478906825473487501, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: 'puzzlePrefabs.Array.data[1]'
       value: 
-      objectReference: {fileID: 5045349007678660981, guid: 695df222fc0c6d84aa9f9c559682a2d4, type: 3}
+      objectReference: {fileID: 5045349007678660981, guid: 9c9c20a84e63a4c45863f058c32a0e95, type: 3}
     - target: {fileID: 478906825473487501, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: 'puzzlePrefabs.Array.data[2]'
       value: 
-      objectReference: {fileID: 5045349007678660981, guid: ac8ffd13228c82a47a80c8ac5b631175, type: 3}
+      objectReference: {fileID: 5045349007678660981, guid: 695df222fc0c6d84aa9f9c559682a2d4, type: 3}
     - target: {fileID: 478906825473487501, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: 'puzzlePrefabs.Array.data[3]'
       value: 
-      objectReference: {fileID: 5045349007678660981, guid: 3d1e7008304f7974ea7ada56cb61fd2a, type: 3}
+      objectReference: {fileID: 5045349007678660981, guid: ac8ffd13228c82a47a80c8ac5b631175, type: 3}
+    - target: {fileID: 478906825473487501, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
+      propertyPath: 'puzzlePrefabs.Array.data[4]'
+      value: 
+      objectReference: {fileID: 5045349007678660981, guid: 4908469c46d1944419e93ae7853ecb1f, type: 3}
     - target: {fileID: 478906825473487501, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: routes.Array.data[0].routeName
       value: Norte
