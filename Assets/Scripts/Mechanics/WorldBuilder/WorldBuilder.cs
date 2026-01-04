@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Unity.Netcode;
+using Unity.Collections;
+
+#region Data
 
 [System.Serializable]
 public class RouteTemplate
@@ -12,26 +15,48 @@ public class RouteTemplate
     public Transform[] moduleSlots; // 4 slots por ruta
 }
 
+public struct PuzzlePlacement : INetworkSerializable
+{
+    public int PuzzleIndex;   // índice en puzzles[]
+    public int RouteIndex;    // 0..3
+    public int LevelIndex;    // 0..3
+    public FixedString32Bytes Color;
+
+    public void NetworkSerialize<T>(BufferSerializer<T> serializer)
+        where T : IReaderWriter
+    {
+        serializer.SerializeValue(ref PuzzleIndex);
+        serializer.SerializeValue(ref RouteIndex);
+        serializer.SerializeValue(ref LevelIndex);
+        serializer.SerializeValue(ref Color);
+    }
+}
+
+#endregion
+
 public class WorldBuilder : NetworkBehaviour
 {
     [Header("References")]
     [SerializeField] private GameController gameController;
-    [SerializeField] private Transform rutasParent;
 
     [Header("Templates (Norte, Este, Sur, Oeste)")]
     [SerializeField] private GameObject[] templates;
 
-    [Header("All Puzzles in Scene")]
+    [Header("All puzzles in scene (ORDER IS IMPORTANT)")]
     [SerializeField] private GameObject[] puzzles;
-
-    [Header("Spawns")]
-    [SerializeField] private Transform[] spawnPoints;
-    private int currentSpawnIndex = 0;
 
     [Header("Routes")]
     [SerializeField] private RouteTemplate[] routes;
 
+    [Header("Spawns")]
+    [SerializeField] private Transform[] spawnPoints;
+
     public event Action<GameObject> OnPlayerEnterInCenter;
+
+    private int currentSpawnIndex = 0;
+
+    private PuzzlePlacement[] currentLayout;
+    private bool worldBuilt;
 
     #region Spawns
 
@@ -52,11 +77,24 @@ public class WorldBuilder : NetworkBehaviour
 
     #endregion
 
-    #region World Build
-    [ContextMenu("Construir")]
+    #region Network lifecycle
+
+    public override void OnNetworkSpawn()
+    {
+        if (!IsServer && worldBuilt && currentLayout != null)
+        {
+            ApplyWorldLayout(currentLayout);
+        }
+    }
+
+    #endregion
+
+    #region Build World
+
+    [ContextMenu("Construir Mundo")]
     public void BuildWorld()
     {
-        if (!IsServer)
+        if (!IsServer || worldBuilt)
             return;
 
         StartCoroutine(BuildWorldRoutine());
@@ -64,30 +102,38 @@ public class WorldBuilder : NetworkBehaviour
 
     private IEnumerator BuildWorldRoutine()
     {
-        // 1. Colores
+        // 1. Colores por ruta
         List<string> colorRoutes = gameController.RutesColor;
 
-        if (colorRoutes.Count == 0)
-            colorRoutes.AddRange(new[] { "amarillo", "azul", "rojo", "verde" });
+        if (colorRoutes == null || colorRoutes.Count == 0)
+            colorRoutes = new List<string> { "amarillo", "azul", "rojo", "verde" };
 
         while (colorRoutes.Count < 4)
             colorRoutes.Add("blanco");
 
-        // 2. Elegir SOLO 4 puzzles
-        GameObject[] puzzlesElegidos = Shuffle(puzzles)
-            .Take(4)
-            .ToArray();
+        // 2. Elegir exactamente 4 puzzles
+        GameObject[] puzzlesElegidos =
+            Shuffle(puzzles).Take(4).ToArray();
 
-        // 3. Agrupar niveles por índice (0..3)
-        List<PuzzleModule>[] nivelesGlobales = new List<PuzzleModule>[4];
+        // 3. Agrupar niveles por índice
+        List<PuzzleModule>[] nivelesPorIndice = new List<PuzzleModule>[4];
         for (int i = 0; i < 4; i++)
-            nivelesGlobales[i] = new List<PuzzleModule>();
+            nivelesPorIndice[i] = new List<PuzzleModule>();
 
-        foreach (GameObject puzzle in puzzlesElegidos)
+        Dictionary<PuzzleModule, int> moduloToGlobalPuzzleIndex =
+            new Dictionary<PuzzleModule, int>();
+
+        for (int globalIndex = 0; globalIndex < puzzles.Length; globalIndex++)
         {
-            puzzle.SetActive(true); // 🔴 IMPORTANTE: activar el puzzle padre
+            GameObject puzzle = puzzles[globalIndex];
 
-            PuzzleModule[] niveles = puzzle.GetComponentsInChildren<PuzzleModule>(true);
+            if (!puzzlesElegidos.Contains(puzzle))
+                continue;
+
+            puzzle.SetActive(true);
+
+            PuzzleModule[] niveles =
+                puzzle.GetComponentsInChildren<PuzzleModule>(true);
 
             if (niveles.Length != 4)
             {
@@ -97,52 +143,95 @@ public class WorldBuilder : NetworkBehaviour
 
             for (int nivel = 0; nivel < 4; nivel++)
             {
-                nivelesGlobales[nivel].Add(niveles[nivel]);
-                niveles[nivel].gameObject.SetActive(false);
+                PuzzleModule modulo = niveles[nivel];
+                modulo.gameObject.SetActive(false);
+
+                nivelesPorIndice[nivel].Add(modulo);
+                moduloToGlobalPuzzleIndex[modulo] = globalIndex;
             }
         }
 
-        // 4. Repartir niveles: 1 por ruta, sin repetir
+        // 4. Construir layout lógico
+        List<PuzzlePlacement> layout = new();
+
         for (int nivel = 0; nivel < 4; nivel++)
         {
-            PuzzleModule[] candidatos = Shuffle(nivelesGlobales[nivel].ToArray());
+            PuzzleModule[] candidatos =
+                Shuffle(nivelesPorIndice[nivel].ToArray());
 
             if (candidatos.Length < 4)
             {
                 Debug.LogError($"Nivel {nivel} no tiene suficientes módulos.");
-                continue;
+                yield break;
             }
 
             for (int ruta = 0; ruta < 4; ruta++)
             {
                 PuzzleModule modulo = candidatos[ruta];
-                Transform slot = routes[ruta].moduleSlots[nivel];
 
-                Transform t = modulo.transform;
-                t.position = slot.position;
-                t.rotation = slot.rotation;
-                t.localScale = slot.localScale;
-
-                // Server-only
-                modulo.ColorIdRute.Value = colorRoutes[ruta];
-                modulo.colorName = colorRoutes[ruta];
-
-                modulo.gameObject.SetActive(true);
+                layout.Add(new PuzzlePlacement
+                {
+                    PuzzleIndex = moduloToGlobalPuzzleIndex[modulo],
+                    RouteIndex = ruta,
+                    LevelIndex = nivel,
+                    Color = colorRoutes[ruta]
+                });
             }
         }
 
+        currentLayout = layout.ToArray();
+        worldBuilt = true;
+
+        // 5. Aplicar en servidor
+        ApplyWorldLayout(currentLayout);
+
+        // 6. Replicar a clientes
+        ApplyWorldLayoutClientRpc(currentLayout);
+
         yield return null;
+    }
 
-        // 5. Ocultar templates (YA NO SE NECESITAN)
-        foreach (GameObject template in templates)
-            template.SetActive(false);
+    #endregion
 
-        // 6. Inicializar SOLO módulos activos
-        foreach (var modulo in puzzlesElegidos.SelectMany(p =>
-                 p.GetComponentsInChildren<PuzzleModule>(true)))
+    #region Apply Layout
+
+    [ClientRpc]
+    private void ApplyWorldLayoutClientRpc(PuzzlePlacement[] layout)
+    {
+        if (!IsServer)
+            ApplyWorldLayout(layout);
+    }
+
+    private void ApplyWorldLayout(PuzzlePlacement[] layout)
+    {
+        // Ocultar templates
+        foreach (var t in templates)
+            t.SetActive(false);
+
+        foreach (PuzzlePlacement p in layout)
         {
-            if (modulo.gameObject.activeSelf)
-                modulo.IniciarPuzzle();
+            GameObject puzzle = puzzles[p.PuzzleIndex];
+
+            if (!puzzle.activeSelf)
+                puzzle.SetActive(true);
+
+            PuzzleModule[] niveles =
+                puzzle.GetComponentsInChildren<PuzzleModule>(true);
+
+            PuzzleModule modulo = niveles[p.LevelIndex];
+            Transform slot = routes[p.RouteIndex].moduleSlots[p.LevelIndex];
+
+            Transform t = modulo.transform;
+            t.position = slot.position;
+            t.rotation = slot.rotation;
+            t.localScale = slot.localScale;
+
+            if (IsServer)
+                modulo.ColorIdRute.Value = p.Color;
+
+            modulo.colorName = p.Color.ToString();
+            modulo.gameObject.SetActive(true);
+            modulo.IniciarPuzzle();
         }
     }
 

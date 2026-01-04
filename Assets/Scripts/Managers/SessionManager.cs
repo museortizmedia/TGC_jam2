@@ -78,11 +78,13 @@ public class SessionManager : NetworkBehaviour
                 LoadNetworkScene("GameScene");
                 MenuMusic.StopAudio();
                 GameMusic.PlayAudio();
+                Cursor.lockState = CursorLockMode.Locked;
                 break;
 
             case SessionState.End:
                 GameMusic.StopAudio();
                 EndMusic.PlayAudio();
+                Cursor.lockState = CursorLockMode.None;
                 break;
         }
 
