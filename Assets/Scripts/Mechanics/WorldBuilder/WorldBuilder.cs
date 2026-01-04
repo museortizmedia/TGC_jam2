@@ -2,77 +2,58 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Collections;
-using Unity.Netcode;
 using UnityEngine;
+using Unity.Netcode;
 
 [System.Serializable]
 public class RouteTemplate
 {
     public string routeName;
-    public Transform[] moduleSlots; // 4 slots
+    public Transform[] moduleSlots; // 4 slots por ruta
 }
 
 public class WorldBuilder : NetworkBehaviour
 {
     [Header("References")]
-    [SerializeField] GameController gameController;
-    [SerializeField] Transform RutasParent;
+    [SerializeField] private GameController gameController;
+    [SerializeField] private Transform rutasParent;
+
+    [Header("Templates (Norte, Este, Sur, Oeste)")]
+    [SerializeField] private GameObject[] templates;
+
+    [Header("All Puzzles in Scene")]
+    [SerializeField] private GameObject[] puzzles;
 
     [Header("Spawns")]
-    [Tooltip("Norte, Sur, Este, Oeste")]
-    public Transform[] SpawnPoints;
+    [SerializeField] private Transform[] spawnPoints;
     private int currentSpawnIndex = 0;
 
+    [Header("Routes")]
+    [SerializeField] private RouteTemplate[] routes;
+
     public event Action<GameObject> OnPlayerEnterInCenter;
-    public event Action<GameObject> OnPlayerExitCenter;
-
-    /*void Start()
-    {
-        StartCoroutine(BuildWorldRoutine());
-    }*/
-
-    private void Reset()
-    {
-        routes = new RouteTemplate[4];
-
-        string[] names = { "Norte", "Sur", "Este", "Oeste" };
-
-        for (int i = 0; i < routes.Length; i++)
-        {
-            routes[i] = new RouteTemplate
-            {
-                routeName = names[i],
-                moduleSlots = new Transform[4]
-            };
-        }
-    }
 
     #region Spawns
+
     public Transform GetCurrentSpawnPointPosition()
     {
-        if (SpawnPoints.Length == 0)
-        {
-            Debug.LogWarning("No spawn points defined in WorldBuilder.");
+        if (spawnPoints == null || spawnPoints.Length == 0)
             return null;
-        }
 
-        Transform spawnPoint = SpawnPoints[currentSpawnIndex];
-        currentSpawnIndex = (currentSpawnIndex + 1) % SpawnPoints.Length;
-        return spawnPoint;
+        Transform spawn = spawnPoints[currentSpawnIndex];
+        currentSpawnIndex = (currentSpawnIndex + 1) % spawnPoints.Length;
+        return spawn;
     }
 
     public void ReportPlayerInCenter(GameObject player)
     {
         OnPlayerEnterInCenter?.Invoke(player);
-        Debug.Log("Player " + player.name + " is in the center area.");
     }
+
     #endregion
 
-    #region Puzzles
-    [Header("Puzzles")]
-    [SerializeField] GameObject[] puzzlePrefabs;
-    public RouteTemplate[] routes;
+    #region World Build
+    [ContextMenu("Construir")]
     public void BuildWorld()
     {
         if (!IsServer)
@@ -83,92 +64,104 @@ public class WorldBuilder : NetworkBehaviour
 
     private IEnumerator BuildWorldRoutine()
     {
-        List<string> ColorRoutes = gameController.RutesColor;
-        if(ColorRoutes.Count == 0)
-        {
-            ColorRoutes.Add("amarillo");
-            ColorRoutes.Add("azul");
-            ColorRoutes.Add("rojo");
-            ColorRoutes.Add("verde");
-        }
-        while (ColorRoutes.Count < 4)
-        {
-            ColorRoutes.Add("blanco");
-        }
+        // 1. Colores
+        List<string> colorRoutes = gameController.RutesColor;
 
-        // sacar las posiciones y rotaciones de cada modulo de todas las rutas
-        Transform[][] levels = new Transform[][]
+        if (colorRoutes.Count == 0)
+            colorRoutes.AddRange(new[] { "amarillo", "azul", "rojo", "verde" });
+
+        while (colorRoutes.Count < 4)
+            colorRoutes.Add("blanco");
+
+        // 2. Elegir SOLO 4 puzzles
+        GameObject[] puzzlesElegidos = Shuffle(puzzles)
+            .Take(4)
+            .ToArray();
+
+        // 3. Agrupar niveles por índice (0..3)
+        List<PuzzleModule>[] nivelesGlobales = new List<PuzzleModule>[4];
+        for (int i = 0; i < 4; i++)
+            nivelesGlobales[i] = new List<PuzzleModule>();
+
+        foreach (GameObject puzzle in puzzlesElegidos)
         {
-            new Transform[] { routes[0].moduleSlots[0], routes[1].moduleSlots[0], routes[2].moduleSlots[0], routes[3].moduleSlots[0] }, // Level 4
-            new Transform[] { routes[0].moduleSlots[1], routes[1].moduleSlots[1], routes[2].moduleSlots[1], routes[3].moduleSlots[1] }, // Level 3
-            new Transform[] { routes[0].moduleSlots[2], routes[1].moduleSlots[2], routes[2].moduleSlots[2], routes[3].moduleSlots[2] }, // Level 2
-            new Transform[] { routes[0].moduleSlots[3], routes[1].moduleSlots[3], routes[2].moduleSlots[3], routes[3].moduleSlots[3] }  // Level 1
-        };
+            puzzle.SetActive(true); // 🔴 IMPORTANTE: activar el puzzle padre
 
-        // Desordenar niveles
-        for (int nivel = 0; nivel < levels.Length; nivel++)
-        {
-            levels[nivel] = Shuffle(levels[nivel]);
-        }
+            PuzzleModule[] niveles = puzzle.GetComponentsInChildren<PuzzleModule>(true);
 
-        for (int i = 0; i < puzzlePrefabs.Length; i++) //puzzles
-        {
-            GameObject instanciaPuzzle = Instantiate(puzzlePrefabs[i], RutasParent); // Se crea el puzzle con los 4 modulos
-            PuzzleModule puzzleModule = instanciaPuzzle.GetComponent<PuzzleModule>();
-
-            
-            
-            GameObject[] modulosDelPuzle = puzzleModule.moduleSlots; // referencia a los 4 modulos del puzzle
-
-            for (int j = 0; j < 4; j++) // niveles
+            if (niveles.Length != 4)
             {
-                Transform referencia = levels[j][i];
-                GameObject nivelDelModulo = modulosDelPuzle[j];
-
-                nivelDelModulo.transform.position = referencia.position;
-                nivelDelModulo.transform.rotation = referencia.rotation;
-                nivelDelModulo.transform.localScale = referencia.localScale;
-
-
-                referencia.gameObject.SetActive(false);
+                Debug.LogError($"Puzzle {puzzle.name} no tiene 4 niveles.");
+                continue;
             }
 
-            instanciaPuzzle.GetComponent<NetworkObject>().Spawn(true);                 // Spawn real
-            //instanciaPuzzle.GetComponent<NetworkObject>().TrySetParent(RutasParent);   // Parent valido
+            for (int nivel = 0; nivel < 4; nivel++)
+            {
+                nivelesGlobales[nivel].Add(niveles[nivel]);
+                niveles[nivel].gameObject.SetActive(false);
+            }
+        }
 
-            puzzleModule.ColorIdRute.Value = new FixedString32Bytes(ColorRoutes[i]);
+        // 4. Repartir niveles: 1 por ruta, sin repetir
+        for (int nivel = 0; nivel < 4; nivel++)
+        {
+            PuzzleModule[] candidatos = Shuffle(nivelesGlobales[nivel].ToArray());
+
+            if (candidatos.Length < 4)
+            {
+                Debug.LogError($"Nivel {nivel} no tiene suficientes módulos.");
+                continue;
+            }
+
+            for (int ruta = 0; ruta < 4; ruta++)
+            {
+                PuzzleModule modulo = candidatos[ruta];
+                Transform slot = routes[ruta].moduleSlots[nivel];
+
+                Transform t = modulo.transform;
+                t.position = slot.position;
+                t.rotation = slot.rotation;
+                t.localScale = slot.localScale;
+
+                // Server-only
+                modulo.ColorIdRute.Value = colorRoutes[ruta];
+                modulo.colorName = colorRoutes[ruta];
+
+                modulo.gameObject.SetActive(true);
+            }
         }
 
         yield return null;
 
-        // Limpiar Plantillas
-        RutasParent.GetChild(0).GetComponent<NetworkObject>().Despawn(true);
-        RutasParent.GetChild(1).GetComponent<NetworkObject>().Despawn(true);
-        RutasParent.GetChild(2).GetComponent<NetworkObject>().Despawn(true);
-        RutasParent.GetChild(3).GetComponent<NetworkObject>().Despawn(true);
+        // 5. Ocultar templates (YA NO SE NECESITAN)
+        foreach (GameObject template in templates)
+            template.SetActive(false);
 
-        //Activar Puzzles
-        PuzzleModule[] puzzles = RutasParent.GetComponentsInChildren<PuzzleModule>();
-        foreach (var puzz in puzzles)
+        // 6. Inicializar SOLO módulos activos
+        foreach (var modulo in puzzlesElegidos.SelectMany(p =>
+                 p.GetComponentsInChildren<PuzzleModule>(true)))
         {
-            puzz.IniciarPuzzle();
+            if (modulo.gameObject.activeSelf)
+                modulo.IniciarPuzzle();
         }
     }
 
-    private Transform[] Shuffle(Transform[] array)
-    {
-        Transform[] result = array.ToArray();
+    #endregion
 
-        for (int i = 0; i < result.Length; i++)
+    #region Utils
+
+    private T[] Shuffle<T>(T[] array)
+    {
+        T[] result = array.ToArray();
+
+        for (int i = result.Length - 1; i > 0; i--)
         {
-            int randomIndex = UnityEngine.Random.Range(i, result.Length);
-            (result[i], result[randomIndex]) = (result[randomIndex], result[i]);
+            int j = UnityEngine.Random.Range(0, i + 1);
+            (result[i], result[j]) = (result[j], result[i]);
         }
 
         return result;
     }
 
     #endregion
-
-
 }

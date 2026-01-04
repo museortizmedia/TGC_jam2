@@ -1,27 +1,18 @@
 using Unity.Collections;
 using Unity.Netcode;
-using UnityEngine;
 using UnityEngine.Events;
 
 public class PuzzleModule : NetworkBehaviour
 {
-    public string puzzleName;
-    [Tooltip("Exactamente 4 módulos hijos")]
-    public GameObject[] moduleSlots;
+    public string colorName;
     public NetworkVariable<FixedString32Bytes> ColorIdRute =
         new NetworkVariable<FixedString32Bytes>(
             "blanco",
             NetworkVariableReadPermission.Everyone,
             NetworkVariableWritePermission.Server
         );
-    public ObjectColored[] RouteColorObjets;
-    public ObjectColored[] NoRouteColorObjets;
-    public UnityEvent<string> OnInitPuzzle;
 
-    public void IniciarPuzzle()
-    {
-        OnInitPuzzle?.Invoke(puzzleName);
-    }
+    public UnityEvent<string> OnInitPuzzle;
 
     public override void OnNetworkSpawn()
     {
@@ -29,18 +20,18 @@ public class PuzzleModule : NetworkBehaviour
         OnColorChanged(default, ColorIdRute.Value);
     }
 
+    private void OnDisable()
+    {
+        ColorIdRute.OnValueChanged -= OnColorChanged;
+    }
+
     private void OnColorChanged(FixedString32Bytes oldValue, FixedString32Bytes newValue)
     {
-        //ApplyColor(newValue.ToString());
-        /*foreach (var routecolor in RouteColorObjets)
-        {
-            routecolor.ApplyColorInObject(newValue);
-        }
+        OnInitPuzzle?.Invoke(newValue.ToString());
+    }
 
-        string otherColor = NoRouteColorObjets[0].GetOtherColorThan(newValue.ToString());
-        foreach (var noroutecolor in NoRouteColorObjets)
-        {
-            noroutecolor.ApplyColorInObject(otherColor);
-        }*/
+    public void IniciarPuzzle()
+    {
+        OnInitPuzzle?.Invoke(ColorIdRute.Value.ToString());
     }
 }
