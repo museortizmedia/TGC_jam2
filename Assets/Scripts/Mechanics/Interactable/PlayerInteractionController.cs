@@ -59,6 +59,7 @@ public class PlayerInteractionController : NetworkBehaviour
     public void OnInteract(InputAction.CallbackContext context)
     {
         currentInteractable = interactionTrigger.CurrentInteractable;
+        if(currentInteractable != null && !(currentInteractable as MonoBehaviour).gameObject.activeSelf) { currentInteractable = null; return; }
 
         if (currentInteractable == null)
         {

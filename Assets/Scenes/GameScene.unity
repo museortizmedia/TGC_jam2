@@ -489,7 +489,7 @@ PrefabInstance:
       objectReference: {fileID: 127101675}
     - target: {fileID: 65129866592961775, guid: 9c9c20a84e63a4c45863f058c32a0e95, type: 3}
       propertyPath: m_VersionIndex
-      value: 5733
+      value: 5736
       objectReference: {fileID: 0}
     - target: {fileID: 308739558637076438, guid: 9c9c20a84e63a4c45863f058c32a0e95, type: 3}
       propertyPath: m_LocalPosition.x
@@ -553,7 +553,7 @@ PrefabInstance:
       objectReference: {fileID: 1897044309}
     - target: {fileID: 3745110823841323823, guid: 9c9c20a84e63a4c45863f058c32a0e95, type: 3}
       propertyPath: m_VersionIndex
-      value: 5800
+      value: 5803
       objectReference: {fileID: 0}
     - target: {fileID: 3832535853174476431, guid: 9c9c20a84e63a4c45863f058c32a0e95, type: 3}
       propertyPath: RouteColorObjets.Array.size
@@ -589,7 +589,7 @@ PrefabInstance:
       objectReference: {fileID: 169452845}
     - target: {fileID: 4422510219523382332, guid: 9c9c20a84e63a4c45863f058c32a0e95, type: 3}
       propertyPath: m_VersionIndex
-      value: 5745
+      value: 5748
       objectReference: {fileID: 0}
     - target: {fileID: 4640524384765770307, guid: 9c9c20a84e63a4c45863f058c32a0e95, type: 3}
       propertyPath: m_Mesh
@@ -621,7 +621,7 @@ PrefabInstance:
       objectReference: {fileID: 1997427957}
     - target: {fileID: 5866234342877693732, guid: 9c9c20a84e63a4c45863f058c32a0e95, type: 3}
       propertyPath: m_VersionIndex
-      value: 5755
+      value: 5758
       objectReference: {fileID: 0}
     - target: {fileID: 7313610224695367195, guid: 9c9c20a84e63a4c45863f058c32a0e95, type: 3}
       propertyPath: m_Mesh
@@ -697,43 +697,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d84cb82f19ea4eb428ec660634bb775d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleModule
-  ShowTopMostFoldoutHeaderGroup: 1
-  colorName: 
-  ColorIdRute:
-    m_InternalValue:
-      utf8LengthInBytes: 6
-      bytes:
-        offset0000:
-          byte0000: 98
-          byte0001: 108
-          byte0002: 97
-          byte0003: 110
-          byte0004: 99
-          byte0005: 111
-          byte0006: 0
-          byte0007: 0
-          byte0008: 0
-          byte0009: 0
-          byte0010: 0
-          byte0011: 0
-          byte0012: 0
-          byte0013: 0
-          byte0014: 0
-          byte0015: 0
-        byte0016: 0
-        byte0017: 0
-        byte0018: 0
-        byte0019: 0
-        byte0020: 0
-        byte0021: 0
-        byte0022: 0
-        byte0023: 0
-        byte0024: 0
-        byte0025: 0
-        byte0026: 0
-        byte0027: 0
-        byte0028: 0
-        byte0029: 0
   OnInitPuzzle:
     m_PersistentCalls:
       m_Calls:
@@ -749,6 +712,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  ColorRouteObjects: []
+  OtherColorRouteObjects: []
 --- !u!114 &77589998
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -761,43 +726,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d84cb82f19ea4eb428ec660634bb775d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleModule
-  ShowTopMostFoldoutHeaderGroup: 1
-  colorName: 
-  ColorIdRute:
-    m_InternalValue:
-      utf8LengthInBytes: 6
-      bytes:
-        offset0000:
-          byte0000: 98
-          byte0001: 108
-          byte0002: 97
-          byte0003: 110
-          byte0004: 99
-          byte0005: 111
-          byte0006: 0
-          byte0007: 0
-          byte0008: 0
-          byte0009: 0
-          byte0010: 0
-          byte0011: 0
-          byte0012: 0
-          byte0013: 0
-          byte0014: 0
-          byte0015: 0
-        byte0016: 0
-        byte0017: 0
-        byte0018: 0
-        byte0019: 0
-        byte0020: 0
-        byte0021: 0
-        byte0022: 0
-        byte0023: 0
-        byte0024: 0
-        byte0025: 0
-        byte0026: 0
-        byte0027: 0
-        byte0028: 0
-        byte0029: 0
   OnInitPuzzle:
     m_PersistentCalls:
       m_Calls:
@@ -813,6 +741,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  ColorRouteObjects: []
+  OtherColorRouteObjects: []
 --- !u!114 &77589999
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -825,43 +755,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d84cb82f19ea4eb428ec660634bb775d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleModule
-  ShowTopMostFoldoutHeaderGroup: 1
-  colorName: 
-  ColorIdRute:
-    m_InternalValue:
-      utf8LengthInBytes: 6
-      bytes:
-        offset0000:
-          byte0000: 98
-          byte0001: 108
-          byte0002: 97
-          byte0003: 110
-          byte0004: 99
-          byte0005: 111
-          byte0006: 0
-          byte0007: 0
-          byte0008: 0
-          byte0009: 0
-          byte0010: 0
-          byte0011: 0
-          byte0012: 0
-          byte0013: 0
-          byte0014: 0
-          byte0015: 0
-        byte0016: 0
-        byte0017: 0
-        byte0018: 0
-        byte0019: 0
-        byte0020: 0
-        byte0021: 0
-        byte0022: 0
-        byte0023: 0
-        byte0024: 0
-        byte0025: 0
-        byte0026: 0
-        byte0027: 0
-        byte0028: 0
-        byte0029: 0
   OnInitPuzzle:
     m_PersistentCalls:
       m_Calls:
@@ -877,6 +770,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  ColorRouteObjects: []
+  OtherColorRouteObjects: []
 --- !u!114 &77590000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -889,43 +784,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d84cb82f19ea4eb428ec660634bb775d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleModule
-  ShowTopMostFoldoutHeaderGroup: 1
-  colorName: 
-  ColorIdRute:
-    m_InternalValue:
-      utf8LengthInBytes: 6
-      bytes:
-        offset0000:
-          byte0000: 98
-          byte0001: 108
-          byte0002: 97
-          byte0003: 110
-          byte0004: 99
-          byte0005: 111
-          byte0006: 0
-          byte0007: 0
-          byte0008: 0
-          byte0009: 0
-          byte0010: 0
-          byte0011: 0
-          byte0012: 0
-          byte0013: 0
-          byte0014: 0
-          byte0015: 0
-        byte0016: 0
-        byte0017: 0
-        byte0018: 0
-        byte0019: 0
-        byte0020: 0
-        byte0021: 0
-        byte0022: 0
-        byte0023: 0
-        byte0024: 0
-        byte0025: 0
-        byte0026: 0
-        byte0027: 0
-        byte0028: 0
-        byte0029: 0
   OnInitPuzzle:
     m_PersistentCalls:
       m_Calls:
@@ -941,6 +799,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  ColorRouteObjects: []
+  OtherColorRouteObjects: []
 --- !u!43 &78837729
 Mesh:
   m_ObjectHideFlags: 0
@@ -1145,7 +1005,7 @@ PrefabInstance:
       objectReference: {fileID: 1328247114}
     - target: {fileID: 65129866592961775, guid: ac8ffd13228c82a47a80c8ac5b631175, type: 3}
       propertyPath: m_VersionIndex
-      value: 5733
+      value: 5736
       objectReference: {fileID: 0}
     - target: {fileID: 308739558637076438, guid: ac8ffd13228c82a47a80c8ac5b631175, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1205,7 +1065,7 @@ PrefabInstance:
       objectReference: {fileID: 104148028}
     - target: {fileID: 3745110823841323823, guid: ac8ffd13228c82a47a80c8ac5b631175, type: 3}
       propertyPath: m_VersionIndex
-      value: 5800
+      value: 5803
       objectReference: {fileID: 0}
     - target: {fileID: 4133513185707914525, guid: ac8ffd13228c82a47a80c8ac5b631175, type: 3}
       propertyPath: m_Mesh
@@ -1217,7 +1077,7 @@ PrefabInstance:
       objectReference: {fileID: 1595349505}
     - target: {fileID: 4422510219523382332, guid: ac8ffd13228c82a47a80c8ac5b631175, type: 3}
       propertyPath: m_VersionIndex
-      value: 5745
+      value: 5748
       objectReference: {fileID: 0}
     - target: {fileID: 4640524384765770307, guid: ac8ffd13228c82a47a80c8ac5b631175, type: 3}
       propertyPath: m_Mesh
@@ -1249,7 +1109,7 @@ PrefabInstance:
       objectReference: {fileID: 816016493}
     - target: {fileID: 5866234342877693732, guid: ac8ffd13228c82a47a80c8ac5b631175, type: 3}
       propertyPath: m_VersionIndex
-      value: 5755
+      value: 5758
       objectReference: {fileID: 0}
     - target: {fileID: 7313610224695367195, guid: ac8ffd13228c82a47a80c8ac5b631175, type: 3}
       propertyPath: m_Mesh
@@ -1321,46 +1181,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d84cb82f19ea4eb428ec660634bb775d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleModule
-  ShowTopMostFoldoutHeaderGroup: 1
-  colorName: 
-  ColorIdRute:
-    m_InternalValue:
-      utf8LengthInBytes: 6
-      bytes:
-        offset0000:
-          byte0000: 98
-          byte0001: 108
-          byte0002: 97
-          byte0003: 110
-          byte0004: 99
-          byte0005: 111
-          byte0006: 0
-          byte0007: 0
-          byte0008: 0
-          byte0009: 0
-          byte0010: 0
-          byte0011: 0
-          byte0012: 0
-          byte0013: 0
-          byte0014: 0
-          byte0015: 0
-        byte0016: 0
-        byte0017: 0
-        byte0018: 0
-        byte0019: 0
-        byte0020: 0
-        byte0021: 0
-        byte0022: 0
-        byte0023: 0
-        byte0024: 0
-        byte0025: 0
-        byte0026: 0
-        byte0027: 0
-        byte0028: 0
-        byte0029: 0
   OnInitPuzzle:
     m_PersistentCalls:
       m_Calls: []
+  ColorRouteObjects:
+  - {fileID: 663371294}
+  OtherColorRouteObjects: []
 --- !u!114 &84647441
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1373,46 +1199,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d84cb82f19ea4eb428ec660634bb775d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleModule
-  ShowTopMostFoldoutHeaderGroup: 1
-  colorName: 
-  ColorIdRute:
-    m_InternalValue:
-      utf8LengthInBytes: 6
-      bytes:
-        offset0000:
-          byte0000: 98
-          byte0001: 108
-          byte0002: 97
-          byte0003: 110
-          byte0004: 99
-          byte0005: 111
-          byte0006: 0
-          byte0007: 0
-          byte0008: 0
-          byte0009: 0
-          byte0010: 0
-          byte0011: 0
-          byte0012: 0
-          byte0013: 0
-          byte0014: 0
-          byte0015: 0
-        byte0016: 0
-        byte0017: 0
-        byte0018: 0
-        byte0019: 0
-        byte0020: 0
-        byte0021: 0
-        byte0022: 0
-        byte0023: 0
-        byte0024: 0
-        byte0025: 0
-        byte0026: 0
-        byte0027: 0
-        byte0028: 0
-        byte0029: 0
   OnInitPuzzle:
     m_PersistentCalls:
       m_Calls: []
+  ColorRouteObjects:
+  - {fileID: 663371295}
+  OtherColorRouteObjects: []
 --- !u!114 &84647442
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1425,46 +1217,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d84cb82f19ea4eb428ec660634bb775d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleModule
-  ShowTopMostFoldoutHeaderGroup: 1
-  colorName: 
-  ColorIdRute:
-    m_InternalValue:
-      utf8LengthInBytes: 6
-      bytes:
-        offset0000:
-          byte0000: 98
-          byte0001: 108
-          byte0002: 97
-          byte0003: 110
-          byte0004: 99
-          byte0005: 111
-          byte0006: 0
-          byte0007: 0
-          byte0008: 0
-          byte0009: 0
-          byte0010: 0
-          byte0011: 0
-          byte0012: 0
-          byte0013: 0
-          byte0014: 0
-          byte0015: 0
-        byte0016: 0
-        byte0017: 0
-        byte0018: 0
-        byte0019: 0
-        byte0020: 0
-        byte0021: 0
-        byte0022: 0
-        byte0023: 0
-        byte0024: 0
-        byte0025: 0
-        byte0026: 0
-        byte0027: 0
-        byte0028: 0
-        byte0029: 0
   OnInitPuzzle:
     m_PersistentCalls:
       m_Calls: []
+  ColorRouteObjects:
+  - {fileID: 663371296}
+  OtherColorRouteObjects: []
 --- !u!114 &84647443
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1477,46 +1235,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d84cb82f19ea4eb428ec660634bb775d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleModule
-  ShowTopMostFoldoutHeaderGroup: 1
-  colorName: 
-  ColorIdRute:
-    m_InternalValue:
-      utf8LengthInBytes: 6
-      bytes:
-        offset0000:
-          byte0000: 98
-          byte0001: 108
-          byte0002: 97
-          byte0003: 110
-          byte0004: 99
-          byte0005: 111
-          byte0006: 0
-          byte0007: 0
-          byte0008: 0
-          byte0009: 0
-          byte0010: 0
-          byte0011: 0
-          byte0012: 0
-          byte0013: 0
-          byte0014: 0
-          byte0015: 0
-        byte0016: 0
-        byte0017: 0
-        byte0018: 0
-        byte0019: 0
-        byte0020: 0
-        byte0021: 0
-        byte0022: 0
-        byte0023: 0
-        byte0024: 0
-        byte0025: 0
-        byte0026: 0
-        byte0027: 0
-        byte0028: 0
-        byte0029: 0
   OnInitPuzzle:
     m_PersistentCalls:
       m_Calls: []
+  ColorRouteObjects:
+  - {fileID: 663371297}
+  OtherColorRouteObjects: []
 --- !u!43 &104148028
 Mesh:
   m_ObjectHideFlags: 0
@@ -2164,6 +1888,50 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
+--- !u!114 &146083169 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 925220318383692938, guid: 3d1e7008304f7974ea7ada56cb61fd2a, type: 3}
+  m_PrefabInstance: {fileID: 1661281419}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94cd0d581bb520f42a64084a5f32acd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectColored
+--- !u!114 &146083170 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2118595385511073969, guid: 3d1e7008304f7974ea7ada56cb61fd2a, type: 3}
+  m_PrefabInstance: {fileID: 1661281419}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94cd0d581bb520f42a64084a5f32acd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectColored
+--- !u!114 &146083171 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8361628038089440888, guid: 3d1e7008304f7974ea7ada56cb61fd2a, type: 3}
+  m_PrefabInstance: {fileID: 1661281419}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94cd0d581bb520f42a64084a5f32acd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectColored
+--- !u!114 &146083172 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5050023020690602295, guid: 3d1e7008304f7974ea7ada56cb61fd2a, type: 3}
+  m_PrefabInstance: {fileID: 1661281419}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94cd0d581bb520f42a64084a5f32acd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectColored
 --- !u!43 &169452845
 Mesh:
   m_ObjectHideFlags: 0
@@ -2895,7 +2663,7 @@ PrefabInstance:
       objectReference: {fileID: 971733688}
     - target: {fileID: 65129866592961775, guid: 695df222fc0c6d84aa9f9c559682a2d4, type: 3}
       propertyPath: m_VersionIndex
-      value: 5733
+      value: 5736
       objectReference: {fileID: 0}
     - target: {fileID: 308739558637076438, guid: 695df222fc0c6d84aa9f9c559682a2d4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2967,7 +2735,7 @@ PrefabInstance:
       objectReference: {fileID: 1715696940}
     - target: {fileID: 3745110823841323823, guid: 695df222fc0c6d84aa9f9c559682a2d4, type: 3}
       propertyPath: m_VersionIndex
-      value: 5800
+      value: 5803
       objectReference: {fileID: 0}
     - target: {fileID: 4133513185707914525, guid: 695df222fc0c6d84aa9f9c559682a2d4, type: 3}
       propertyPath: m_Mesh
@@ -2979,7 +2747,7 @@ PrefabInstance:
       objectReference: {fileID: 1907375023}
     - target: {fileID: 4422510219523382332, guid: 695df222fc0c6d84aa9f9c559682a2d4, type: 3}
       propertyPath: m_VersionIndex
-      value: 5745
+      value: 5748
       objectReference: {fileID: 0}
     - target: {fileID: 4640524384765770307, guid: 695df222fc0c6d84aa9f9c559682a2d4, type: 3}
       propertyPath: m_Mesh
@@ -3011,7 +2779,7 @@ PrefabInstance:
       objectReference: {fileID: 1582020758}
     - target: {fileID: 5866234342877693732, guid: 695df222fc0c6d84aa9f9c559682a2d4, type: 3}
       propertyPath: m_VersionIndex
-      value: 5755
+      value: 5758
       objectReference: {fileID: 0}
     - target: {fileID: 7313610224695367195, guid: 695df222fc0c6d84aa9f9c559682a2d4, type: 3}
       propertyPath: m_Mesh
@@ -3083,46 +2851,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d84cb82f19ea4eb428ec660634bb775d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleModule
-  ShowTopMostFoldoutHeaderGroup: 1
-  colorName: 
-  ColorIdRute:
-    m_InternalValue:
-      utf8LengthInBytes: 6
-      bytes:
-        offset0000:
-          byte0000: 98
-          byte0001: 108
-          byte0002: 97
-          byte0003: 110
-          byte0004: 99
-          byte0005: 111
-          byte0006: 0
-          byte0007: 0
-          byte0008: 0
-          byte0009: 0
-          byte0010: 0
-          byte0011: 0
-          byte0012: 0
-          byte0013: 0
-          byte0014: 0
-          byte0015: 0
-        byte0016: 0
-        byte0017: 0
-        byte0018: 0
-        byte0019: 0
-        byte0020: 0
-        byte0021: 0
-        byte0022: 0
-        byte0023: 0
-        byte0024: 0
-        byte0025: 0
-        byte0026: 0
-        byte0027: 0
-        byte0028: 0
-        byte0029: 0
   OnInitPuzzle:
     m_PersistentCalls:
       m_Calls: []
+  ColorRouteObjects:
+  - {fileID: 406604655}
+  OtherColorRouteObjects: []
 --- !u!114 &302034073
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3135,46 +2869,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d84cb82f19ea4eb428ec660634bb775d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleModule
-  ShowTopMostFoldoutHeaderGroup: 1
-  colorName: 
-  ColorIdRute:
-    m_InternalValue:
-      utf8LengthInBytes: 6
-      bytes:
-        offset0000:
-          byte0000: 98
-          byte0001: 108
-          byte0002: 97
-          byte0003: 110
-          byte0004: 99
-          byte0005: 111
-          byte0006: 0
-          byte0007: 0
-          byte0008: 0
-          byte0009: 0
-          byte0010: 0
-          byte0011: 0
-          byte0012: 0
-          byte0013: 0
-          byte0014: 0
-          byte0015: 0
-        byte0016: 0
-        byte0017: 0
-        byte0018: 0
-        byte0019: 0
-        byte0020: 0
-        byte0021: 0
-        byte0022: 0
-        byte0023: 0
-        byte0024: 0
-        byte0025: 0
-        byte0026: 0
-        byte0027: 0
-        byte0028: 0
-        byte0029: 0
   OnInitPuzzle:
     m_PersistentCalls:
       m_Calls: []
+  ColorRouteObjects:
+  - {fileID: 406604656}
+  OtherColorRouteObjects: []
 --- !u!114 &302034074
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3187,46 +2887,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d84cb82f19ea4eb428ec660634bb775d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleModule
-  ShowTopMostFoldoutHeaderGroup: 1
-  colorName: 
-  ColorIdRute:
-    m_InternalValue:
-      utf8LengthInBytes: 6
-      bytes:
-        offset0000:
-          byte0000: 98
-          byte0001: 108
-          byte0002: 97
-          byte0003: 110
-          byte0004: 99
-          byte0005: 111
-          byte0006: 0
-          byte0007: 0
-          byte0008: 0
-          byte0009: 0
-          byte0010: 0
-          byte0011: 0
-          byte0012: 0
-          byte0013: 0
-          byte0014: 0
-          byte0015: 0
-        byte0016: 0
-        byte0017: 0
-        byte0018: 0
-        byte0019: 0
-        byte0020: 0
-        byte0021: 0
-        byte0022: 0
-        byte0023: 0
-        byte0024: 0
-        byte0025: 0
-        byte0026: 0
-        byte0027: 0
-        byte0028: 0
-        byte0029: 0
   OnInitPuzzle:
     m_PersistentCalls:
       m_Calls: []
+  ColorRouteObjects:
+  - {fileID: 406604657}
+  OtherColorRouteObjects: []
 --- !u!114 &302034075
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3239,46 +2905,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d84cb82f19ea4eb428ec660634bb775d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleModule
-  ShowTopMostFoldoutHeaderGroup: 1
-  colorName: 
-  ColorIdRute:
-    m_InternalValue:
-      utf8LengthInBytes: 6
-      bytes:
-        offset0000:
-          byte0000: 98
-          byte0001: 108
-          byte0002: 97
-          byte0003: 110
-          byte0004: 99
-          byte0005: 111
-          byte0006: 0
-          byte0007: 0
-          byte0008: 0
-          byte0009: 0
-          byte0010: 0
-          byte0011: 0
-          byte0012: 0
-          byte0013: 0
-          byte0014: 0
-          byte0015: 0
-        byte0016: 0
-        byte0017: 0
-        byte0018: 0
-        byte0019: 0
-        byte0020: 0
-        byte0021: 0
-        byte0022: 0
-        byte0023: 0
-        byte0024: 0
-        byte0025: 0
-        byte0026: 0
-        byte0027: 0
-        byte0028: 0
-        byte0029: 0
   OnInitPuzzle:
     m_PersistentCalls:
       m_Calls: []
+  ColorRouteObjects:
+  - {fileID: 406604658}
+  OtherColorRouteObjects: []
 --- !u!1 &308109883
 GameObject:
   m_ObjectHideFlags: 0
@@ -3445,6 +3077,50 @@ Transform:
   - {fileID: 564212590}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &406604655 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6701861042950930333, guid: 695df222fc0c6d84aa9f9c559682a2d4, type: 3}
+  m_PrefabInstance: {fileID: 302034065}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94cd0d581bb520f42a64084a5f32acd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectColored
+--- !u!114 &406604656 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7316561944418924736, guid: 695df222fc0c6d84aa9f9c559682a2d4, type: 3}
+  m_PrefabInstance: {fileID: 302034065}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94cd0d581bb520f42a64084a5f32acd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectColored
+--- !u!114 &406604657 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3947042890876377003, guid: 695df222fc0c6d84aa9f9c559682a2d4, type: 3}
+  m_PrefabInstance: {fileID: 302034065}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94cd0d581bb520f42a64084a5f32acd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectColored
+--- !u!114 &406604658 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 168210382094570004, guid: 695df222fc0c6d84aa9f9c559682a2d4, type: 3}
+  m_PrefabInstance: {fileID: 302034065}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94cd0d581bb520f42a64084a5f32acd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectColored
 --- !u!1 &452238529
 GameObject:
   m_ObjectHideFlags: 0
@@ -4428,6 +4104,50 @@ MonoBehaviour:
   m_PivotReferenceSize: 0
   m_Pivot: 0
   m_WorldSpaceCollider: {fileID: 0}
+--- !u!114 &663371294 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6751002327396562038, guid: ac8ffd13228c82a47a80c8ac5b631175, type: 3}
+  m_PrefabInstance: {fileID: 84647433}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94cd0d581bb520f42a64084a5f32acd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectColored
+--- !u!114 &663371295 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 696173136423962352, guid: ac8ffd13228c82a47a80c8ac5b631175, type: 3}
+  m_PrefabInstance: {fileID: 84647433}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94cd0d581bb520f42a64084a5f32acd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectColored
+--- !u!114 &663371296 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7620978204102920943, guid: ac8ffd13228c82a47a80c8ac5b631175, type: 3}
+  m_PrefabInstance: {fileID: 84647433}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94cd0d581bb520f42a64084a5f32acd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectColored
+--- !u!114 &663371297 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3939817302446447690, guid: ac8ffd13228c82a47a80c8ac5b631175, type: 3}
+  m_PrefabInstance: {fileID: 84647433}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94cd0d581bb520f42a64084a5f32acd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectColored
 --- !u!43 &682294193
 Mesh:
   m_ObjectHideFlags: 0
@@ -4980,7 +4700,7 @@ PrefabInstance:
       objectReference: {fileID: 636807237}
     - target: {fileID: 65129866592961775, guid: 4908469c46d1944419e93ae7853ecb1f, type: 3}
       propertyPath: m_VersionIndex
-      value: 5733
+      value: 5736
       objectReference: {fileID: 0}
     - target: {fileID: 308739558637076438, guid: 4908469c46d1944419e93ae7853ecb1f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5040,7 +4760,7 @@ PrefabInstance:
       objectReference: {fileID: 1639013944}
     - target: {fileID: 3745110823841323823, guid: 4908469c46d1944419e93ae7853ecb1f, type: 3}
       propertyPath: m_VersionIndex
-      value: 5800
+      value: 5803
       objectReference: {fileID: 0}
     - target: {fileID: 4133513185707914525, guid: 4908469c46d1944419e93ae7853ecb1f, type: 3}
       propertyPath: m_Mesh
@@ -5052,7 +4772,7 @@ PrefabInstance:
       objectReference: {fileID: 880507795}
     - target: {fileID: 4422510219523382332, guid: 4908469c46d1944419e93ae7853ecb1f, type: 3}
       propertyPath: m_VersionIndex
-      value: 5745
+      value: 5748
       objectReference: {fileID: 0}
     - target: {fileID: 4640524384765770307, guid: 4908469c46d1944419e93ae7853ecb1f, type: 3}
       propertyPath: m_Mesh
@@ -5084,7 +4804,7 @@ PrefabInstance:
       objectReference: {fileID: 1027495858}
     - target: {fileID: 5866234342877693732, guid: 4908469c46d1944419e93ae7853ecb1f, type: 3}
       propertyPath: m_VersionIndex
-      value: 5755
+      value: 5758
       objectReference: {fileID: 0}
     - target: {fileID: 7313610224695367195, guid: 4908469c46d1944419e93ae7853ecb1f, type: 3}
       propertyPath: m_Mesh
@@ -5156,46 +4876,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d84cb82f19ea4eb428ec660634bb775d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleModule
-  ShowTopMostFoldoutHeaderGroup: 1
-  colorName: 
-  ColorIdRute:
-    m_InternalValue:
-      utf8LengthInBytes: 6
-      bytes:
-        offset0000:
-          byte0000: 98
-          byte0001: 108
-          byte0002: 97
-          byte0003: 110
-          byte0004: 99
-          byte0005: 111
-          byte0006: 0
-          byte0007: 0
-          byte0008: 0
-          byte0009: 0
-          byte0010: 0
-          byte0011: 0
-          byte0012: 0
-          byte0013: 0
-          byte0014: 0
-          byte0015: 0
-        byte0016: 0
-        byte0017: 0
-        byte0018: 0
-        byte0019: 0
-        byte0020: 0
-        byte0021: 0
-        byte0022: 0
-        byte0023: 0
-        byte0024: 0
-        byte0025: 0
-        byte0026: 0
-        byte0027: 0
-        byte0028: 0
-        byte0029: 0
   OnInitPuzzle:
     m_PersistentCalls:
       m_Calls: []
+  ColorRouteObjects: []
+  OtherColorRouteObjects: []
 --- !u!114 &780102672
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5208,46 +4893,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d84cb82f19ea4eb428ec660634bb775d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleModule
-  ShowTopMostFoldoutHeaderGroup: 1
-  colorName: 
-  ColorIdRute:
-    m_InternalValue:
-      utf8LengthInBytes: 6
-      bytes:
-        offset0000:
-          byte0000: 98
-          byte0001: 108
-          byte0002: 97
-          byte0003: 110
-          byte0004: 99
-          byte0005: 111
-          byte0006: 0
-          byte0007: 0
-          byte0008: 0
-          byte0009: 0
-          byte0010: 0
-          byte0011: 0
-          byte0012: 0
-          byte0013: 0
-          byte0014: 0
-          byte0015: 0
-        byte0016: 0
-        byte0017: 0
-        byte0018: 0
-        byte0019: 0
-        byte0020: 0
-        byte0021: 0
-        byte0022: 0
-        byte0023: 0
-        byte0024: 0
-        byte0025: 0
-        byte0026: 0
-        byte0027: 0
-        byte0028: 0
-        byte0029: 0
   OnInitPuzzle:
     m_PersistentCalls:
       m_Calls: []
+  ColorRouteObjects: []
+  OtherColorRouteObjects: []
 --- !u!114 &780102673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5260,46 +4910,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d84cb82f19ea4eb428ec660634bb775d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleModule
-  ShowTopMostFoldoutHeaderGroup: 1
-  colorName: 
-  ColorIdRute:
-    m_InternalValue:
-      utf8LengthInBytes: 6
-      bytes:
-        offset0000:
-          byte0000: 98
-          byte0001: 108
-          byte0002: 97
-          byte0003: 110
-          byte0004: 99
-          byte0005: 111
-          byte0006: 0
-          byte0007: 0
-          byte0008: 0
-          byte0009: 0
-          byte0010: 0
-          byte0011: 0
-          byte0012: 0
-          byte0013: 0
-          byte0014: 0
-          byte0015: 0
-        byte0016: 0
-        byte0017: 0
-        byte0018: 0
-        byte0019: 0
-        byte0020: 0
-        byte0021: 0
-        byte0022: 0
-        byte0023: 0
-        byte0024: 0
-        byte0025: 0
-        byte0026: 0
-        byte0027: 0
-        byte0028: 0
-        byte0029: 0
   OnInitPuzzle:
     m_PersistentCalls:
       m_Calls: []
+  ColorRouteObjects: []
+  OtherColorRouteObjects: []
 --- !u!114 &780102674
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5312,46 +4927,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d84cb82f19ea4eb428ec660634bb775d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleModule
-  ShowTopMostFoldoutHeaderGroup: 1
-  colorName: 
-  ColorIdRute:
-    m_InternalValue:
-      utf8LengthInBytes: 6
-      bytes:
-        offset0000:
-          byte0000: 98
-          byte0001: 108
-          byte0002: 97
-          byte0003: 110
-          byte0004: 99
-          byte0005: 111
-          byte0006: 0
-          byte0007: 0
-          byte0008: 0
-          byte0009: 0
-          byte0010: 0
-          byte0011: 0
-          byte0012: 0
-          byte0013: 0
-          byte0014: 0
-          byte0015: 0
-        byte0016: 0
-        byte0017: 0
-        byte0018: 0
-        byte0019: 0
-        byte0020: 0
-        byte0021: 0
-        byte0022: 0
-        byte0023: 0
-        byte0024: 0
-        byte0025: 0
-        byte0026: 0
-        byte0027: 0
-        byte0028: 0
-        byte0029: 0
   OnInitPuzzle:
     m_PersistentCalls:
       m_Calls: []
+  ColorRouteObjects: []
+  OtherColorRouteObjects: []
 --- !u!1 &785257272 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 772889754508692968, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
@@ -10834,7 +10414,7 @@ PrefabInstance:
       objectReference: {fileID: 751398046}
     - target: {fileID: 65129866592961775, guid: 3d1e7008304f7974ea7ada56cb61fd2a, type: 3}
       propertyPath: m_VersionIndex
-      value: 5733
+      value: 5736
       objectReference: {fileID: 0}
     - target: {fileID: 308739558637076438, guid: 3d1e7008304f7974ea7ada56cb61fd2a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10894,7 +10474,7 @@ PrefabInstance:
       objectReference: {fileID: 1656861523}
     - target: {fileID: 3745110823841323823, guid: 3d1e7008304f7974ea7ada56cb61fd2a, type: 3}
       propertyPath: m_VersionIndex
-      value: 5800
+      value: 5803
       objectReference: {fileID: 0}
     - target: {fileID: 4133513185707914525, guid: 3d1e7008304f7974ea7ada56cb61fd2a, type: 3}
       propertyPath: m_Mesh
@@ -10906,7 +10486,7 @@ PrefabInstance:
       objectReference: {fileID: 682294193}
     - target: {fileID: 4422510219523382332, guid: 3d1e7008304f7974ea7ada56cb61fd2a, type: 3}
       propertyPath: m_VersionIndex
-      value: 5745
+      value: 5748
       objectReference: {fileID: 0}
     - target: {fileID: 4640524384765770307, guid: 3d1e7008304f7974ea7ada56cb61fd2a, type: 3}
       propertyPath: m_Mesh
@@ -10938,7 +10518,7 @@ PrefabInstance:
       objectReference: {fileID: 1124150647}
     - target: {fileID: 5866234342877693732, guid: 3d1e7008304f7974ea7ada56cb61fd2a, type: 3}
       propertyPath: m_VersionIndex
-      value: 5755
+      value: 5758
       objectReference: {fileID: 0}
     - target: {fileID: 7313610224695367195, guid: 3d1e7008304f7974ea7ada56cb61fd2a, type: 3}
       propertyPath: m_Mesh
@@ -11010,46 +10590,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d84cb82f19ea4eb428ec660634bb775d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleModule
-  ShowTopMostFoldoutHeaderGroup: 1
-  colorName: 
-  ColorIdRute:
-    m_InternalValue:
-      utf8LengthInBytes: 6
-      bytes:
-        offset0000:
-          byte0000: 98
-          byte0001: 108
-          byte0002: 97
-          byte0003: 110
-          byte0004: 99
-          byte0005: 111
-          byte0006: 0
-          byte0007: 0
-          byte0008: 0
-          byte0009: 0
-          byte0010: 0
-          byte0011: 0
-          byte0012: 0
-          byte0013: 0
-          byte0014: 0
-          byte0015: 0
-        byte0016: 0
-        byte0017: 0
-        byte0018: 0
-        byte0019: 0
-        byte0020: 0
-        byte0021: 0
-        byte0022: 0
-        byte0023: 0
-        byte0024: 0
-        byte0025: 0
-        byte0026: 0
-        byte0027: 0
-        byte0028: 0
-        byte0029: 0
   OnInitPuzzle:
     m_PersistentCalls:
       m_Calls: []
+  ColorRouteObjects:
+  - {fileID: 146083169}
+  OtherColorRouteObjects: []
 --- !u!114 &1661281427
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11062,46 +10608,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d84cb82f19ea4eb428ec660634bb775d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleModule
-  ShowTopMostFoldoutHeaderGroup: 1
-  colorName: 
-  ColorIdRute:
-    m_InternalValue:
-      utf8LengthInBytes: 6
-      bytes:
-        offset0000:
-          byte0000: 98
-          byte0001: 108
-          byte0002: 97
-          byte0003: 110
-          byte0004: 99
-          byte0005: 111
-          byte0006: 0
-          byte0007: 0
-          byte0008: 0
-          byte0009: 0
-          byte0010: 0
-          byte0011: 0
-          byte0012: 0
-          byte0013: 0
-          byte0014: 0
-          byte0015: 0
-        byte0016: 0
-        byte0017: 0
-        byte0018: 0
-        byte0019: 0
-        byte0020: 0
-        byte0021: 0
-        byte0022: 0
-        byte0023: 0
-        byte0024: 0
-        byte0025: 0
-        byte0026: 0
-        byte0027: 0
-        byte0028: 0
-        byte0029: 0
   OnInitPuzzle:
     m_PersistentCalls:
       m_Calls: []
+  ColorRouteObjects:
+  - {fileID: 146083170}
+  OtherColorRouteObjects: []
 --- !u!114 &1661281428
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11114,46 +10626,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d84cb82f19ea4eb428ec660634bb775d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleModule
-  ShowTopMostFoldoutHeaderGroup: 1
-  colorName: 
-  ColorIdRute:
-    m_InternalValue:
-      utf8LengthInBytes: 6
-      bytes:
-        offset0000:
-          byte0000: 98
-          byte0001: 108
-          byte0002: 97
-          byte0003: 110
-          byte0004: 99
-          byte0005: 111
-          byte0006: 0
-          byte0007: 0
-          byte0008: 0
-          byte0009: 0
-          byte0010: 0
-          byte0011: 0
-          byte0012: 0
-          byte0013: 0
-          byte0014: 0
-          byte0015: 0
-        byte0016: 0
-        byte0017: 0
-        byte0018: 0
-        byte0019: 0
-        byte0020: 0
-        byte0021: 0
-        byte0022: 0
-        byte0023: 0
-        byte0024: 0
-        byte0025: 0
-        byte0026: 0
-        byte0027: 0
-        byte0028: 0
-        byte0029: 0
   OnInitPuzzle:
     m_PersistentCalls:
       m_Calls: []
+  ColorRouteObjects:
+  - {fileID: 146083171}
+  OtherColorRouteObjects: []
 --- !u!114 &1661281429
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11166,46 +10644,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d84cb82f19ea4eb428ec660634bb775d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleModule
-  ShowTopMostFoldoutHeaderGroup: 1
-  colorName: 
-  ColorIdRute:
-    m_InternalValue:
-      utf8LengthInBytes: 6
-      bytes:
-        offset0000:
-          byte0000: 98
-          byte0001: 108
-          byte0002: 97
-          byte0003: 110
-          byte0004: 99
-          byte0005: 111
-          byte0006: 0
-          byte0007: 0
-          byte0008: 0
-          byte0009: 0
-          byte0010: 0
-          byte0011: 0
-          byte0012: 0
-          byte0013: 0
-          byte0014: 0
-          byte0015: 0
-        byte0016: 0
-        byte0017: 0
-        byte0018: 0
-        byte0019: 0
-        byte0020: 0
-        byte0021: 0
-        byte0022: 0
-        byte0023: 0
-        byte0024: 0
-        byte0025: 0
-        byte0026: 0
-        byte0027: 0
-        byte0028: 0
-        byte0029: 0
   OnInitPuzzle:
     m_PersistentCalls:
       m_Calls: []
+  ColorRouteObjects:
+  - {fileID: 146083172}
+  OtherColorRouteObjects: []
 --- !u!43 &1688633181
 Mesh:
   m_ObjectHideFlags: 0
@@ -13259,7 +12703,7 @@ PrefabInstance:
       objectReference: {fileID: 1595482651}
     - target: {fileID: 404013032739109179, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: m_VersionIndex
-      value: 6316
+      value: 6319
       objectReference: {fileID: 0}
     - target: {fileID: 478906825473487501, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: PiecePrefab
@@ -13499,7 +12943,7 @@ PrefabInstance:
       objectReference: {fileID: 1870019004}
     - target: {fileID: 888353083310120316, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: m_VersionIndex
-      value: 2770
+      value: 2773
       objectReference: {fileID: 0}
     - target: {fileID: 926335542256834270, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: m_Mesh
@@ -13511,7 +12955,7 @@ PrefabInstance:
       objectReference: {fileID: 2051071886}
     - target: {fileID: 950594432862452409, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: m_VersionIndex
-      value: 2378
+      value: 2381
       objectReference: {fileID: 0}
     - target: {fileID: 955152269971731102, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: m_Mesh
@@ -13575,7 +13019,7 @@ PrefabInstance:
       objectReference: {fileID: 1424392845}
     - target: {fileID: 1542307145498297629, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: m_VersionIndex
-      value: 6306
+      value: 6309
       objectReference: {fileID: 0}
     - target: {fileID: 1670199295080633353, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: m_Mesh
@@ -13591,7 +13035,7 @@ PrefabInstance:
       objectReference: {fileID: 996367709}
     - target: {fileID: 2000099346443960846, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: m_VersionIndex
-      value: 6294
+      value: 6297
       objectReference: {fileID: 0}
     - target: {fileID: 2034399908592181339, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: m_IsActive
@@ -13607,7 +13051,7 @@ PrefabInstance:
       objectReference: {fileID: 78837729}
     - target: {fileID: 2149474992656870329, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: m_VersionIndex
-      value: 6316
+      value: 6319
       objectReference: {fileID: 0}
     - target: {fileID: 2201820169463866604, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: m_Mesh
@@ -13619,7 +13063,7 @@ PrefabInstance:
       objectReference: {fileID: 1225528349}
     - target: {fileID: 2411077786855611395, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: m_VersionIndex
-      value: 2420
+      value: 2423
       objectReference: {fileID: 0}
     - target: {fileID: 2534723016226337541, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: m_Mesh
@@ -13631,7 +13075,7 @@ PrefabInstance:
       objectReference: {fileID: 515210701}
     - target: {fileID: 2538791749098030390, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: m_VersionIndex
-      value: 6316
+      value: 6319
       objectReference: {fileID: 0}
     - target: {fileID: 2846376786677735777, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: m_Mesh
@@ -13647,7 +13091,7 @@ PrefabInstance:
       objectReference: {fileID: 284408122}
     - target: {fileID: 2945331020876619214, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: m_VersionIndex
-      value: 6294
+      value: 6297
       objectReference: {fileID: 0}
     - target: {fileID: 3009069566139054726, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: m_Mesh
@@ -13719,7 +13163,7 @@ PrefabInstance:
       objectReference: {fileID: 924895566}
     - target: {fileID: 4355615433608410278, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: m_VersionIndex
-      value: 2525
+      value: 2528
       objectReference: {fileID: 0}
     - target: {fileID: 4386679634586678002, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: m_Mesh
@@ -13747,7 +13191,7 @@ PrefabInstance:
       objectReference: {fileID: 2116383483}
     - target: {fileID: 4732116468694128957, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: m_VersionIndex
-      value: 6294
+      value: 6297
       objectReference: {fileID: 0}
     - target: {fileID: 4908115682294154193, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: m_Mesh
@@ -13771,7 +13215,7 @@ PrefabInstance:
       objectReference: {fileID: 1141299905}
     - target: {fileID: 5501734458442852466, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: m_VersionIndex
-      value: 6294
+      value: 6297
       objectReference: {fileID: 0}
     - target: {fileID: 5568595873931267898, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: m_Mesh
@@ -13783,7 +13227,7 @@ PrefabInstance:
       objectReference: {fileID: 2027171933}
     - target: {fileID: 5696346766287019566, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: m_VersionIndex
-      value: 6306
+      value: 6309
       objectReference: {fileID: 0}
     - target: {fileID: 5924374854856016524, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: m_Mesh
@@ -13795,7 +13239,7 @@ PrefabInstance:
       objectReference: {fileID: 919865698}
     - target: {fileID: 6058812642551413488, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: m_VersionIndex
-      value: 6294
+      value: 6297
       objectReference: {fileID: 0}
     - target: {fileID: 6340094787330477120, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: m_Mesh
@@ -13811,7 +13255,7 @@ PrefabInstance:
       objectReference: {fileID: 760468895}
     - target: {fileID: 6530255278219129616, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: m_VersionIndex
-      value: 3366
+      value: 3369
       objectReference: {fileID: 0}
     - target: {fileID: 6578228060145714783, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: m_Mesh
@@ -13847,7 +13291,7 @@ PrefabInstance:
       objectReference: {fileID: 505612934}
     - target: {fileID: 7425051260932236592, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: m_VersionIndex
-      value: 6294
+      value: 6297
       objectReference: {fileID: 0}
     - target: {fileID: 7431691244080116247, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: m_Name
@@ -13863,7 +13307,7 @@ PrefabInstance:
       objectReference: {fileID: 1066082719}
     - target: {fileID: 7614939526906978851, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: m_VersionIndex
-      value: 6306
+      value: 6309
       objectReference: {fileID: 0}
     - target: {fileID: 7621389435256145698, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: m_Mesh
@@ -13891,7 +13335,7 @@ PrefabInstance:
       objectReference: {fileID: 1688633181}
     - target: {fileID: 8206293609363812513, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: m_VersionIndex
-      value: 6306
+      value: 6309
       objectReference: {fileID: 0}
     - target: {fileID: 8265785284785374973, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: m_Mesh
@@ -13899,7 +13343,7 @@ PrefabInstance:
       objectReference: {fileID: 145399609}
     - target: {fileID: 8265785284785374973, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: m_VersionIndex
-      value: 6294
+      value: 6297
       objectReference: {fileID: 0}
     - target: {fileID: 8322832648259653012, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: GlobalObjectIdHash
@@ -13935,7 +13379,7 @@ PrefabInstance:
       objectReference: {fileID: 65882426}
     - target: {fileID: 8741914296833596933, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: m_VersionIndex
-      value: 6316
+      value: 6319
       objectReference: {fileID: 0}
     - target: {fileID: 8805373788381143413, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: m_LocalScale.x
@@ -14007,7 +13451,7 @@ PrefabInstance:
       objectReference: {fileID: 1657907059}
     - target: {fileID: 9170520025893812146, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: m_VersionIndex
-      value: 6294
+      value: 6297
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8760224884545561106, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}

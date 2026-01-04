@@ -15,7 +15,7 @@ public class ObjectColored : MonoBehaviour, IColorAffected
 
     [Header("Read Only")]
     public bool IsColored;
-    [SerializeField] ColorData currentColor;
+    public ColorData currentColor;
     [SerializeField] ColorData[] allColors;
     [SerializeField] Material writtingMaterial;
 
@@ -68,6 +68,16 @@ public class ObjectColored : MonoBehaviour, IColorAffected
     {
         currentColor = null;
         currentColor = allColors.FirstOrDefault(c => c.colorId == colorDataNet.colorId);
+        if (currentColor != null)
+        {
+            ApplyColorInObject();
+        }
+    }
+
+    public void ApplyColorInObject(string colorNameId)
+    {
+        currentColor = null;
+        currentColor = allColors.FirstOrDefault(c => c.colorId == colorNameId);
         if (currentColor != null)
         {
             ApplyColorInObject();

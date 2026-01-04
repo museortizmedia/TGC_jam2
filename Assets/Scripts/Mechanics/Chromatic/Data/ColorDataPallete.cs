@@ -9,6 +9,6 @@ public class ColorDataPallete : ScriptableObject
     public ColorData Find(string colorName)
     {
         if(pallete.Length == 0 ) return null;
-        return pallete.FirstOrDefault(c => c.colorId == colorName);
+        return pallete.FirstOrDefault(c => c.colorId.ToLower() == colorName.ToLower());
     }
 }

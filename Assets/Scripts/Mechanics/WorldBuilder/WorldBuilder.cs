@@ -198,13 +198,11 @@ public class WorldBuilder : NetworkBehaviour
     [ClientRpc]
     private void ApplyWorldLayoutClientRpc(PuzzlePlacement[] layout)
     {
-        if (!IsServer)
-            ApplyWorldLayout(layout);
+        ApplyWorldLayout(layout);
     }
 
     private void ApplyWorldLayout(PuzzlePlacement[] layout)
     {
-        // Ocultar templates
         foreach (var t in templates)
             t.SetActive(false);
 
@@ -221,17 +219,14 @@ public class WorldBuilder : NetworkBehaviour
             PuzzleModule modulo = niveles[p.LevelIndex];
             Transform slot = routes[p.RouteIndex].moduleSlots[p.LevelIndex];
 
-            Transform t = modulo.transform;
-            t.position = slot.position;
-            t.rotation = slot.rotation;
-            t.localScale = slot.localScale;
+            Transform tr = modulo.transform;
+            tr.position = slot.position;
+            tr.rotation = slot.rotation;
+            tr.localScale = slot.localScale;
 
-            if (IsServer)
-                modulo.ColorIdRute.Value = p.Color;
-
-            modulo.colorName = p.Color.ToString();
             modulo.gameObject.SetActive(true);
-            modulo.IniciarPuzzle();
+            //if(p.Color != "blanco") { Debug.Log($"[WorldBuilder] Inicicando {modulo.gameObject.name} con {p.Color.ToString()}"); }
+            modulo.Initialize(p.Color.ToString());
         }
     }
 

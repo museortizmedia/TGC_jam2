@@ -1,38 +1,49 @@
-using Unity.Collections;
-using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class PuzzleModule : NetworkBehaviour
+public class PuzzleModule : MonoBehaviour
 {
-    public string colorName;
-    public NetworkVariable<FixedString32Bytes> ColorIdRute =
-        new NetworkVariable<FixedString32Bytes>(
-            "blanco",
-            NetworkVariableReadPermission.Everyone,
-            NetworkVariableWritePermission.Server
-        );
-
+    // Evento que entrega el color como string
     public UnityEvent<string> OnInitPuzzle;
+    public ObjectColored[] ColorRouteObjects;
+    public ObjectColored[] OtherColorRouteObjects;
 
-    public override void OnNetworkSpawn()
+    private bool initialized;
+
+    // Llamado por WorldBuilder o ClientRpc
+    public void Initialize(string color)
     {
-        ColorIdRute.OnValueChanged += OnColorChanged;
-        OnColorChanged(default, ColorIdRute.Value);
+        if (initialized) return;
+
+        initialized = true;
+
+        // Dispara el evento para que los suscriptores pinten o reaccionen
+        OnInitPuzzle?.Invoke(color);
+        ColorObjects(color.ToLower());
+
+        if(color!="blanco") Debug.Log($"[PuzzleModule] Inicializado con color: {color}", transform);
     }
 
-    private void OnDisable()
+    // Permite reinicializar si se reconstruye el mundo
+    public void ResetModule()
     {
-        ColorIdRute.OnValueChanged -= OnColorChanged;
+        initialized = false;
     }
+    [ContextMenu("Colorear Objects")]
+    void ColorObjects(string color)
+    {
+        if (ColorRouteObjects == null) return;
 
-    private void OnColorChanged(FixedString32Bytes oldValue, FixedString32Bytes newValue)
-    {
-        OnInitPuzzle?.Invoke(newValue.ToString());
-    }
-    [ContextMenu("IniciarPuzzle")]
-    public void IniciarPuzzle()
-    {
-        OnInitPuzzle?.Invoke(ColorIdRute.Value.ToString());
+        if (OtherColorRouteObjects == null) return;
+
+        foreach (var objectColorRoute in ColorRouteObjects)
+        {
+            objectColorRoute.ApplyColorInObject(color);
+        }
+        foreach (var objectColorNoRoute in OtherColorRouteObjects)
+        {
+            objectColorNoRoute.ApplyColorInObject(color);
+        }
     }
 }
