@@ -24,6 +24,7 @@ public class PlayerColor : NetworkBehaviour
         );
     public string currenColorName;
     public ColorData currentColor;
+    public ColorData CurrentColor => currentColor;
     [SerializeField] ColorData[] allColors;
 
     public UnityEvent OnStarPlayerColor;
