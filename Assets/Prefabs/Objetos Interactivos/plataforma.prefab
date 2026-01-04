@@ -108,10 +108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4e668336afa30e4d9cfeba1e884cb92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RandomPlatformColor
-  possibleColors:
-  - {r: 1, g: 0, b: 0, a: 0}
-  - {r: 0.06549895, g: 1, b: 0, a: 0}
-  - {r: 0, g: 0.0802474, b: 1, a: 0}
+  returnToNeutralSpeed: 2
 --- !u!114 &2400431087229607440
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -124,3 +121,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4b1b5e51b3afbc4ab572c5cd738db07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OrbitingPlatform
+  heightAmplitude: 1
+  heightSpeed: 1
+  platformRadius: 10

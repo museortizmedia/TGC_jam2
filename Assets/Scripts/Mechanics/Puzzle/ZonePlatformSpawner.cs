@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ZonePlatformSpawner : MonoBehaviour
@@ -11,6 +12,11 @@ public class ZonePlatformSpawner : MonoBehaviour
     [Tooltip("Define el área cerrada donde pueden aparecer plataformas")]
     [SerializeField] private Vector3[] localAreaPoints;
 
+    [Header("Movement")]
+    [SerializeField] private float speed = 0.4f;
+
+    List<LocalMovingPlatform> spawnedPlatforms = new();
+
     void Start()
     {
         if (localAreaPoints == null || localAreaPoints.Length < 3)
@@ -18,6 +24,14 @@ public class ZonePlatformSpawner : MonoBehaviour
             Debug.LogWarning("Zona inválida: se necesitan al menos 3 puntos");
             return;
         }
+
+        SpawnPlatforms();
+        InitializePlatforms();
+    }
+
+    void SpawnPlatforms()
+    {
+        spawnedPlatforms.Clear();
 
         for (int i = 0; i < platformCount; i++)
         {
@@ -27,9 +41,30 @@ public class ZonePlatformSpawner : MonoBehaviour
             GameObject platform = Instantiate(platformPrefab, transform);
             platform.transform.localPosition = localPos;
             platform.transform.localRotation = platformPrefab.transform.localRotation;
+
+            var mover = platform.GetComponent<LocalMovingPlatform>();
+            if (mover != null)
+            {
+                spawnedPlatforms.Add(mover);
+            }
         }
     }
 
+    void InitializePlatforms()
+    {
+        LocalMovingPlatform[] allPlatforms = spawnedPlatforms.ToArray();
+
+        foreach (var platform in allPlatforms)
+        {
+            platform.Initialize(
+                platform.transform.localPosition,
+                speed,
+                allPlatforms
+            );
+        }
+    }
+
+    // ---------- GIZMOS ----------
 
     void OnDrawGizmos()
     {
@@ -49,11 +84,10 @@ public class ZonePlatformSpawner : MonoBehaviour
         }
     }
 
+    // ---------- SPAWN LOGIC ----------
+
     Vector3 GetRandomPointInPolygon()
     {
-        // Método simple y seguro para JAM:
-        // triangulamos en abanico desde el punto 0
-
         int triangleIndex = Random.Range(1, localAreaPoints.Length - 1);
 
         Vector3 a = localAreaPoints[0];
@@ -72,5 +106,10 @@ public class ZonePlatformSpawner : MonoBehaviour
             (1 - r1) * a +
             r1 * (1 - r2) * b +
             r1 * r2 * c;
+    }
+
+    public Vector3[] GetLocalAreaPoints()
+    {
+        return localAreaPoints;
     }
 }
