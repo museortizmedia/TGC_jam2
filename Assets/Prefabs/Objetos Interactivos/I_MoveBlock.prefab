@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 1386254936872288730}
   - component: {fileID: 7689782534273236858}
   - component: {fileID: 1344659524276974196}
+  - component: {fileID: 5917455254304732168}
   m_Layer: 0
   m_Name: I_MoveBlock
   m_TagString: Untagged
@@ -70,7 +71,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 91b693067dde48240b7dd7d61301e743, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -148,9 +149,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a660940db7a09346aae197e23877ca8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteractionMoving
-  followDistance: 1.2
-  moveSpeed: 5
-  lockY: 1
+  objectColored: {fileID: 0}
+  followX: 1
+  followY: 0
+  followZ: 1
+  jointSpring: 5000
+  jointDamping: 100
 --- !u!54 &1344659524276974196
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -178,3 +182,26 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &5917455254304732168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1411849794280926452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94cd0d581bb520f42a64084a5f32acd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectColored
+  emitColorProperty: _EmitColor
+  emitIntensityProperty: _EmitIntensity
+  render: {fileID: 5075471098205824060}
+  IsColored: 0
+  currentColor: {fileID: 0}
+  allColors:
+  - {fileID: 11400000, guid: 1703ceb6c4a7270499f35e42b0b4a6a0, type: 2}
+  - {fileID: 11400000, guid: 32c9bbca4a2f3ab45932136c2d668bc3, type: 2}
+  - {fileID: 11400000, guid: 9cb2c6964de5e7749bb0ef74498fe8dd, type: 2}
+  - {fileID: 11400000, guid: 227ccc20ac0ce214f869f4c4e92657bd, type: 2}
+  writtingMaterial: {fileID: 2100000, guid: 91b693067dde48240b7dd7d61301e743, type: 2}

@@ -13,10 +13,11 @@ public class ObjectColored : MonoBehaviour, IColorAffected
     [SerializeField] private string emitIntensityProperty = "_EmitIntensity";
     [SerializeField] Renderer render;
 
-    [Header("Settings")]
+    [Header("Read Only")]
     public bool IsColored;
     [SerializeField] ColorData currentColor;
     [SerializeField] ColorData[] allColors;
+    [SerializeField] Material writtingMaterial;
 
     private MaterialPropertyBlock propertyBlock;
 
@@ -42,12 +43,15 @@ public class ObjectColored : MonoBehaviour, IColorAffected
             .Select(name => allColorAssets.FirstOrDefault(c => c.name == name))
             .Where(c => c != null)
             .ToArray();
+
+        writtingMaterial = AssetDatabase.LoadAssetAtPath<Material>(AssetDatabase.GUIDToAssetPath("91b693067dde48240b7dd7d61301e743"));
+        if(render != null && render.sharedMaterial != writtingMaterial) { render.sharedMaterial = writtingMaterial; }
     }
 #endif
 
     public string GetOtherColorThan(string color)
     {
-        return allColors.FirstOrDefault( c => c.colorId != color).colorId;
+        return allColors.FirstOrDefault(c => c.colorId != color).colorId;
     }
 
     public void ApplyColorInObject(FixedString32Bytes colorName)
@@ -56,7 +60,7 @@ public class ObjectColored : MonoBehaviour, IColorAffected
         currentColor = allColors.FirstOrDefault(c => c.colorId == colorName);
         if (currentColor != null)
         {
-            ApplyColorInObject(currentColor);
+            ApplyColorInObject();
         }
     }
 
@@ -66,7 +70,7 @@ public class ObjectColored : MonoBehaviour, IColorAffected
         currentColor = allColors.FirstOrDefault(c => c.colorId == colorDataNet.colorId);
         if (currentColor != null)
         {
-            ApplyColorInObject(currentColor);
+            ApplyColorInObject();
         }
     }
 
@@ -76,13 +80,21 @@ public class ObjectColored : MonoBehaviour, IColorAffected
         currentColor = colorData;
         if (currentColor != null)
         {
-            render.GetPropertyBlock(propertyBlock);
-            propertyBlock.SetColor(emitColorProperty, colorData.color);
-            propertyBlock.SetFloat(emitIntensityProperty, colorData.intensity);
-            render.SetPropertyBlock(propertyBlock);
+            ApplyColorInObject();
         }
-
-        IsColored = true;
+    }
+    [ContextMenu("Apply Current Color")]
+    public void ApplyColorInObject()
+    {
+        if (currentColor != null)
+        {
+            propertyBlock ??= new();
+            render.GetPropertyBlock(propertyBlock);
+            propertyBlock.SetColor(emitColorProperty, currentColor.color);
+            propertyBlock.SetFloat(emitIntensityProperty, currentColor.intensity);
+            render.SetPropertyBlock(propertyBlock);
+            IsColored = true;
+        }
     }
 
     public bool CanInteractive(ColorData colorData)

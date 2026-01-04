@@ -489,7 +489,7 @@ PrefabInstance:
       objectReference: {fileID: 127101675}
     - target: {fileID: 65129866592961775, guid: 9c9c20a84e63a4c45863f058c32a0e95, type: 3}
       propertyPath: m_VersionIndex
-      value: 5730
+      value: 5733
       objectReference: {fileID: 0}
     - target: {fileID: 308739558637076438, guid: 9c9c20a84e63a4c45863f058c32a0e95, type: 3}
       propertyPath: m_LocalPosition.x
@@ -543,13 +543,17 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1997427957}
+    - target: {fileID: 2754713385424167498, guid: 9c9c20a84e63a4c45863f058c32a0e95, type: 3}
+      propertyPath: pallete
+      value: 
+      objectReference: {fileID: 11400000, guid: b4d10a039816935459c5d1f88561ee15, type: 2}
     - target: {fileID: 3745110823841323823, guid: 9c9c20a84e63a4c45863f058c32a0e95, type: 3}
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1897044309}
     - target: {fileID: 3745110823841323823, guid: 9c9c20a84e63a4c45863f058c32a0e95, type: 3}
       propertyPath: m_VersionIndex
-      value: 5797
+      value: 5800
       objectReference: {fileID: 0}
     - target: {fileID: 3832535853174476431, guid: 9c9c20a84e63a4c45863f058c32a0e95, type: 3}
       propertyPath: RouteColorObjets.Array.size
@@ -567,17 +571,25 @@ PrefabInstance:
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 3616713997
       objectReference: {fileID: 0}
+    - target: {fileID: 4126524813063993000, guid: 9c9c20a84e63a4c45863f058c32a0e95, type: 3}
+      propertyPath: pallete
+      value: 
+      objectReference: {fileID: 11400000, guid: b4d10a039816935459c5d1f88561ee15, type: 2}
     - target: {fileID: 4133513185707914525, guid: 9c9c20a84e63a4c45863f058c32a0e95, type: 3}
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 169452845}
+    - target: {fileID: 4391332385379165862, guid: 9c9c20a84e63a4c45863f058c32a0e95, type: 3}
+      propertyPath: pallete
+      value: 
+      objectReference: {fileID: 11400000, guid: b4d10a039816935459c5d1f88561ee15, type: 2}
     - target: {fileID: 4422510219523382332, guid: 9c9c20a84e63a4c45863f058c32a0e95, type: 3}
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 169452845}
     - target: {fileID: 4422510219523382332, guid: 9c9c20a84e63a4c45863f058c32a0e95, type: 3}
       propertyPath: m_VersionIndex
-      value: 5742
+      value: 5745
       objectReference: {fileID: 0}
     - target: {fileID: 4640524384765770307, guid: 9c9c20a84e63a4c45863f058c32a0e95, type: 3}
       propertyPath: m_Mesh
@@ -589,7 +601,7 @@ PrefabInstance:
       objectReference: {fileID: 1224102398}
     - target: {fileID: 5045349007678660981, guid: 9c9c20a84e63a4c45863f058c32a0e95, type: 3}
       propertyPath: m_Name
-      value: Puzzle 1
+      value: Puzzle 1 Laberinto
       objectReference: {fileID: 0}
     - target: {fileID: 5045349007678660981, guid: 9c9c20a84e63a4c45863f058c32a0e95, type: 3}
       propertyPath: m_IsActive
@@ -609,12 +621,16 @@ PrefabInstance:
       objectReference: {fileID: 1997427957}
     - target: {fileID: 5866234342877693732, guid: 9c9c20a84e63a4c45863f058c32a0e95, type: 3}
       propertyPath: m_VersionIndex
-      value: 5752
+      value: 5755
       objectReference: {fileID: 0}
     - target: {fileID: 7313610224695367195, guid: 9c9c20a84e63a4c45863f058c32a0e95, type: 3}
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1897044309}
+    - target: {fileID: 7723178945928664140, guid: 9c9c20a84e63a4c45863f058c32a0e95, type: 3}
+      propertyPath: pallete
+      value: 
+      objectReference: {fileID: 11400000, guid: b4d10a039816935459c5d1f88561ee15, type: 2}
     - target: {fileID: 8318718199566622590, guid: 9c9c20a84e63a4c45863f058c32a0e95, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -682,6 +698,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleModule
   ShowTopMostFoldoutHeaderGroup: 1
+  colorName: 
   ColorIdRute:
     m_InternalValue:
       utf8LengthInBytes: 6
@@ -719,7 +736,19 @@ MonoBehaviour:
         byte0029: 0
   OnInitPuzzle:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1569989379}
+        m_TargetAssemblyTypeName: MazeGenerator, Assembly-CSharp
+        m_MethodName: OnPuzzleInit
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &77589998
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -733,6 +762,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleModule
   ShowTopMostFoldoutHeaderGroup: 1
+  colorName: 
   ColorIdRute:
     m_InternalValue:
       utf8LengthInBytes: 6
@@ -770,7 +800,19 @@ MonoBehaviour:
         byte0029: 0
   OnInitPuzzle:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1569989380}
+        m_TargetAssemblyTypeName: MazeGenerator, Assembly-CSharp
+        m_MethodName: OnPuzzleInit
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &77589999
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -784,6 +826,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleModule
   ShowTopMostFoldoutHeaderGroup: 1
+  colorName: 
   ColorIdRute:
     m_InternalValue:
       utf8LengthInBytes: 6
@@ -821,7 +864,19 @@ MonoBehaviour:
         byte0029: 0
   OnInitPuzzle:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1569989381}
+        m_TargetAssemblyTypeName: MazeGenerator, Assembly-CSharp
+        m_MethodName: OnPuzzleInit
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &77590000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -835,6 +890,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleModule
   ShowTopMostFoldoutHeaderGroup: 1
+  colorName: 
   ColorIdRute:
     m_InternalValue:
       utf8LengthInBytes: 6
@@ -872,7 +928,19 @@ MonoBehaviour:
         byte0029: 0
   OnInitPuzzle:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1569989382}
+        m_TargetAssemblyTypeName: MazeGenerator, Assembly-CSharp
+        m_MethodName: OnPuzzleInit
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!43 &78837729
 Mesh:
   m_ObjectHideFlags: 0
@@ -1077,7 +1145,7 @@ PrefabInstance:
       objectReference: {fileID: 1328247114}
     - target: {fileID: 65129866592961775, guid: ac8ffd13228c82a47a80c8ac5b631175, type: 3}
       propertyPath: m_VersionIndex
-      value: 5730
+      value: 5733
       objectReference: {fileID: 0}
     - target: {fileID: 308739558637076438, guid: ac8ffd13228c82a47a80c8ac5b631175, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1137,7 +1205,7 @@ PrefabInstance:
       objectReference: {fileID: 104148028}
     - target: {fileID: 3745110823841323823, guid: ac8ffd13228c82a47a80c8ac5b631175, type: 3}
       propertyPath: m_VersionIndex
-      value: 5797
+      value: 5800
       objectReference: {fileID: 0}
     - target: {fileID: 4133513185707914525, guid: ac8ffd13228c82a47a80c8ac5b631175, type: 3}
       propertyPath: m_Mesh
@@ -1149,7 +1217,7 @@ PrefabInstance:
       objectReference: {fileID: 1595349505}
     - target: {fileID: 4422510219523382332, guid: ac8ffd13228c82a47a80c8ac5b631175, type: 3}
       propertyPath: m_VersionIndex
-      value: 5742
+      value: 5745
       objectReference: {fileID: 0}
     - target: {fileID: 4640524384765770307, guid: ac8ffd13228c82a47a80c8ac5b631175, type: 3}
       propertyPath: m_Mesh
@@ -1181,7 +1249,7 @@ PrefabInstance:
       objectReference: {fileID: 816016493}
     - target: {fileID: 5866234342877693732, guid: ac8ffd13228c82a47a80c8ac5b631175, type: 3}
       propertyPath: m_VersionIndex
-      value: 5752
+      value: 5755
       objectReference: {fileID: 0}
     - target: {fileID: 7313610224695367195, guid: ac8ffd13228c82a47a80c8ac5b631175, type: 3}
       propertyPath: m_Mesh
@@ -1254,6 +1322,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleModule
   ShowTopMostFoldoutHeaderGroup: 1
+  colorName: 
   ColorIdRute:
     m_InternalValue:
       utf8LengthInBytes: 6
@@ -1305,6 +1374,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleModule
   ShowTopMostFoldoutHeaderGroup: 1
+  colorName: 
   ColorIdRute:
     m_InternalValue:
       utf8LengthInBytes: 6
@@ -1356,6 +1426,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleModule
   ShowTopMostFoldoutHeaderGroup: 1
+  colorName: 
   ColorIdRute:
     m_InternalValue:
       utf8LengthInBytes: 6
@@ -1407,6 +1478,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleModule
   ShowTopMostFoldoutHeaderGroup: 1
+  colorName: 
   ColorIdRute:
     m_InternalValue:
       utf8LengthInBytes: 6
@@ -2823,7 +2895,7 @@ PrefabInstance:
       objectReference: {fileID: 971733688}
     - target: {fileID: 65129866592961775, guid: 695df222fc0c6d84aa9f9c559682a2d4, type: 3}
       propertyPath: m_VersionIndex
-      value: 5730
+      value: 5733
       objectReference: {fileID: 0}
     - target: {fileID: 308739558637076438, guid: 695df222fc0c6d84aa9f9c559682a2d4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2895,7 +2967,7 @@ PrefabInstance:
       objectReference: {fileID: 1715696940}
     - target: {fileID: 3745110823841323823, guid: 695df222fc0c6d84aa9f9c559682a2d4, type: 3}
       propertyPath: m_VersionIndex
-      value: 5797
+      value: 5800
       objectReference: {fileID: 0}
     - target: {fileID: 4133513185707914525, guid: 695df222fc0c6d84aa9f9c559682a2d4, type: 3}
       propertyPath: m_Mesh
@@ -2907,7 +2979,7 @@ PrefabInstance:
       objectReference: {fileID: 1907375023}
     - target: {fileID: 4422510219523382332, guid: 695df222fc0c6d84aa9f9c559682a2d4, type: 3}
       propertyPath: m_VersionIndex
-      value: 5742
+      value: 5745
       objectReference: {fileID: 0}
     - target: {fileID: 4640524384765770307, guid: 695df222fc0c6d84aa9f9c559682a2d4, type: 3}
       propertyPath: m_Mesh
@@ -2939,7 +3011,7 @@ PrefabInstance:
       objectReference: {fileID: 1582020758}
     - target: {fileID: 5866234342877693732, guid: 695df222fc0c6d84aa9f9c559682a2d4, type: 3}
       propertyPath: m_VersionIndex
-      value: 5752
+      value: 5755
       objectReference: {fileID: 0}
     - target: {fileID: 7313610224695367195, guid: 695df222fc0c6d84aa9f9c559682a2d4, type: 3}
       propertyPath: m_Mesh
@@ -3012,6 +3084,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleModule
   ShowTopMostFoldoutHeaderGroup: 1
+  colorName: 
   ColorIdRute:
     m_InternalValue:
       utf8LengthInBytes: 6
@@ -3063,6 +3136,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleModule
   ShowTopMostFoldoutHeaderGroup: 1
+  colorName: 
   ColorIdRute:
     m_InternalValue:
       utf8LengthInBytes: 6
@@ -3114,6 +3188,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleModule
   ShowTopMostFoldoutHeaderGroup: 1
+  colorName: 
   ColorIdRute:
     m_InternalValue:
       utf8LengthInBytes: 6
@@ -3165,6 +3240,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleModule
   ShowTopMostFoldoutHeaderGroup: 1
+  colorName: 
   ColorIdRute:
     m_InternalValue:
       utf8LengthInBytes: 6
@@ -4988,7 +5064,7 @@ PrefabInstance:
       objectReference: {fileID: 273778141}
     - target: {fileID: 5045349007678660981, guid: 4908469c46d1944419e93ae7853ecb1f, type: 3}
       propertyPath: m_Name
-      value: Puzzle plataforma_color
+      value: Puzzle 5 Plataformas
       objectReference: {fileID: 0}
     - target: {fileID: 5045349007678660981, guid: 4908469c46d1944419e93ae7853ecb1f, type: 3}
       propertyPath: m_IsActive
@@ -5081,6 +5157,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleModule
   ShowTopMostFoldoutHeaderGroup: 1
+  colorName: 
   ColorIdRute:
     m_InternalValue:
       utf8LengthInBytes: 6
@@ -5132,6 +5209,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleModule
   ShowTopMostFoldoutHeaderGroup: 1
+  colorName: 
   ColorIdRute:
     m_InternalValue:
       utf8LengthInBytes: 6
@@ -5183,6 +5261,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleModule
   ShowTopMostFoldoutHeaderGroup: 1
+  colorName: 
   ColorIdRute:
     m_InternalValue:
       utf8LengthInBytes: 6
@@ -5234,6 +5313,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleModule
   ShowTopMostFoldoutHeaderGroup: 1
+  colorName: 
   ColorIdRute:
     m_InternalValue:
       utf8LengthInBytes: 6
@@ -9490,6 +9570,50 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3986236150996157528, guid: 6034d02d67b8f534db09ce3fd7bbae13, type: 3}
   m_PrefabInstance: {fileID: 481337772}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1569989379 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4126524813063993000, guid: 9c9c20a84e63a4c45863f058c32a0e95, type: 3}
+  m_PrefabInstance: {fileID: 77589990}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2d5bbd2d0e052f458e833a66a2d0a2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MazeGenerator
+--- !u!114 &1569989380 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7723178945928664140, guid: 9c9c20a84e63a4c45863f058c32a0e95, type: 3}
+  m_PrefabInstance: {fileID: 77589990}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2d5bbd2d0e052f458e833a66a2d0a2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MazeGenerator
+--- !u!114 &1569989381 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2754713385424167498, guid: 9c9c20a84e63a4c45863f058c32a0e95, type: 3}
+  m_PrefabInstance: {fileID: 77589990}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2d5bbd2d0e052f458e833a66a2d0a2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MazeGenerator
+--- !u!114 &1569989382 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4391332385379165862, guid: 9c9c20a84e63a4c45863f058c32a0e95, type: 3}
+  m_PrefabInstance: {fileID: 77589990}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2d5bbd2d0e052f458e833a66a2d0a2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MazeGenerator
 --- !u!43 &1582020758
 Mesh:
   m_ObjectHideFlags: 0
@@ -10710,7 +10834,7 @@ PrefabInstance:
       objectReference: {fileID: 751398046}
     - target: {fileID: 65129866592961775, guid: 3d1e7008304f7974ea7ada56cb61fd2a, type: 3}
       propertyPath: m_VersionIndex
-      value: 5730
+      value: 5733
       objectReference: {fileID: 0}
     - target: {fileID: 308739558637076438, guid: 3d1e7008304f7974ea7ada56cb61fd2a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10770,7 +10894,7 @@ PrefabInstance:
       objectReference: {fileID: 1656861523}
     - target: {fileID: 3745110823841323823, guid: 3d1e7008304f7974ea7ada56cb61fd2a, type: 3}
       propertyPath: m_VersionIndex
-      value: 5797
+      value: 5800
       objectReference: {fileID: 0}
     - target: {fileID: 4133513185707914525, guid: 3d1e7008304f7974ea7ada56cb61fd2a, type: 3}
       propertyPath: m_Mesh
@@ -10782,7 +10906,7 @@ PrefabInstance:
       objectReference: {fileID: 682294193}
     - target: {fileID: 4422510219523382332, guid: 3d1e7008304f7974ea7ada56cb61fd2a, type: 3}
       propertyPath: m_VersionIndex
-      value: 5742
+      value: 5745
       objectReference: {fileID: 0}
     - target: {fileID: 4640524384765770307, guid: 3d1e7008304f7974ea7ada56cb61fd2a, type: 3}
       propertyPath: m_Mesh
@@ -10814,7 +10938,7 @@ PrefabInstance:
       objectReference: {fileID: 1124150647}
     - target: {fileID: 5866234342877693732, guid: 3d1e7008304f7974ea7ada56cb61fd2a, type: 3}
       propertyPath: m_VersionIndex
-      value: 5752
+      value: 5755
       objectReference: {fileID: 0}
     - target: {fileID: 7313610224695367195, guid: 3d1e7008304f7974ea7ada56cb61fd2a, type: 3}
       propertyPath: m_Mesh
@@ -10887,6 +11011,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleModule
   ShowTopMostFoldoutHeaderGroup: 1
+  colorName: 
   ColorIdRute:
     m_InternalValue:
       utf8LengthInBytes: 6
@@ -10938,6 +11063,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleModule
   ShowTopMostFoldoutHeaderGroup: 1
+  colorName: 
   ColorIdRute:
     m_InternalValue:
       utf8LengthInBytes: 6
@@ -10989,6 +11115,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleModule
   ShowTopMostFoldoutHeaderGroup: 1
+  colorName: 
   ColorIdRute:
     m_InternalValue:
       utf8LengthInBytes: 6
@@ -11040,6 +11167,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleModule
   ShowTopMostFoldoutHeaderGroup: 1
+  colorName: 
   ColorIdRute:
     m_InternalValue:
       utf8LengthInBytes: 6

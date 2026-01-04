@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 1375926378868274763}
   - component: {fileID: 7642305787298494558}
   - component: {fileID: 3594742741345103893}
+  - component: {fileID: 573113470148514232}
   m_Layer: 0
   m_Name: I_LaunchBlock
   m_TagString: Untagged
@@ -70,7 +71,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 91b693067dde48240b7dd7d61301e743, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -175,6 +176,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06094f1f398fdc14e8200e2cb6798e84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteractionGrabLaunch
+  objectColored: {fileID: 0}
   followSpeed: 15
   rotationSpeed: 12
   grabbedScale: {x: 0.2, y: 0.2, z: 0.2}
@@ -182,3 +184,26 @@ MonoBehaviour:
   launchForce: 12
   physicalCollider: {fileID: 4910036094498139657}
   desyncReleaseDelay: 0.25
+--- !u!114 &573113470148514232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2729388516057036685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94cd0d581bb520f42a64084a5f32acd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectColored
+  emitColorProperty: _EmitColor
+  emitIntensityProperty: _EmitIntensity
+  render: {fileID: 6980346652862857883}
+  IsColored: 0
+  currentColor: {fileID: 0}
+  allColors:
+  - {fileID: 11400000, guid: 1703ceb6c4a7270499f35e42b0b4a6a0, type: 2}
+  - {fileID: 11400000, guid: 32c9bbca4a2f3ab45932136c2d668bc3, type: 2}
+  - {fileID: 11400000, guid: 9cb2c6964de5e7749bb0ef74498fe8dd, type: 2}
+  - {fileID: 11400000, guid: 227ccc20ac0ce214f869f4c4e92657bd, type: 2}
+  writtingMaterial: {fileID: 2100000, guid: 91b693067dde48240b7dd7d61301e743, type: 2}

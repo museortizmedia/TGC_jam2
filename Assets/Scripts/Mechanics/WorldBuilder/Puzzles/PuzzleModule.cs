@@ -1,5 +1,6 @@
 using Unity.Collections;
 using Unity.Netcode;
+using UnityEngine;
 using UnityEngine.Events;
 
 public class PuzzleModule : NetworkBehaviour
@@ -29,7 +30,7 @@ public class PuzzleModule : NetworkBehaviour
     {
         OnInitPuzzle?.Invoke(newValue.ToString());
     }
-
+    [ContextMenu("IniciarPuzzle")]
     public void IniciarPuzzle()
     {
         OnInitPuzzle?.Invoke(ColorIdRute.Value.ToString());

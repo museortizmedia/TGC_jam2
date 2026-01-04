@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,7 +20,9 @@ public class MazeGenerator : MonoBehaviour
     [SerializeField] private float perimeterWallThickness = 0.3f;
 
     [Header("Target / Button")]
+    [SerializeField] ColorDataPallete pallete;
     [SerializeField] private GameObject buttonPrefab;
+    [SerializeField] GameObject buttonInstanced;
     [SerializeField] private int hubRadius = 2;
     [SerializeField] private int extraConnections = 6;
 
@@ -31,7 +34,7 @@ public class MazeGenerator : MonoBehaviour
     {
         if (localAreaPoints == null || localAreaPoints.Length < 3)
         {
-            Debug.LogWarning("MazeGenerator: zona inválida");
+            Debug.LogWarning("MazeGenerator: zona invï¿½lida");
             return;
         }
 
@@ -267,7 +270,7 @@ public class MazeGenerator : MonoBehaviour
         if (!buttonPrefab) return;
 
         Vector3 pos = GridToLocalPosition(bounds, cell.x, cell.y);
-        Instantiate(buttonPrefab, transform.TransformPoint(pos), Quaternion.identity, transform);
+        buttonInstanced = Instantiate(buttonPrefab, transform.TransformPoint(pos), Quaternion.identity, transform);
     }
 
     Vector3 GridToLocalPosition(Bounds bounds, int x, int y)
@@ -320,6 +323,26 @@ public class MazeGenerator : MonoBehaviour
             Vector3 a = transform.TransformPoint(localAreaPoints[i]);
             Vector3 b = transform.TransformPoint(localAreaPoints[(i + 1) % localAreaPoints.Length]);
             Gizmos.DrawLine(a, b);
+        }
+    }
+
+    // Inicializador de objetos
+    public void OnPuzzleInit(string coloname)
+    {
+        StartCoroutine(WaitButtonState(coloname));
+    }
+
+    IEnumerator WaitButtonState(string coloname)
+    {
+        while(buttonInstanced == null) { yield return null; }
+
+        if(buttonInstanced.TryGetComponent(out ObjectColored objectColored))
+        {
+            ColorData value = pallete.Find(coloname);
+            if(value != null)
+            {
+                objectColored.ApplyColorInObject(value);
+            }
         }
     }
 

@@ -181,6 +181,7 @@ GameObject:
   - component: {fileID: 8904243495065105251}
   - component: {fileID: 4151649419656647206}
   - component: {fileID: 4010917827578471897}
+  - component: {fileID: 2026701770537042927}
   m_Layer: 0
   m_Name: Placa
   m_TagString: Untagged
@@ -236,7 +237,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 91b693067dde48240b7dd7d61301e743, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -279,8 +280,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.9999999, y: 1.9999996, z: 0.1943142}
-  m_Center: {x: 0, y: -1.1602759e-15, z: 0.15484487}
+  m_Size: {x: 1.9999999, y: 1.9999996, z: 0.09}
+  m_Center: {x: 0, y: -1.1602759e-15, z: 0.12}
 --- !u!114 &4010917827578471897
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -293,6 +294,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5ce1f56faf94a0449032ed579429a29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteractionPressureplate
+  objectColored: {fileID: 0}
   animator: {fileID: 5354707686528360273}
   onActivated:
     m_PersistentCalls:
@@ -300,3 +302,26 @@ MonoBehaviour:
   onDeactivated:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2026701770537042927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7131585530337212905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94cd0d581bb520f42a64084a5f32acd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectColored
+  emitColorProperty: _EmitColor
+  emitIntensityProperty: _EmitIntensity
+  render: {fileID: 8904243495065105251}
+  IsColored: 0
+  currentColor: {fileID: 0}
+  allColors:
+  - {fileID: 11400000, guid: 1703ceb6c4a7270499f35e42b0b4a6a0, type: 2}
+  - {fileID: 11400000, guid: 32c9bbca4a2f3ab45932136c2d668bc3, type: 2}
+  - {fileID: 11400000, guid: 9cb2c6964de5e7749bb0ef74498fe8dd, type: 2}
+  - {fileID: 11400000, guid: 227ccc20ac0ce214f869f4c4e92657bd, type: 2}
+  writtingMaterial: {fileID: 2100000, guid: 91b693067dde48240b7dd7d61301e743, type: 2}

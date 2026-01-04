@@ -115,7 +115,7 @@ public class LobbyReadyController : NetworkBehaviour
 
     private void TryStartGame()
     {
-        Debug.Log($"Players: {connectedPlayers.Value}, Max: {maxPlayers}, Ready: {readyCount.Value}");
+        Debug.Log($"Players: {connectedPlayers.Value}, Max: {maxPlayers}, Ready: {readyCount.Value}, IsLobbyFull: {IsLobbyFull}");
         
         bool lobbyFull = connectedPlayers.Value >= maxPlayers;
         bool allReady = readyCount.Value == connectedPlayers.Value && lobbyFull;
