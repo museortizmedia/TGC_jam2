@@ -12,6 +12,8 @@ public class ColorReactivePlatform : MonoBehaviour
 
     private PlayerColor currentPlayer; // jugador que activó la plataforma
     private float timer = 0f;          // temporizador para mantener color
+    private bool pintada;
+    private string colorName;
 
     void Awake()
     {
@@ -25,13 +27,27 @@ public class ColorReactivePlatform : MonoBehaviour
         PlayerColor player = collision.gameObject.GetComponent<PlayerColor>();
         if (player == null || player.CurrentColor == null) return;
 
-        // Solo tomar color si la plataforma está blanca
-        if (currentPlayer == null)
+        if (pintada)
         {
-            currentPlayer = player;
-            SetColor(player.CurrentColor.color);
-            timer = holdTime;
+            if (player.currentColor.colorId != colorName)
+            {
+                if (collision.gameObject.TryGetComponent(out IDeadly deadly))
+                {
+                    deadly.Dead();
+                }
+            }
         }
+        else
+        {           
+            // Solo tomar color si la plataforma está blanca
+            if (currentPlayer == null)
+            {
+                currentPlayer = player;
+                SetColor(player.CurrentColor.color);
+                colorName = player.CurrentColor.colorId;
+                timer = holdTime;
+            }
+        }                
     }
 
     void OnCollisionExit(Collision collision)
@@ -66,6 +82,7 @@ public class ColorReactivePlatform : MonoBehaviour
             Color target = Color.Lerp(current, neutralColor, Time.deltaTime * returnToNeutralSpeed);
             block.SetColor("_BaseColor", target);
             rend.SetPropertyBlock(block);
+            pintada = false;
         }
     }
 
@@ -74,5 +91,6 @@ public class ColorReactivePlatform : MonoBehaviour
         rend.GetPropertyBlock(block);
         block.SetColor("_BaseColor", color);
         rend.SetPropertyBlock(block);
+        pintada = color == neutralColor? false : true;
     }
 }
