@@ -1,0 +1,10 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/endDocument.uss?fileID=7433441132597879392&amp;guid=3c89fe6b7e682424c9ad37d42fe3f921&amp;type=3#endDocument"/>
+    <ui:VisualElement style="flex-grow: 1; width: 100%; height: 100%; background-image: url(&quot;project://database/Assets/Sprites/BadEnding.png?fileID=2800000&amp;guid=5c1342f0a34861c489639047e1d34522&amp;type=3#BadEnding&quot;);">
+        <ui:VisualElement style="flex-grow: 1; justify-content: center; align-self: center; width: 368px;">
+            <ui:Image source="project://database/Assets/Sprites/WinText.png?fileID=2800000&amp;guid=2b43393123aa7f24db0366933e70c5ba&amp;type=3#WinText" scale-mode="StretchToFill" tint-color="rgb(0, 239, 236)" style="height: 15%; aspect-ratio: 4; width: 100%;"/>
+            <ui:Image source="project://database/Assets/Sprites/ImpostorWin.png?fileID=2800000&amp;guid=ae7251f9f57e6934cbf94fe2ce1588f1&amp;type=3#ImpostorWin" scale-mode="StretchToFill" tint-color="rgb(0, 239, 236)" style="height: 15%; aspect-ratio: 4; width: 100%; top: -53px;"/>
+            <ui:Button text="Return to Lobby"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,6 +1,3 @@
-using System;
-using Unity.Collections;
-using Unity.Netcode;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewColor", menuName = "BETWEEN/ColorData")]

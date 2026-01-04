@@ -25,6 +25,7 @@ public class WorldBuilder : NetworkBehaviour
     private int currentSpawnIndex = 0;
 
     public event Action<GameObject> OnPlayerEnterInCenter;
+    public event Action<GameObject> OnPlayerExitCenter;
 
     /*void Start()
     {
@@ -112,10 +113,10 @@ public class WorldBuilder : NetworkBehaviour
 
         for (int i = 0; i < puzzlePrefabs.Length; i++) //puzzles
         {
-            GameObject instanciaPuzzle = Instantiate(puzzlePrefabs[i], RutasParent); // Se crea el puzzle con los 4 modulos           
+            GameObject instanciaPuzzle = Instantiate(puzzlePrefabs[i], RutasParent); // Se crea el puzzle con los 4 modulos
             PuzzleModule puzzleModule = instanciaPuzzle.GetComponent<PuzzleModule>();
 
-            puzzleModule.ColorIdRute.Value = new FixedString32Bytes(ColorRoutes[i]);
+            
             
             GameObject[] modulosDelPuzle = puzzleModule.moduleSlots; // referencia a los 4 modulos del puzzle
 
@@ -132,16 +133,15 @@ public class WorldBuilder : NetworkBehaviour
                 referencia.gameObject.SetActive(false);
             }
 
-            instanciaPuzzle.GetComponent<NetworkObject>().Spawn(true);
+            instanciaPuzzle.GetComponent<NetworkObject>().Spawn(true);                 // Spawn real
+            //instanciaPuzzle.GetComponent<NetworkObject>().TrySetParent(RutasParent);   // Parent valido
+
+            puzzleModule.ColorIdRute.Value = new FixedString32Bytes(ColorRoutes[i]);
         }
+
         yield return null;
 
-
         // Limpiar Plantillas
-        RutasParent.GetChild(0).gameObject.SetActive(false);
-        RutasParent.GetChild(1).gameObject.SetActive(false);
-        RutasParent.GetChild(2).gameObject.SetActive(false);
-        RutasParent.GetChild(3).gameObject.SetActive(false);
         RutasParent.GetChild(0).GetComponent<NetworkObject>().Despawn(true);
         RutasParent.GetChild(1).GetComponent<NetworkObject>().Despawn(true);
         RutasParent.GetChild(2).GetComponent<NetworkObject>().Despawn(true);

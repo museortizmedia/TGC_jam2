@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4640166229409602657}
   - component: {fileID: 3113760690273241834}
   - component: {fileID: 8984886632031532847}
+  - component: {fileID: 1152449182301271602}
   - component: {fileID: 7085790231254611100}
   - component: {fileID: 6810811284423949686}
   - component: {fileID: 4621875121548438981}
@@ -154,6 +155,21 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+--- !u!114 &1152449182301271602
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 378827129244887094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d9fcceae795d6f498bedc00aa76f261, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerRole
+  ShowTopMostFoldoutHeaderGroup: 1
+  Role:
+    m_InternalValue: 0
 --- !u!136 &7085790231254611100
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -299,6 +315,7 @@ MonoBehaviour:
   moveSpeed: 5
   jumpForce: 8
   verticalFreeMoveSpeed: 5
+  sprintSpeed: 10
   cameraReference: {fileID: 0}
   groundLayers:
     serializedVersion: 2
@@ -311,6 +328,9 @@ MonoBehaviour:
   jumpInput: 0
   crouchInput: 0
   verticalInput: 0
+  sprintInput: 0
+  isGroundedNet:
+    m_InternalValue: 1
   isGrounded: 0
 --- !u!114 &4942732193969505918
 MonoBehaviour:
@@ -330,8 +350,6 @@ MonoBehaviour:
   - {fileID: 7361430719581269433}
   movement: {fileID: 4984804232306192955}
   visualsChild: {fileID: 4079310922658465208}
-  smoothTime: 10
-  fallThreshold: 0.15
   turnSpeed: 15
   targetYRotationNet:
     m_InternalValue: 0
@@ -339,6 +357,8 @@ MonoBehaviour:
     m_InternalValue: 0
   animSpeedNet:
     m_InternalValue: 1
+  verticalVelocityNet:
+    m_InternalValue: 0
 --- !u!114 &29188683119206676
 MonoBehaviour:
   m_ObjectHideFlags: 0

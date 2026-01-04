@@ -32,7 +32,7 @@ public class PuzzleModule : NetworkBehaviour
     private void OnColorChanged(FixedString32Bytes oldValue, FixedString32Bytes newValue)
     {
         //ApplyColor(newValue.ToString());
-        foreach (var routecolor in RouteColorObjets)
+        /*foreach (var routecolor in RouteColorObjets)
         {
             routecolor.ApplyColorInObject(newValue);
         }
@@ -41,6 +41,6 @@ public class PuzzleModule : NetworkBehaviour
         foreach (var noroutecolor in NoRouteColorObjets)
         {
             noroutecolor.ApplyColorInObject(otherColor);
-        }
+        }*/
     }
 }

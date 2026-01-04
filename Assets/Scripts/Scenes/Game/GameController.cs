@@ -1,10 +1,20 @@
 using UnityEngine;
 using Unity.Netcode;
 using System.Collections.Generic;
-using Unity.Cinemachine;
-using Mono.Cecil.Cil;
 using System.Collections;
-using Unity.VisualScripting;
+
+public enum GameEndResult
+{
+    None,
+    ColorsWin,
+    ImpostorWins
+}
+
+public enum PlayerRoleType
+{
+    Color,
+    Impostor
+}
 
 public class GameController : NetworkBehaviour
 {
@@ -69,14 +79,22 @@ public class GameController : NetworkBehaviour
         if (!sceneEvent.ClientId.Equals(NetworkManager.ServerClientId))
             return;
 
-        SpawnAllPlayers();
-
-        if (IsServer)
-        {
-            worldBuilder.BuildWorld();
-        }
+        StartCoroutine(InitializeGameRoutine());
 
     }
+
+    IEnumerator InitializeGameRoutine()
+    {
+        SpawnAllPlayers();
+        yield return null;
+
+        AssignRoles();
+        InitializeColorPlayers();
+        yield return null;
+
+        worldBuilder.BuildWorld();
+    }
+
 
     void SpawnAllPlayers()
     {
@@ -174,11 +192,52 @@ public class GameController : NetworkBehaviour
             Debug.LogError("SystemCameraController not found on client");
             yield break;
         }
-        
+
         systemCameraController.PlayIntroCinematic(
             center,
             localPlayer.transform
         );
+    }
+
+    void AssignRoles()
+    {
+        if (!IsServer) return;
+
+        var clients = NetworkManager.ConnectedClientsList;
+        int impostorIndex = Random.Range(0, clients.Count);
+
+        for (int i = 0; i < clients.Count; i++)
+        {
+            var netObj = clients[i].PlayerObject;
+            if (netObj == null) continue;
+
+            var role = netObj.GetComponent<PlayerRole>();
+            if (role == null) continue;
+
+            role.Role.Value = (i == impostorIndex)
+                ? PlayerRoleType.Impostor
+                : PlayerRoleType.Color;
+        }
+
+        Debug.Log($"Impostor asignado: Client {clients[impostorIndex].ClientId}");
+    }
+
+    private HashSet<ulong> activeColorPlayers = new();
+    private HashSet<ulong> colorPlayersInCenter = new();
+    private GameEndResult gameResult = GameEndResult.None;
+
+    void InitializeColorPlayers()
+    {
+        activeColorPlayers.Clear();
+
+        foreach (var client in NetworkManager.ConnectedClientsList)
+        {
+            var role = client.PlayerObject.GetComponent<PlayerRole>();
+            if (role != null && role.IsColor)
+            {
+                activeColorPlayers.Add(client.ClientId);
+            }
+        }
     }
 
     void PlayerInCenterCounter(GameObject player)
@@ -192,21 +251,67 @@ public class GameController : NetworkBehaviour
 
         ulong clientId = netObj.OwnerClientId;
 
-        // Si ya entró antes, ignoramos
-        if (!playersThatEnteredCenter.Add(clientId))
+        if (!activeColorPlayers.Contains(clientId))
             return;
 
-        Debug.Log(
-            $"Jugador {clientId} entró al centro " +
-            $"({playersThatEnteredCenter.Count}/{NetworkManager.ConnectedClientsList.Count})"
-        );
+        colorPlayersInCenter.Add(clientId);
 
-        // ¿Todos han entrado?
-        if (playersThatEnteredCenter.Count == NetworkManager.ConnectedClientsList.Count)
+        Debug.Log($"Color {clientId} en centro ({colorPlayersInCenter.Count}/{activeColorPlayers.Count})");
+
+        CheckColorsVictory();
+    }
+
+    void CheckColorsVictory()
+    {
+        if (activeColorPlayers.Count > 0 &&
+            colorPlayersInCenter.Count == activeColorPlayers.Count)
         {
-            FinalizarPartida();
+            EndGame(GameEndResult.ColorsWin);
         }
     }
+    void EndGame(GameEndResult result)
+    {
+        if (partidaFinalizada)
+            return;
+
+        partidaFinalizada = true;
+        gameResult = result;
+
+        Debug.Log($"Partida finalizada: {result}");
+
+        SessionManager.Instance.ChangeState(SessionManager.SessionState.End);
+
+        EndGameClientRpc(result);
+    }
+
+    [ClientRpc]
+    void EndGameClientRpc(GameEndResult result)
+    {
+        GameResultHolder.Result = result;
+    }
+
+    public static class GameResultHolder
+    {
+        public static GameEndResult Result;
+    }
+
+
+
+
+
+    void PlayerExitCenter(GameObject player)
+    {
+        if (!IsServer || partidaFinalizada)
+            return;
+
+        var netObj = player.GetComponent<NetworkObject>();
+        if (netObj == null)
+            return;
+
+        colorPlayersInCenter.Remove(netObj.OwnerClientId);
+    }
+
+
 
     void FinalizarPartida()
     {
@@ -231,4 +336,5 @@ public class GameController : NetworkBehaviour
     {
         systemCameraController.PlayEndCinematic(spawnCenter);
     }
+
 }
