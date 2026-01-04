@@ -37,9 +37,13 @@ public class InteractionButton : InteractiveObject
         if (singleUse)
             alreadyUsed = true;
 
-        Debug.Log($"[InteractionButton] Button pressed: {gameObject.name}", this);
-
         onPressed?.Invoke();
+
+        MazeGenerator maze = GetComponentInParent<MazeGenerator>();
+        if (maze != null)
+        {
+            Destroy(maze.gameObject);
+        }
     }
 
     protected override void OnInteractEnd()

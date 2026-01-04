@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5585277873728053929
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3324261117076106517}
+  - component: {fileID: 8893292642248135527}
+  m_Layer: 0
+  m_Name: laberinto
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3324261117076106517
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5585277873728053929}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -136, y: 51.8, z: -278}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8893292642248135527
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5585277873728053929}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2d5bbd2d0e052f458e833a66a2d0a2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MazeGenerator
+  player: {fileID: 4640166229409602657, guid: 3b6f370707af6f240aa76973333b1025, type: 3}
+  playerSafeRadius: 1.5
+  cellSize: 10
+  localAreaPoints:
+  - {x: -287.8, y: 0, z: 259.3}
+  - {x: 16.4, y: 0, z: 82.5}
+  - {x: 313.4, y: 0, z: 98.8}
+  - {x: 370.4, y: 0, z: -71.8}
+  - {x: -21, y: 0, z: -93.2}
+  - {x: -418.6, y: 0, z: 144}
+  wallPrefab: {fileID: 3782667996396012620, guid: 44c59669c77d87441b19ab8a07b3e65a, type: 3}
+  wallsParent: {fileID: 3324261117076106517}
+  perimeterWallThickness: 0.7
+  buttonPrefab: {fileID: 8382822008105646738, guid: 7afc725bf705b984cad4faf93ecf66be, type: 3}
+  hubRadius: 1
+  extraConnections: 8
