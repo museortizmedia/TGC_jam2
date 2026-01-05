@@ -13,6 +13,8 @@ public class LobbyReadyController : NetworkBehaviour
     private int maxPlayers;
     [SerializeField] private int countdownSecondsProd  = 5;
     [SerializeField] private int countdownSecondsEditor = 1;
+
+    [SerializeField] bool ImReadyEverActived = true; 
     private int countdownSeconds;
 
     // =========================
@@ -145,7 +147,7 @@ public class LobbyReadyController : NetworkBehaviour
     }
 
     public bool IsLobbyFull =>
-        connectedPlayers.Value == maxPlayers;
+        ImReadyEverActived ? true : connectedPlayers.Value == maxPlayers;
 
     public string StatusText
     {
