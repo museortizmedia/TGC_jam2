@@ -272,7 +272,6 @@ public class GameController : NetworkBehaviour
 
     // Referencias runtime
     private VisualElement endGamePanel;
-    private Image backgroundImage;
     private Image titleImage;
     private Image subtitleImage;
 
@@ -284,9 +283,21 @@ public class GameController : NetworkBehaviour
         var root = endGameUIDocument.rootVisualElement;
 
         endGamePanel = root.Q<VisualElement>("EndGamePanel");
-        backgroundImage = root.Q<Image>("BackgroundImage");
         titleImage = root.Q<Image>("TitleImage");
         subtitleImage = root.Q<Image>("SubtitleImage");
+
+        var restartButton = root.Q<Button>("RestartButton");
+        if (restartButton != null)
+        {
+            restartButton.clicked += OnRestartButtonClicked;
+        }
+
+        endGamePanel.style.display = DisplayStyle.None;
+    }
+
+    private void OnRestartButtonClicked()
+    {
+        SessionManager.Instance.ChangeState(SessionManager.SessionState.Lobby);
     }
 
     void InitializeColorPlayers()
@@ -339,6 +350,61 @@ public class GameController : NetworkBehaviour
         CheckGameOver();
     }
 
+    private void CheckGameOver()
+    {
+        if (partidaFinalizada)
+            return;
+
+        // Detectar si hay impostor
+        NetworkObject localImpostor = null;
+        foreach (var client in NetworkManager.ConnectedClientsList)
+        {
+            var role = client.PlayerObject?.GetComponent<PlayerRole>();
+            if (role != null && role.IsImpostor)
+            {
+                localImpostor = client.PlayerObject;
+                break;
+            }
+        }
+
+        // 1️⃣ Si no queda ningún color vivo → Impostor gana
+        if (activeColorPlayers.Count == 0)
+        {
+            EndGame(GameEndResult.ImpostorWins);
+            return;
+        }
+
+        // 2️⃣ Si todos los colores vivos están en el centro → Colores ganan
+        if (colorPlayersInCenter.IsSupersetOf(activeColorPlayers))
+        {
+            EndGame(GameEndResult.ColorsWin);
+            return;
+        }
+
+        // 3️⃣ Si el impostor murió → Colores ganan
+        if (localImpostor == null || !localImpostor.gameObject.activeInHierarchy)
+        {
+            EndGame(GameEndResult.ColorsWin);
+            return;
+        }
+
+        // 4️⃣ Ninguna condición cumplida → seguir jugando
+    }
+
+    void EndGame(GameEndResult result)
+    {
+        if (partidaFinalizada)
+            return;
+
+        partidaFinalizada = true;
+        gameResult = result;
+
+        SessionManager.Instance.ChangeState(SessionManager.SessionState.End);
+
+        // Mostrar UI en todos los clientes
+        ShowEndGameUIClientRpc(result);
+    }
+
     [ContextMenu("Mostrar UI end colors")]
     void MostrarUIColor()
     {
@@ -358,52 +424,65 @@ public class GameController : NetworkBehaviour
         if (endGamePanel == null) SetupEndGameUI();
         if (endGamePanel == null) return;
 
+        // Mostrar panel
         endGamePanel.style.display = DisplayStyle.Flex;
+        UnityEngine.Cursor.lockState = CursorLockMode.None;
 
         // Detectar rol del jugador local
         NetworkObject localPlayer = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject();
         PlayerRole role = localPlayer?.GetComponent<PlayerRole>();
         bool isColor = role != null && role.IsColor;
 
+        // Determinar si el jugador local ganó
+        bool localWon = false;
         switch (result)
         {
             case GameEndResult.ColorsWin:
-                backgroundImage.sprite = backgroundColorsWin;
-                titleImage.sprite = titleWin;
-                subtitleImage.sprite = subtitleColorsWin;
+                localWon = isColor;
                 break;
             case GameEndResult.ImpostorWins:
-                backgroundImage.sprite = backgroundImpostorWin;
-                titleImage.sprite = titleLoose;
-                subtitleImage.sprite = subtitleImpostorWin;
+                localWon = !isColor;
                 break;
         }
 
-        // Opcional: puedes ajustar según rol
-        if (isColor && result == GameEndResult.ColorsWin)
+        // 1️⃣ Asignar background del panel
+        switch (result)
         {
-            // algún efecto para colores
+            case GameEndResult.ColorsWin:
+                endGamePanel.style.backgroundImage = new StyleBackground(backgroundColorsWin);
+                break;
+            case GameEndResult.ImpostorWins:
+                endGamePanel.style.backgroundImage = new StyleBackground(backgroundImpostorWin);
+                break;
         }
-        else if (!isColor && result == GameEndResult.ImpostorWins)
+
+        // 2️⃣ Asignar title según victoria del jugador local
+        titleImage.sprite = localWon ? titleWin : titleLoose;
+
+        // 3️⃣ Asignar subtitle según cómo terminó el juego
+        if (result == GameEndResult.ColorsWin)
         {
-            // algún efecto para impostor
+            // Colores ganaron → subtítulo de colores
+            subtitleImage.sprite = subtitleColorsWin;
+        }
+        else if (result == GameEndResult.ImpostorWins)
+        {
+            // Todos los colores murieron → subtítulo de impostor
+            subtitleImage.sprite = subtitleImpostorWin;
+        }
+
+        // Opcional: efectos visuales según rol y victoria
+        if (localWon)
+        {
+            // Ej: animación de brillo o resaltado
+        }
+        else
+        {
+            // Ej: animación de desvanecimiento o derrota
         }
     }
 
-    void EndGame(GameEndResult result)
-    {
-        if (partidaFinalizada)
-            return;
 
-        partidaFinalizada = true;
-        gameResult = result;
-
-        Debug.Log($"Partida finalizada: {result}");
-
-        SessionManager.Instance.ChangeState(SessionManager.SessionState.End);
-
-        EndGameClientRpc(result);
-    }
 
     [ClientRpc]
     void EndGameClientRpc(GameEndResult result)
@@ -417,27 +496,7 @@ public class GameController : NetworkBehaviour
     }
 
 
-    private void CheckGameOver()
-    {
-        if (partidaFinalizada)
-            return;
 
-        // 1. Si no queda ningún color vivo → Impostor gana
-        if (activeColorPlayers.Count == 0)
-        {
-            EndGame(GameEndResult.ImpostorWins);
-            return;
-        }
-
-        // 2. Si todos los colores vivos están en el centro → Colores ganan
-        if (colorPlayersInCenter.IsSupersetOf(activeColorPlayers))
-        {
-            EndGame(GameEndResult.ColorsWin);
-            return;
-        }
-
-        // 3. Si no se cumple ninguna condición → seguir jugando
-    }
 
     [ClientRpc]
     void EndCinematicClientRpc()

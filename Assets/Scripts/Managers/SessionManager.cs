@@ -71,6 +71,7 @@ public class SessionManager : NetworkBehaviour
         switch (newState)
         {
             case SessionState.Lobby:
+                Time.timeScale = 1;
                 LoadNetworkScene("MenuScene");
                 break;
 
@@ -82,6 +83,7 @@ public class SessionManager : NetworkBehaviour
                 break;
 
             case SessionState.End:
+                Time.timeScale = 0;
                 GameMusic.StopAudio();
                 EndMusic.PlayAudio();
                 Cursor.lockState = CursorLockMode.None;

@@ -4508,7 +4508,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &654548165
 Transform:
   m_ObjectHideFlags: 0
@@ -4522,7 +4522,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1812490216}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &654548166
 MonoBehaviour:
@@ -16543,38 +16543,6 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
---- !u!1 &1812490215
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1812490216}
-  m_Layer: 0
-  m_Name: EndGameController
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1812490216
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1812490215}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 654548165}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!43 &1870019004
 Mesh:
   m_ObjectHideFlags: 0
@@ -17727,13 +17695,13 @@ MonoBehaviour:
   RutesColor: []
   worldBuilder: {fileID: 1203637815122856592}
   gameResult: 0
-  endGameUIDocument: {fileID: 0}
-  backgroundColorsWin: {fileID: 0}
-  backgroundImpostorWin: {fileID: 0}
-  titleWin: {fileID: 0}
-  titleLoose: {fileID: 0}
-  subtitleColorsWin: {fileID: 0}
-  subtitleImpostorWin: {fileID: 0}
+  endGameUIDocument: {fileID: 654548166}
+  backgroundColorsWin: {fileID: 21300000, guid: 8ff779881a4192a45bc5e88f19240a00, type: 3}
+  backgroundImpostorWin: {fileID: 21300000, guid: 5c1342f0a34861c489639047e1d34522, type: 3}
+  titleWin: {fileID: 21300000, guid: 2b43393123aa7f24db0366933e70c5ba, type: 3}
+  titleLoose: {fileID: 21300000, guid: b59592b492d671f438d4556eed37bcfa, type: 3}
+  subtitleColorsWin: {fileID: 21300000, guid: ace244d70f4491549872f87cb460fe34, type: 3}
+  subtitleImpostorWin: {fileID: 21300000, guid: ae7251f9f57e6934cbf94fe2ce1588f1, type: 3}
 --- !u!43 &2116383483
 Mesh:
   m_ObjectHideFlags: 0
@@ -18098,7 +18066,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 478906825473487501, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: puzzles.Array.size
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 478906825473487501, guid: 8eb8cefe6a04a8043945719b5044410c, type: 3}
       propertyPath: templates.Array.size
@@ -19260,6 +19228,6 @@ SceneRoots:
   - {fileID: 316553483}
   - {fileID: 1061532300}
   - {fileID: 1538865392995499451}
-  - {fileID: 1812490216}
+  - {fileID: 654548165}
   - {fileID: 1356603918}
   - {fileID: 985906105}
