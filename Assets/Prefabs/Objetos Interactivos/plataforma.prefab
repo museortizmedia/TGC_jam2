@@ -111,6 +111,7 @@ MonoBehaviour:
   returnToNeutralSpeed: 2
   holdTime: 8
   neutralColor: {r: 1, g: 1, b: 1, a: 1}
+  activeEmissionIntensity: 1.2
 --- !u!114 &2400431087229607440
 MonoBehaviour:
   m_ObjectHideFlags: 0
