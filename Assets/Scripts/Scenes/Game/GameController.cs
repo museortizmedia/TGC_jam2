@@ -2,6 +2,7 @@ using UnityEngine;
 using Unity.Netcode;
 using System.Collections.Generic;
 using System.Collections;
+using UnityEngine.UIElements;
 
 public enum GameEndResult
 {
@@ -31,7 +32,6 @@ public class GameController : NetworkBehaviour
 
     [SerializeField] WorldBuilder worldBuilder;
 
-    private HashSet<ulong> playersThatEnteredCenter = new();
     private bool partidaFinalizada = false;
 
 
@@ -50,8 +50,11 @@ public class GameController : NetworkBehaviour
 
         if (worldBuilder != null)
         {
-            worldBuilder.OnPlayerEnterInCenter += PlayerInCenterCounter;
+            worldBuilder.OnPlayerEnterInCenter += PlayerEnterCenter;
+            worldBuilder.OnPlayerExitOfCenter += PlayerExitCenter;
         }
+
+        SetupEndGameUI();
     }
 
     public override void OnNetworkDespawn()
@@ -62,7 +65,8 @@ public class GameController : NetworkBehaviour
 
         if (worldBuilder != null)
         {
-            worldBuilder.OnPlayerEnterInCenter -= PlayerInCenterCounter;
+            worldBuilder.OnPlayerEnterInCenter -= PlayerEnterCenter;
+            worldBuilder.OnPlayerExitOfCenter -= PlayerExitCenter;
         }
     }
 
@@ -95,7 +99,7 @@ public class GameController : NetworkBehaviour
         worldBuilder.BuildWorld();
     }
 
-
+    #region INICIAR PARTIDA
     void SpawnAllPlayers()
     {
         foreach (var client in NetworkManager.ConnectedClientsList)
@@ -150,12 +154,62 @@ public class GameController : NetworkBehaviour
             playerFall.spawnPoint = spawpoint;
         }
 
+        // Suscribirse al evento de muerte
+        if (player.TryGetComponent(out PlayerDead playerDead))
+        {
+            playerDead.OnDead.AddListener(() => OnPlayerDead(player));
+        }
+
         if (IsServer)
         {
             StartIntroCinematicClientRpc(spawnCenter);
         }
 
     }
+
+    void AssignRoles()
+    {
+        if (!IsServer) return;
+
+        var clients = NetworkManager.ConnectedClientsList;
+        int impostorIndex = Random.Range(0, clients.Count);
+
+        for (int i = 0; i < clients.Count; i++)
+        {
+            var netObj = clients[i].PlayerObject;
+            if (netObj == null) continue;
+
+            var role = netObj.GetComponent<PlayerRole>();
+            if (role == null) continue;
+
+            role.Role.Value = (i == impostorIndex)
+                ? PlayerRoleType.Impostor
+                : PlayerRoleType.Color;
+        }
+
+        Debug.Log($"Impostor asignado: Client {clients[impostorIndex].ClientId}");
+    }
+
+    private void OnPlayerDead(GameObject player)
+    {
+        if (!IsServer || partidaFinalizada)
+            return;
+
+        var netObj = player.GetComponent<NetworkObject>();
+        if (netObj == null)
+            return;
+
+        // Remover de jugadores activos si era Color
+        activeColorPlayers.Remove(netObj.OwnerClientId);
+
+        Debug.Log($"Jugador {netObj.OwnerClientId} ha muerto. Activos restantes: {activeColorPlayers.Count}");
+
+        // Comprobar si la partida termina
+        CheckGameOver();
+    }
+    #endregion
+
+    #region CIENMATICAS
 
     [ClientRpc]
     void StartIntroCinematicClientRpc(Vector3 center)
@@ -198,33 +252,42 @@ public class GameController : NetworkBehaviour
             localPlayer.transform
         );
     }
+    #endregion
 
-    void AssignRoles()
-    {
-        if (!IsServer) return;
-
-        var clients = NetworkManager.ConnectedClientsList;
-        int impostorIndex = Random.Range(0, clients.Count);
-
-        for (int i = 0; i < clients.Count; i++)
-        {
-            var netObj = clients[i].PlayerObject;
-            if (netObj == null) continue;
-
-            var role = netObj.GetComponent<PlayerRole>();
-            if (role == null) continue;
-
-            role.Role.Value = (i == impostorIndex)
-                ? PlayerRoleType.Impostor
-                : PlayerRoleType.Color;
-        }
-
-        Debug.Log($"Impostor asignado: Client {clients[impostorIndex].ClientId}");
-    }
+    #region END PARTIDA
 
     private HashSet<ulong> activeColorPlayers = new();
     private HashSet<ulong> colorPlayersInCenter = new();
-    private GameEndResult gameResult = GameEndResult.None;
+    public GameEndResult gameResult = GameEndResult.None;
+
+    [Header("End Game UI")]
+    [SerializeField] private UIDocument endGameUIDocument;
+    // Sprites según rol + resultado
+    [SerializeField] private Sprite backgroundColorsWin;
+    [SerializeField] private Sprite backgroundImpostorWin;
+    [SerializeField] private Sprite titleWin;
+    [SerializeField] private Sprite titleLoose;
+    [SerializeField] private Sprite subtitleColorsWin;
+    [SerializeField] private Sprite subtitleImpostorWin;
+
+    // Referencias runtime
+    private VisualElement endGamePanel;
+    private Image backgroundImage;
+    private Image titleImage;
+    private Image subtitleImage;
+
+
+    private void SetupEndGameUI()
+    {
+        if (endGameUIDocument == null) return;
+
+        var root = endGameUIDocument.rootVisualElement;
+
+        endGamePanel = root.Q<VisualElement>("EndGamePanel");
+        backgroundImage = root.Q<Image>("BackgroundImage");
+        titleImage = root.Q<Image>("TitleImage");
+        subtitleImage = root.Q<Image>("SubtitleImage");
+    }
 
     void InitializeColorPlayers()
     {
@@ -240,7 +303,7 @@ public class GameController : NetworkBehaviour
         }
     }
 
-    void PlayerInCenterCounter(GameObject player)
+    private void PlayerEnterCenter(GameObject player)
     {
         if (!IsServer || partidaFinalizada)
             return;
@@ -255,20 +318,78 @@ public class GameController : NetworkBehaviour
             return;
 
         colorPlayersInCenter.Add(clientId);
-
         Debug.Log($"Color {clientId} en centro ({colorPlayersInCenter.Count}/{activeColorPlayers.Count})");
 
-        CheckColorsVictory();
+        CheckGameOver();
     }
 
-    void CheckColorsVictory()
+    private void PlayerExitCenter(GameObject player)
     {
-        if (activeColorPlayers.Count > 0 &&
-            colorPlayersInCenter.Count == activeColorPlayers.Count)
+        if (!IsServer || partidaFinalizada)
+            return;
+
+        var netObj = player.GetComponent<NetworkObject>();
+        if (netObj == null)
+            return;
+
+        colorPlayersInCenter.Remove(netObj.OwnerClientId);
+        Debug.Log($"Color {netObj.OwnerClientId} salió del centro ({colorPlayersInCenter.Count}/{activeColorPlayers.Count})");
+
+        // Revisar si se mantiene la condición de victoria
+        CheckGameOver();
+    }
+
+    [ContextMenu("Mostrar UI end colors")]
+    void MostrarUIColor()
+    {
+        ShowEndGameUIClientRpc(GameEndResult.ColorsWin);
+    }
+
+
+    [ContextMenu("Mostrar UI end impostor")]
+    void MostrarUIImpostor()
+    {
+        ShowEndGameUIClientRpc(GameEndResult.ImpostorWins);
+    }
+
+    [ClientRpc]
+    private void ShowEndGameUIClientRpc(GameEndResult result)
+    {
+        if (endGamePanel == null) SetupEndGameUI();
+        if (endGamePanel == null) return;
+
+        endGamePanel.style.display = DisplayStyle.Flex;
+
+        // Detectar rol del jugador local
+        NetworkObject localPlayer = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject();
+        PlayerRole role = localPlayer?.GetComponent<PlayerRole>();
+        bool isColor = role != null && role.IsColor;
+
+        switch (result)
         {
-            EndGame(GameEndResult.ColorsWin);
+            case GameEndResult.ColorsWin:
+                backgroundImage.sprite = backgroundColorsWin;
+                titleImage.sprite = titleWin;
+                subtitleImage.sprite = subtitleColorsWin;
+                break;
+            case GameEndResult.ImpostorWins:
+                backgroundImage.sprite = backgroundImpostorWin;
+                titleImage.sprite = titleLoose;
+                subtitleImage.sprite = subtitleImpostorWin;
+                break;
+        }
+
+        // Opcional: puedes ajustar según rol
+        if (isColor && result == GameEndResult.ColorsWin)
+        {
+            // algún efecto para colores
+        }
+        else if (!isColor && result == GameEndResult.ImpostorWins)
+        {
+            // algún efecto para impostor
         }
     }
+
     void EndGame(GameEndResult result)
     {
         if (partidaFinalizada)
@@ -296,39 +417,26 @@ public class GameController : NetworkBehaviour
     }
 
 
-
-
-
-    void PlayerExitCenter(GameObject player)
-    {
-        if (!IsServer || partidaFinalizada)
-            return;
-
-        var netObj = player.GetComponent<NetworkObject>();
-        if (netObj == null)
-            return;
-
-        colorPlayersInCenter.Remove(netObj.OwnerClientId);
-    }
-
-
-
-    void FinalizarPartida()
+    private void CheckGameOver()
     {
         if (partidaFinalizada)
             return;
 
-        partidaFinalizada = true;
-
-        Debug.Log("Todos los jugadores han entrado al centro. Finalizando partida.");
-
-        // Reportar al SessionManager
-        SessionManager.Instance.ChangeState(SessionManager.SessionState.End);
-
-        if (IsServer)
+        // 1. Si no queda ningún color vivo → Impostor gana
+        if (activeColorPlayers.Count == 0)
         {
-            EndCinematicClientRpc();
+            EndGame(GameEndResult.ImpostorWins);
+            return;
         }
+
+        // 2. Si todos los colores vivos están en el centro → Colores ganan
+        if (colorPlayersInCenter.IsSupersetOf(activeColorPlayers))
+        {
+            EndGame(GameEndResult.ColorsWin);
+            return;
+        }
+
+        // 3. Si no se cumple ninguna condición → seguir jugando
     }
 
     [ClientRpc]
@@ -336,5 +444,6 @@ public class GameController : NetworkBehaviour
     {
         systemCameraController.PlayEndCinematic(spawnCenter);
     }
+    #endregion
 
 }

@@ -31,7 +31,7 @@ public class PlayerColor : NetworkBehaviour
     public ColorData CurrentColor => currentColor;
     [SerializeField] ColorData[] allColors;
 
-    public UnityEvent OnStarPlayerColor;
+    public UnityEvent<Color> OnStarPlayerColor;
 
 
     private void Awake()
@@ -75,7 +75,7 @@ public class PlayerColor : NetworkBehaviour
         if (objectToDisableWhenColored != null)
             objectToDisableWhenColored.SetActive(false);
 
-        OnStarPlayerColor?.Invoke();
+        OnStarPlayerColor?.Invoke(currentColor.color);
     }
 
     /// <summary>

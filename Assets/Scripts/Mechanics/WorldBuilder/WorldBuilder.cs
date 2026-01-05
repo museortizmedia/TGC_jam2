@@ -52,6 +52,7 @@ public class WorldBuilder : NetworkBehaviour
     [SerializeField] private Transform[] spawnPoints;
 
     public event Action<GameObject> OnPlayerEnterInCenter;
+    public event Action<GameObject> OnPlayerExitOfCenter;
 
     private int currentSpawnIndex = 0;
 
@@ -73,6 +74,11 @@ public class WorldBuilder : NetworkBehaviour
     public void ReportPlayerInCenter(GameObject player)
     {
         OnPlayerEnterInCenter?.Invoke(player);
+    }
+
+    public void ReportPlayerExitCenter(GameObject player)
+    {
+        OnPlayerExitOfCenter?.Invoke(player);
     }
 
     #endregion

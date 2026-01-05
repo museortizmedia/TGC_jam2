@@ -8,15 +8,18 @@ public class CenterTrigger : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         worldBuilder.ReportPlayerInCenter(other.gameObject);
-        Debug.Log("CenterTrigger: OnTriggerEnter with " + other.name);
-    }
-
-    void OnTriggerStay(Collider other) {
         //Debug.Log("CenterTrigger: OnTriggerEnter with " + other.name);
     }
-    
+
+    void OnTriggerStay(Collider other)
+    {
+        //Debug.Log("CenterTrigger: OnTriggerEnter with " + other.name);
+    }
+
     void OnTriggerExit(Collider other)
     {
+        worldBuilder.ReportPlayerExitCenter(other.gameObject);
         //Debug.Log("CenterTrigger: OnTriggerExit with " + other.name);
     }
+
 }
