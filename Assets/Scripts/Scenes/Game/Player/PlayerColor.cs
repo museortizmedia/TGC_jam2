@@ -7,6 +7,9 @@ using UnityEngine.Events;
 [DisallowMultipleComponent]
 public class PlayerColor : NetworkBehaviour
 {
+    [Header("Color State")]
+    [SerializeField] private GameObject objectToDisableWhenColored;
+
     public bool DEBUG_COLOR_COLLIDER;
     [Header("Shader Property Names")]
     [SerializeField] private string emitColorProperty = "_EmitColor";
@@ -68,6 +71,9 @@ public class PlayerColor : NetworkBehaviour
         if (currentColor == null) return;
 
         ApplyColor(currentColor.color, currentColor.intensity);
+
+        if (objectToDisableWhenColored != null)
+            objectToDisableWhenColored.SetActive(false);
 
         OnStarPlayerColor?.Invoke();
     }
