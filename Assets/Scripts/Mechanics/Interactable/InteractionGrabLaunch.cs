@@ -170,4 +170,14 @@ public class InteractionGrabLaunch : InteractiveObject
 
         transform.localScale = originalScale;
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.CompareTag("WallBlock"))
+        {
+            // Destruye el bloque del muro
+            Destroy(collision.collider.gameObject);
+
+        }
+    }
 }
