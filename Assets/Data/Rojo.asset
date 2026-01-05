@@ -15,4 +15,5 @@ MonoBehaviour:
   colorId: rojo
   color: {r: 0.9528302, g: 0.25618547, b: 0.3221616, a: 1}
   intensity: 1
+  meshIndex: 0
   ghostMaterial: {fileID: 0}

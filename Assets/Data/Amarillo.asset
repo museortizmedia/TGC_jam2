@@ -15,4 +15,5 @@ MonoBehaviour:
   colorId: amarillo
   color: {r: 0.9433962, g: 0.7165071, b: 0.11124954, a: 1}
   intensity: 1
+  meshIndex: 0
   ghostMaterial: {fileID: 0}

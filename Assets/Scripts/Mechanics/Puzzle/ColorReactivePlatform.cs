@@ -1,25 +1,42 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class ColorReactivePlatform : MonoBehaviour
 {
-    [Header("Configuración")]
+    [Header("ConfiguraciÃ³n")]
     [SerializeField] private float returnToNeutralSpeed = 2f;
-    [SerializeField] private float holdTime = 1f; // tiempo que mantiene el color después de que el jugador se va
+    [SerializeField] private float holdTime = 1f;
+
+    [Header("Colores")]
     [SerializeField] private Color neutralColor = Color.white;
+    [SerializeField] private float activeEmissionIntensity = 1.2f;
+
+    private static readonly int BaseColorID = Shader.PropertyToID("_BaseColor");
+    private static readonly int EmissionColorID = Shader.PropertyToID("_EmissionColor");
 
     private Renderer rend;
     private MaterialPropertyBlock block;
 
-    private PlayerColor currentPlayer; // jugador que activó la plataforma
-    private float timer = 0f;          // temporizador para mantener color
+    private PlayerColor currentPlayer;
+    private float timer;
     private bool pintada;
     private string colorName;
+
+    private Color defaultEmissionColor;
+    private bool hasDefaultEmission;
 
     void Awake()
     {
         rend = GetComponentInChildren<Renderer>();
         block = new MaterialPropertyBlock();
-        SetColor(neutralColor);
+
+        Material mat = rend.sharedMaterial;
+
+        if (mat != null && mat.HasProperty(EmissionColorID))
+        {
+            defaultEmissionColor = mat.GetColor(EmissionColorID);
+            hasDefaultEmission = true;
+            mat.EnableKeyword("_EMISSION");
+        }
     }
 
     void OnCollisionEnter(Collision collision)
@@ -27,70 +44,75 @@ public class ColorReactivePlatform : MonoBehaviour
         PlayerColor player = collision.gameObject.GetComponent<PlayerColor>();
         if (player == null || player.CurrentColor == null) return;
 
-        if (pintada)
+        if (pintada && player.CurrentColor.colorId != colorName)
         {
-            if (player.currentColor.colorId != colorName)
-            {
-                if (collision.gameObject.TryGetComponent(out IDeadly deadly))
-                {
-                    deadly.Dead();
-                }
-            }
+            if (collision.gameObject.TryGetComponent(out IDeadly deadly))
+                deadly.Dead();
+            return;
         }
-        else
-        {           
-            // Solo tomar color si la plataforma está blanca
-            if (currentPlayer == null)
-            {
-                currentPlayer = player;
-                SetColor(player.CurrentColor.color);
-                colorName = player.CurrentColor.colorId;
-                timer = holdTime;
-            }
-        }                
+
+        currentPlayer = player;
+        colorName = player.CurrentColor.colorId;
+        pintada = true;
+
+        SetActiveColor(player.CurrentColor.color);
+        timer = holdTime;
     }
 
     void OnCollisionExit(Collision collision)
     {
         PlayerColor player = collision.gameObject.GetComponent<PlayerColor>();
         if (player == currentPlayer)
-        {
-            currentPlayer = null; // libera la plataforma
-        }
+            currentPlayer = null;
     }
 
     void Update()
     {
-        rend.GetPropertyBlock(block);
-        Color current = block.GetColor("_BaseColor");
-
+        // Jugador encima â†’ nunca se apaga
         if (currentPlayer != null)
         {
-            // Mantener color mientras el jugador esté encima
-            SetColor(currentPlayer.CurrentColor.color);
-            timer = holdTime; // reinicia temporizador
+            SetActiveColor(currentPlayer.CurrentColor.color);
+            timer = holdTime;
+            return;
         }
-        else if (timer > 0f)
+
+        // Tiempo de gracia
+        if (timer > 0f)
         {
-            // Mantener color un tiempo
             timer -= Time.deltaTime;
-            SetColor(current);
+            return;
         }
-        else
-        {
-            // Volver suavemente a blanco
-            Color target = Color.Lerp(current, neutralColor, Time.deltaTime * returnToNeutralSpeed);
-            block.SetColor("_BaseColor", target);
-            rend.SetPropertyBlock(block);
-            pintada = false;
-        }
+
+        // Volver suavemente al estado original
+        rend.GetPropertyBlock(block);
+
+        Color baseCurrent = block.GetColor(BaseColorID);
+        Color emissionCurrent = block.GetColor(EmissionColorID);
+
+        Color baseTarget = Color.Lerp(
+            baseCurrent,
+            neutralColor,
+            Time.deltaTime * returnToNeutralSpeed
+        );
+
+        Color emissionTarget = hasDefaultEmission
+            ? Color.Lerp(emissionCurrent, defaultEmissionColor, Time.deltaTime * returnToNeutralSpeed)
+            : emissionCurrent;
+
+        block.SetColor(BaseColorID, baseTarget);
+        block.SetColor(EmissionColorID, emissionTarget);
+        rend.SetPropertyBlock(block);
+
+        pintada = false;
     }
 
-    void SetColor(Color color)
+    void SetActiveColor(Color baseColor)
     {
-        rend.GetPropertyBlock(block);
-        block.SetColor("_BaseColor", color);
+        Color emissionColor = baseColor * activeEmissionIntensity;
+
+        block.Clear();
+        block.SetColor(BaseColorID, baseColor);
+        block.SetColor(EmissionColorID, emissionColor);
         rend.SetPropertyBlock(block);
-        pintada = color == neutralColor? false : true;
     }
 }
