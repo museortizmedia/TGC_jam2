@@ -11,10 +11,10 @@ public class LobbyReadyController : NetworkBehaviour
     [SerializeField] private int maxPlayersProd = 4;
     [SerializeField] private int maxPlayersEditor = 1;
     private int maxPlayers;
-    [SerializeField] private int countdownSecondsProd  = 5;
+    [SerializeField] private int countdownSecondsProd = 5;
     [SerializeField] private int countdownSecondsEditor = 1;
 
-    [SerializeField] bool ImReadyEverActived = true; 
+    [SerializeField] bool ImReadyEverActived = true;
     private int countdownSeconds;
 
     // =========================
@@ -96,7 +96,20 @@ public class LobbyReadyController : NetworkBehaviour
         RecalculateConnectedPlayers();
         readyCount.Value = readyPlayers.Count;
 
-        TryStartGame();
+        //TryStartGame();
+        // FIX:
+        if (gameStarted)
+        {
+            ForceClientIntoGame(clientId);
+        }
+    }
+
+    // FIX:
+    private void ForceClientIntoGame(ulong clientId)
+    {
+        // Aquí normalmente NO haces nada:
+        // Netcode + SceneManager ya sincronizan
+        Debug.Log($"[LOCAL FIX] Client {clientId} enters game");
     }
 
     private void RecalculateConnectedPlayers()
@@ -106,19 +119,50 @@ public class LobbyReadyController : NetworkBehaviour
 
     private void RegisterReady(ulong clientId)
     {
-        if (gameStarted || readyPlayers.Contains(clientId))
+        if (readyPlayers.Contains(clientId))
             return;
 
         readyPlayers.Add(clientId);
         readyCount.Value = readyPlayers.Count;
 
-        TryStartGame();
+        // FIX: el primer Ready arranca el juego
+        if (!gameStarted)
+        {
+            StartGameImmediately();
+        }
+        /*if (gameStarted || readyPlayers.Contains(clientId))
+            return;
+
+        readyPlayers.Add(clientId);
+        readyCount.Value = readyPlayers.Count;
+
+        TryStartGame();*/
     }
+
+    //FIXME
+    private void StartGameImmediately()
+    {
+        if (gameStarted)
+            return;
+
+        gameStarted = true;
+
+        if (countdownRoutine != null)
+            StopCoroutine(countdownRoutine);
+
+        countdownNet.Value = -1;
+
+        Debug.Log("[LOCAL FIX] Game started by first Ready");
+
+        SessionManager.Instance.ChangeState(
+            SessionManager.SessionState.Game);
+    }
+
 
     private void TryStartGame()
     {
         Debug.Log($"Players: {connectedPlayers.Value}, Max: {maxPlayers}, Ready: {readyCount.Value}, IsLobbyFull: {IsLobbyFull}");
-        
+
         bool lobbyFull = connectedPlayers.Value >= maxPlayers;
         bool allReady = readyCount.Value == connectedPlayers.Value && lobbyFull;
 
@@ -146,8 +190,8 @@ public class LobbyReadyController : NetworkBehaviour
         RegisterReady(rpcParams.Receive.SenderClientId);
     }
 
-    public bool IsLobbyFull =>
-        ImReadyEverActived ? true : connectedPlayers.Value == maxPlayers;
+    public bool IsLobbyFull => true; // FIXME: siempre lleno para poder pasar
+                                     //ImReadyEverActived ? true : connectedPlayers.Value == maxPlayers;
 
     public string StatusText
     {

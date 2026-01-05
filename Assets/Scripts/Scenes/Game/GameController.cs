@@ -93,7 +93,7 @@ public class GameController : NetworkBehaviour
         yield return null;
 
         AssignRoles();
-        InitializeColorPlayers();
+        UpdateActiveColorPlayers();
         yield return null;
 
         worldBuilder.BuildWorld();
@@ -256,13 +256,22 @@ public class GameController : NetworkBehaviour
 
     #region END PARTIDA
 
+    // =========================
+    // GAME STATE
+    // =========================
     private HashSet<ulong> activeColorPlayers = new();
     private HashSet<ulong> colorPlayersInCenter = new();
+
     public GameEndResult gameResult = GameEndResult.None;
 
+    // =========================
+    // END GAME UI
+    // =========================
     [Header("End Game UI")]
-    [SerializeField] private UIDocument endGameUIDocument, hudUIDocument;
-    // Sprites según rol + resultado
+    [SerializeField] private UIDocument endGameUIDocument;
+    [SerializeField] private UIDocument hudUIDocument;
+
+    // Sprites según resultado
     [SerializeField] private Sprite backgroundColorsWin;
     [SerializeField] private Sprite backgroundImpostorWin;
     [SerializeField] private Sprite titleWin;
@@ -270,22 +279,23 @@ public class GameController : NetworkBehaviour
     [SerializeField] private Sprite subtitleColorsWin;
     [SerializeField] private Sprite subtitleImpostorWin;
 
-    // Referencias runtime
+    // Runtime UI refs
     private VisualElement endGamePanel;
     private Image titleImage;
     private Image subtitleImage;
-
     private Label hudRolLabel;
 
-    private static readonly Color COLOR_COLORS_WIN = new Color(0f, 0.937f, 0.925f); // #00EFEC
-    private static readonly Color COLOR_IMPOSTOR_WIN = new Color(0.514f, 0.31f, 0.729f); // #834FBA
-    // Todavia no se aplican los colores en el momento adecuado
+    // Colores tema
+    private static readonly Color COLOR_COLORS_WIN = new(0f, 0.937f, 0.925f);
+    private static readonly Color COLOR_IMPOSTOR_WIN = new(0.514f, 0.31f, 0.729f);
 
-
-
+    // =========================
+    // UI SETUP
+    // =========================
     private void SetupEndGameUI()
     {
-        if (endGameUIDocument == null) return;
+        if (endGameUIDocument == null)
+            return;
 
         var root = endGameUIDocument.rootVisualElement;
 
@@ -295,37 +305,26 @@ public class GameController : NetworkBehaviour
 
         var restartButton = root.Q<Button>("RestartButton");
         if (restartButton != null)
-        {
             restartButton.clicked += OnRestartButtonClicked;
-        }
 
         endGamePanel.style.display = DisplayStyle.None;
     }
 
+    // =========================
+    // HUD
+    // =========================
     public void UpdateHUDForRole(PlayerRoleType role)
     {
         if (hudUIDocument == null)
-        {
-            Debug.LogWarning("[HUD] hudUIDocument es null");
             return;
-        }
 
         var root = hudUIDocument.rootVisualElement;
 
         hudRolLabel = root.Q<Label>("Role");
         var abilityElement = root.Q<VisualElement>("ability");
 
-        if (hudRolLabel == null)
-        {
-            Debug.LogError("[HUD] Label 'Role' no encontrado en UIDocument");
+        if (hudRolLabel == null || abilityElement == null)
             return;
-        }
-
-        if (abilityElement == null)
-        {
-            Debug.LogError("[HUD] VisualElement 'ability' no encontrado");
-            return;
-        }
 
         if (role == PlayerRoleType.Color)
         {
@@ -337,27 +336,30 @@ public class GameController : NetworkBehaviour
             hudRolLabel.text = "You are the Depression";
             abilityElement.style.display = DisplayStyle.Flex;
         }
-
-        Debug.Log($"[HUD] HUD actualizado correctamente. Rol: {role}");
     }
 
-    private void OnRestartButtonClicked()
-    {
-        SessionManager.Instance.ChangeState(SessionManager.SessionState.Lobby);
-    }
-
-    void InitializeColorPlayers()
+    // =========================
+    // PLAYER TRACKING
+    // =========================
+    private void UpdateActiveColorPlayers()
     {
         activeColorPlayers.Clear();
 
-        foreach (var client in NetworkManager.ConnectedClientsList)
+        foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
         {
-            var role = client.PlayerObject.GetComponent<PlayerRole>();
+            var playerObj = client.PlayerObject;
+            if (playerObj == null || !playerObj.gameObject.activeInHierarchy)
+                continue;
+
+            var role = playerObj.GetComponent<PlayerRole>();
             if (role != null && role.IsColor)
             {
                 activeColorPlayers.Add(client.ClientId);
             }
         }
+
+        // Limpieza defensiva
+        colorPlayersInCenter.RemoveWhere(id => !activeColorPlayers.Contains(id));
     }
 
     private void PlayerEnterCenter(GameObject player)
@@ -371,12 +373,12 @@ public class GameController : NetworkBehaviour
 
         ulong clientId = netObj.OwnerClientId;
 
+        UpdateActiveColorPlayers();
+
         if (!activeColorPlayers.Contains(clientId))
             return;
 
         colorPlayersInCenter.Add(clientId);
-        Debug.Log($"Color {clientId} en centro ({colorPlayersInCenter.Count}/{activeColorPlayers.Count})");
-
         CheckGameOver();
     }
 
@@ -390,54 +392,61 @@ public class GameController : NetworkBehaviour
             return;
 
         colorPlayersInCenter.Remove(netObj.OwnerClientId);
-        Debug.Log($"Color {netObj.OwnerClientId} salió del centro ({colorPlayersInCenter.Count}/{activeColorPlayers.Count})");
-
-        // Revisar si se mantiene la condición de victoria
         CheckGameOver();
     }
 
+    // =========================
+    // GAME OVER EVALUATION
+    // =========================
     private void CheckGameOver()
     {
         if (partidaFinalizada)
             return;
 
-        // Detectar si hay impostor
-        NetworkObject localImpostor = null;
-        foreach (var client in NetworkManager.ConnectedClientsList)
+        UpdateActiveColorPlayers();
+
+        NetworkObject impostor = null;
+
+        foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
         {
-            var role = client.PlayerObject?.GetComponent<PlayerRole>();
+            var playerObj = client.PlayerObject;
+            if (playerObj == null || !playerObj.gameObject.activeInHierarchy)
+                continue;
+
+            var role = playerObj.GetComponent<PlayerRole>();
             if (role != null && role.IsImpostor)
             {
-                localImpostor = client.PlayerObject;
+                impostor = playerObj;
                 break;
             }
         }
 
-        // 1️⃣ Si no queda ningún color vivo → Impostor gana
+        // 1️⃣ Todos los colores muertos → gana el Impostor
         if (activeColorPlayers.Count == 0)
         {
             EndGame(GameEndResult.ImpostorWins);
             return;
         }
 
-        // 2️⃣ Si todos los colores vivos están en el centro → Colores ganan
+        // 2️⃣ Todos los colores vivos en el centro → ganan los Colores
         if (colorPlayersInCenter.IsSupersetOf(activeColorPlayers))
         {
             EndGame(GameEndResult.ColorsWin);
             return;
         }
 
-        // 3️⃣ Si el impostor murió → Colores ganan
-        if (localImpostor == null || !localImpostor.gameObject.activeInHierarchy)
+        // 3️⃣ Impostor muerto → ganan los Colores
+        if (impostor == null)
         {
             EndGame(GameEndResult.ColorsWin);
             return;
         }
-
-        // 4️⃣ Ninguna condición cumplida → seguir jugando
     }
 
-    void EndGame(GameEndResult result)
+    // =========================
+    // END GAME
+    // =========================
+    private void EndGame(GameEndResult result)
     {
         if (partidaFinalizada)
             return;
@@ -447,24 +456,12 @@ public class GameController : NetworkBehaviour
 
         SessionManager.Instance.ChangeState(SessionManager.SessionState.End);
 
-        // Mostrar UI en todos los clientes
         ShowEndGameUIClientRpc(result);
     }
 
-    [ContextMenu("Mostrar UI end colors")]
-    void MostrarUIColor()
-    {
-        ShowEndGameUIClientRpc(GameEndResult.ColorsWin);
-    }
-
-
-    [ContextMenu("Mostrar UI end impostor")]
-    void MostrarUIImpostor()
-    {
-        ShowEndGameUIClientRpc(GameEndResult.ImpostorWins);
-    }
-
-
+    // =========================
+    // UI RPC
+    // =========================
     [ClientRpc]
     private void ShowEndGameUIClientRpc(GameEndResult result)
     {
@@ -476,23 +473,19 @@ public class GameController : NetworkBehaviour
         endGamePanel.style.display = DisplayStyle.Flex;
         UnityEngine.Cursor.lockState = CursorLockMode.None;
 
-        // Rol local
-        NetworkObject localPlayer =
+        var localPlayer =
             NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject();
-        PlayerRole role = localPlayer?.GetComponent<PlayerRole>();
-        bool isColor = role != null && role.IsColor;
+        var role = localPlayer?.GetComponent<PlayerRole>();
 
-        // ¿Ganó el jugador local?
+        bool isColor = role != null && role.IsColor;
         bool localWon =
             (result == GameEndResult.ColorsWin && isColor) ||
             (result == GameEndResult.ImpostorWins && !isColor);
 
-        // Tema visual por resultado global
         if (result == GameEndResult.ColorsWin)
         {
             endGamePanel.style.backgroundImage =
                 new StyleBackground(backgroundColorsWin);
-
             ApplyEndGameTheme(COLOR_COLORS_WIN);
             subtitleImage.sprite = subtitleColorsWin;
         }
@@ -500,27 +493,23 @@ public class GameController : NetworkBehaviour
         {
             endGamePanel.style.backgroundImage =
                 new StyleBackground(backgroundImpostorWin);
-
             ApplyEndGameTheme(COLOR_IMPOSTOR_WIN);
             subtitleImage.sprite = subtitleImpostorWin;
         }
 
-        // Título depende del resultado LOCAL
         titleImage.sprite = localWon ? titleWin : titleLoose;
     }
 
+    // =========================
+    // UI THEME
+    // =========================
     private void ApplyEndGameTheme(Color themeColor)
     {
-        // Tint del panel completo
         endGamePanel.style.unityBackgroundImageTintColor = themeColor;
-
-        // Tint de título y subtítulo
         titleImage.tintColor = themeColor;
         subtitleImage.tintColor = themeColor;
 
-        // Tint de botones
-        var buttons = endGamePanel.Query<Button>().ToList();
-        foreach (var btn in buttons)
+        foreach (var btn in endGamePanel.Query<Button>().ToList())
         {
             btn.style.color = themeColor;
             btn.style.borderBottomColor =
@@ -529,6 +518,13 @@ public class GameController : NetworkBehaviour
             btn.style.borderRightColor = themeColor;
         }
     }
+
+    private void OnRestartButtonClicked()
+    {
+        SessionManager.Instance.ChangeState(SessionManager.SessionState.Lobby);
+    }
+
     #endregion
+
 
 }
