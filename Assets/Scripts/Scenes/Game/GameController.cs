@@ -261,7 +261,7 @@ public class GameController : NetworkBehaviour
     public GameEndResult gameResult = GameEndResult.None;
 
     [Header("End Game UI")]
-    [SerializeField] private UIDocument endGameUIDocument;
+    [SerializeField] private UIDocument endGameUIDocument, hudUIDocument;
     // Sprites según rol + resultado
     [SerializeField] private Sprite backgroundColorsWin;
     [SerializeField] private Sprite backgroundImpostorWin;
@@ -275,8 +275,11 @@ public class GameController : NetworkBehaviour
     private Image titleImage;
     private Image subtitleImage;
 
+    private Label hudRolLabel;
+
     private static readonly Color COLOR_COLORS_WIN = new Color(0f, 0.937f, 0.925f); // #00EFEC
     private static readonly Color COLOR_IMPOSTOR_WIN = new Color(0.514f, 0.31f, 0.729f); // #834FBA
+    // Todavia no se aplican los colores en el momento adecuado
 
 
 
@@ -297,6 +300,45 @@ public class GameController : NetworkBehaviour
         }
 
         endGamePanel.style.display = DisplayStyle.None;
+    }
+
+    public void UpdateHUDForRole(PlayerRoleType role)
+    {
+        if (hudUIDocument == null)
+        {
+            Debug.LogWarning("[HUD] hudUIDocument es null");
+            return;
+        }
+
+        var root = hudUIDocument.rootVisualElement;
+
+        hudRolLabel = root.Q<Label>("Role");
+        var abilityElement = root.Q<VisualElement>("ability");
+
+        if (hudRolLabel == null)
+        {
+            Debug.LogError("[HUD] Label 'Role' no encontrado en UIDocument");
+            return;
+        }
+
+        if (abilityElement == null)
+        {
+            Debug.LogError("[HUD] VisualElement 'ability' no encontrado");
+            return;
+        }
+
+        if (role == PlayerRoleType.Color)
+        {
+            hudRolLabel.text = "You are a Color";
+            abilityElement.style.display = DisplayStyle.None;
+        }
+        else
+        {
+            hudRolLabel.text = "You are the Depression";
+            abilityElement.style.display = DisplayStyle.Flex;
+        }
+
+        Debug.Log($"[HUD] HUD actualizado correctamente. Rol: {role}");
     }
 
     private void OnRestartButtonClicked()
@@ -422,90 +464,70 @@ public class GameController : NetworkBehaviour
         ShowEndGameUIClientRpc(GameEndResult.ImpostorWins);
     }
 
+
     [ClientRpc]
     private void ShowEndGameUIClientRpc(GameEndResult result)
     {
-        if (endGamePanel == null) SetupEndGameUI();
-        if (endGamePanel == null) return;
+        if (endGamePanel == null)
+            SetupEndGameUI();
+        if (endGamePanel == null)
+            return;
 
-        // Mostrar panel
         endGamePanel.style.display = DisplayStyle.Flex;
         UnityEngine.Cursor.lockState = CursorLockMode.None;
 
-        // Detectar rol del jugador local
-        NetworkObject localPlayer = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject();
+        // Rol local
+        NetworkObject localPlayer =
+            NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject();
         PlayerRole role = localPlayer?.GetComponent<PlayerRole>();
         bool isColor = role != null && role.IsColor;
 
-        // Determinar si el jugador local ganó
-        bool localWon = false;
-        switch (result)
-        {
-            case GameEndResult.ColorsWin:
-                localWon = isColor;
-                break;
-            case GameEndResult.ImpostorWins:
-                localWon = !isColor;
-                break;
-        }
+        // ¿Ganó el jugador local?
+        bool localWon =
+            (result == GameEndResult.ColorsWin && isColor) ||
+            (result == GameEndResult.ImpostorWins && !isColor);
 
-        // 1️⃣ Asignar background del panel
-        switch (result)
-        {
-            case GameEndResult.ColorsWin:
-                endGamePanel.style.backgroundImage = new StyleBackground(backgroundColorsWin); // Color tint de imagenes, texto y borde del boton: 00EFEC
-                break;
-            case GameEndResult.ImpostorWins:
-                endGamePanel.style.backgroundImage = new StyleBackground(backgroundImpostorWin); // Color tint de iamgenes, texto y borde del boton :834FBA
-                break;
-        }
-
-        // 2️⃣ Asignar title según victoria del jugador local
-        titleImage.sprite = localWon ? titleWin : titleLoose;
-
-        // 3️⃣ Asignar subtitle según cómo terminó el juego
+        // Tema visual por resultado global
         if (result == GameEndResult.ColorsWin)
         {
-            // Colores ganaron → subtítulo de colores
-            subtitleImage.sprite = subtitleColorsWin;
-        }
-        else if (result == GameEndResult.ImpostorWins)
-        {
-            // Todos los colores murieron → subtítulo de impostor
-            subtitleImage.sprite = subtitleImpostorWin;
-        }
+            endGamePanel.style.backgroundImage =
+                new StyleBackground(backgroundColorsWin);
 
-        // Opcional: efectos visuales según rol y victoria
-        if (localWon)
-        {
-            // Ej: animación de brillo o resaltado
+            ApplyEndGameTheme(COLOR_COLORS_WIN);
+            subtitleImage.sprite = subtitleColorsWin;
         }
         else
         {
-            // Ej: animación de desvanecimiento o derrota
+            endGamePanel.style.backgroundImage =
+                new StyleBackground(backgroundImpostorWin);
+
+            ApplyEndGameTheme(COLOR_IMPOSTOR_WIN);
+            subtitleImage.sprite = subtitleImpostorWin;
         }
+
+        // Título depende del resultado LOCAL
+        titleImage.sprite = localWon ? titleWin : titleLoose;
     }
 
-
-
-    [ClientRpc]
-    void EndGameClientRpc(GameEndResult result)
+    private void ApplyEndGameTheme(Color themeColor)
     {
-        GameResultHolder.Result = result;
-    }
+        // Tint del panel completo
+        endGamePanel.style.unityBackgroundImageTintColor = themeColor;
 
-    public static class GameResultHolder
-    {
-        public static GameEndResult Result;
-    }
+        // Tint de título y subtítulo
+        titleImage.tintColor = themeColor;
+        subtitleImage.tintColor = themeColor;
 
-
-
-
-    [ClientRpc]
-    void EndCinematicClientRpc()
-    {
-        systemCameraController.PlayEndCinematic(spawnCenter);
+        // Tint de botones
+        var buttons = endGamePanel.Query<Button>().ToList();
+        foreach (var btn in buttons)
+        {
+            btn.style.color = themeColor;
+            btn.style.borderBottomColor =
+            btn.style.borderTopColor =
+            btn.style.borderLeftColor =
+            btn.style.borderRightColor = themeColor;
+        }
     }
     #endregion
 

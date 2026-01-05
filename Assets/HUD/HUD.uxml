@@ -1,9 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ui:UXML
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ui="UnityEngine.UIElements"
-    xmlns:uie="UnityEditor.UIElements"
-    xsi:noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd"
->
-    
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Label text="You Are a Color" name="Role" style="position: absolute; width: 600px; height: 61px; color: rgb(27, 165, 188); -unity-font-style: bold; top: 618px; left: 578px; -unity-text-align: upper-right; align-items: flex-end; bottom: auto; right: auto;"/>
+    <ui:VisualElement name="ability" style="flex-grow: 1; position: absolute;"/>
 </ui:UXML>
