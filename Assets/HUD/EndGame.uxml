@@ -4,7 +4,7 @@
         <ui:VisualElement style="flex-grow: 1; justify-content: center; align-self: center; width: 368px;">
             <ui:Image source="project://database/Assets/Sprites/WinText.png?fileID=2800000&amp;guid=2b43393123aa7f24db0366933e70c5ba&amp;type=3#WinText" scale-mode="StretchToFill" tint-color="rgb(0, 239, 236)" name="TitleImage" style="height: 15%; aspect-ratio: 4; width: 100%;"/>
             <ui:Image source="project://database/Assets/Sprites/ImpostorWin.png?fileID=2800000&amp;guid=ae7251f9f57e6934cbf94fe2ce1588f1&amp;type=3#ImpostorWin" scale-mode="StretchToFill" tint-color="rgb(0, 239, 236)" name="SubtitleImage" style="height: 15%; aspect-ratio: 4; width: 100%; top: -53px;"/>
-            <ui:Button text="Return to Lobby" name="RestartButton"/>
+            <ui:Button text="Return to Lobby" name="RestartButton" style="font-size: 27px; border-left-width: 4px; border-top-width: 4px; border-right-width: 4px; border-bottom-width: 4px;"/>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

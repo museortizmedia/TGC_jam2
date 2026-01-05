@@ -275,6 +275,10 @@ public class GameController : NetworkBehaviour
     private Image titleImage;
     private Image subtitleImage;
 
+    private static readonly Color COLOR_COLORS_WIN = new Color(0f, 0.937f, 0.925f); // #00EFEC
+    private static readonly Color COLOR_IMPOSTOR_WIN = new Color(0.514f, 0.31f, 0.729f); // #834FBA
+
+
 
     private void SetupEndGameUI()
     {
@@ -449,10 +453,10 @@ public class GameController : NetworkBehaviour
         switch (result)
         {
             case GameEndResult.ColorsWin:
-                endGamePanel.style.backgroundImage = new StyleBackground(backgroundColorsWin);
+                endGamePanel.style.backgroundImage = new StyleBackground(backgroundColorsWin); // Color tint de imagenes, texto y borde del boton: 00EFEC
                 break;
             case GameEndResult.ImpostorWins:
-                endGamePanel.style.backgroundImage = new StyleBackground(backgroundImpostorWin);
+                endGamePanel.style.backgroundImage = new StyleBackground(backgroundImpostorWin); // Color tint de iamgenes, texto y borde del boton :834FBA
                 break;
         }
 
