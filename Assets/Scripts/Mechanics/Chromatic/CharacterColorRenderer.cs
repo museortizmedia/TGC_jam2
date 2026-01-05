@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 [Obsolete]
-public class CharacterColorRenderer : MonoBehaviour, IColorAffected
+public class CharacterColorRenderer : MonoBehaviour//, IColorAffected
 {
     private Renderer rend;
     private MaterialPropertyBlock block;
@@ -13,11 +13,11 @@ public class CharacterColorRenderer : MonoBehaviour, IColorAffected
         block = new MaterialPropertyBlock();
     }
 
-    public bool CanInteractive(ColorData colorData)
+    /*public bool CanInteractive(ColorData colorData)
     {
         rend.GetPropertyBlock(block);
         //block.SetColor("_Color", colorData.dataColor.value);
         rend.SetPropertyBlock(block);
         return true;
-    }
+    }*/
 }

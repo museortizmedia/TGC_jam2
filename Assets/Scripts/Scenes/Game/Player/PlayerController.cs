@@ -34,7 +34,8 @@ public class PlayerMovementServerAuth : NetworkBehaviour
     public float crouchHeightOffset = 0.5f;
 
     [Header("Free Navigation Mode")]
-    public bool disableJumpAndCrouch = false;
+    private bool _disableJumpAndCrouch = false;
+    public bool DisableJumpAndCrouch { get => _disableJumpAndCrouch; set => _disableJumpAndCrouch = value; }
 
     [Header("Input Debug (Inspector)")]
     public Vector2 moveInput;
@@ -107,7 +108,7 @@ public class PlayerMovementServerAuth : NetworkBehaviour
         input.Player.Vertical.performed += ctx => verticalInput = ctx.ReadValue<float>();
         input.Player.Vertical.canceled += _ => verticalInput = 0f;
 
-        // Registro de la acción de Sprint
+        // Registro de la acciï¿½n de Sprint
         input.Player.Sprint.performed += _ => sprintInput = true;
         input.Player.Sprint.canceled += _ => sprintInput = false;
 
@@ -171,13 +172,13 @@ public class PlayerMovementServerAuth : NetworkBehaviour
     {
         CheckGround();
 
-        // Aplicación de velocidad: Sprint solo funciona si estamos en el suelo
+        // Aplicaciï¿½n de velocidad: Sprint solo funciona si estamos en el suelo
         float currentSpeed = (sprint && isGrounded) ? sprintSpeed : moveSpeed;
 
         Vector3 horizontalVelocity = (forward * move.y + right * move.x) * currentSpeed;
 
 
-        if (disableJumpAndCrouch)
+        if (DisableJumpAndCrouch)
         {
             rb.useGravity = false;
             rb.linearVelocity = new Vector3(horizontalVelocity.x, vertical * verticalFreeMoveSpeed, horizontalVelocity.z);
@@ -244,7 +245,7 @@ public class PlayerMovementServerAuth : NetworkBehaviour
 
         isGrounded = groundedResult;
 
-        // Solo actualizar si estamos en el servidor Y la NetworkVariable está lista
+        // Solo actualizar si estamos en el servidor Y la NetworkVariable estï¿½ lista
         if (IsServer && isGroundedNet != null)
         {
             isGroundedNet.Value = isGrounded;

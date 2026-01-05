@@ -33,7 +33,8 @@ public abstract class InteractiveObject : MonoBehaviour, IInteractable
         // Matar al tratar de interactuar con un objeto de otro color
         if(objectInteracting.gameObject.TryGetComponent(out PlayerColor playerColor))
         {
-            if(!objectColored.CanInteractive(playerColor.currentColor))
+            // Si no es del color del player
+            if(!objectColored.IsThisColor(playerColor.currentColor))
             {
                 if(objectInteracting.gameObject.TryGetComponent(out IDeadly deadly))
                 {

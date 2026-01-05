@@ -7,6 +7,7 @@ using UnityEngine.Events;
 [DisallowMultipleComponent]
 public class PlayerColor : NetworkBehaviour
 {
+    public bool DEBUG_COLOR_COLLIDER;
     [Header("Shader Property Names")]
     [SerializeField] private string emitColorProperty = "_EmitColor";
     [SerializeField] private string emitIntensityProperty = "_EmitIntensity";
@@ -64,7 +65,7 @@ public class PlayerColor : NetworkBehaviour
     [ContextMenu("Start Player Color")]
     public void StartPlayerColor()
     {
-        if(currentColor==null) return;
+        if (currentColor == null) return;
 
         ApplyColor(currentColor.color, currentColor.intensity);
 
@@ -100,16 +101,68 @@ public class PlayerColor : NetworkBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.TryGetComponent<IColorAffected>(out var colorAfected))
+        GameObject target = collision.gameObject;
+
+        ObjectColored objColored = null;
+
+        // 1. Buscar en el objeto mismo
+        objColored = target.GetComponent<ObjectColored>();
+
+        // 2. Si no está, buscar en los hijos
+        if (objColored == null)
         {
-            if(!colorAfected.CanInteractive(currentColor))
+            objColored = target.GetComponentInChildren<ObjectColored>();
+        }
+
+        // 3. Si aún no se encuentra, buscar en el padre
+        if (objColored == null && target.transform.parent != null)
+        {
+            objColored = target.transform.parent.GetComponent<ObjectColored>();
+        }
+
+        // 4. Si el padre se llama "Model", buscar en su padre
+        if (objColored == null && target.transform.parent != null &&
+            target.transform.parent.name == "Model" && target.transform.parent.parent != null)
+        {
+            objColored = target.transform.parent.parent.GetComponent<ObjectColored>();
+        }
+
+        // 5. Si no se encontró nada, no es un objeto de color
+        if (objColored == null)
+        {
+            if (DEBUG_COLOR_COLLIDER)
+                Debug.Log($"{target.name} no es un objeto de color", target.transform);
+            return;
+        }
+
+        if (DEBUG_COLOR_COLLIDER)
+            Debug.Log($"Se encontró ObjectColored: {objColored.name}", objColored.transform);
+
+        // 6. Comprobar color (Si no es el color = muerte)
+        if (!objColored.IsThisColor(currentColor))
+        {
+            if (DEBUG_COLOR_COLLIDER)
+                Debug.Log($"{objColored.name} no puede interactuar con el color {currenColorName}", transform);
+
+            // 7. Ejecutar Dead si implementa IDeadly
+            if (objColored.TryGetComponent<IDeadly>(out var deadly))
             {
-                // Dead
-                if(collision.gameObject.TryGetComponent<IDeadly>(out var deadly))
-                {
-                    deadly.Dead();
-                }
+                deadly.Dead();
+            }
+
+            // Ejecutar el Dead propio
+            if(gameObject.TryGetComponent(out PlayerDead playerDead))
+            {
+                playerDead.Dead();
+                 Debug.LogWarning("MUERE PLAYER y lo mato: ", objColored.transform);
             }
         }
+        else
+        {
+            if (DEBUG_COLOR_COLLIDER)
+                Debug.Log($"{objColored.name} es del color correcto", objColored.transform);
+        }
     }
+
+
 }

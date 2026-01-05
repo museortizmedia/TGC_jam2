@@ -107,8 +107,10 @@ public class ObjectColored : MonoBehaviour, IColorAffected
         }
     }
 
-    public bool CanInteractive(ColorData colorData)
+    public bool IsThisColor(ColorData colorData)
     {
-        return currentColor == null ? true : colorData.colorId != currentColor.colorId;
+        if(currentColor == null) return false;
+
+        return colorData.colorId.ToLower() == currentColor.colorId.ToLower();
     }
 }

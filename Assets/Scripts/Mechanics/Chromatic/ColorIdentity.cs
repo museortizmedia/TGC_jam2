@@ -19,7 +19,8 @@ public class ColorIdentity : MonoBehaviour {
         var affectedComponents = GetComponentsInChildren<IColorAffected>();
         foreach (var comp in affectedComponents)
         {
-            comp.CanInteractive(currentColor);
+            //comp.CanInteractive(currentColor);
+            
         }
     }
 }

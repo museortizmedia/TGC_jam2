@@ -624,7 +624,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LobbyPlayerCounter
   ShowTopMostFoldoutHeaderGroup: 1
   maxPlayersProd: 4
-  maxPlayersEditor: 2
+  maxPlayersEditor: 1
   countdownSecondsProd: 5
   countdownSecondsEditor: 1
 --- !u!114 &893407391
